@@ -1,0 +1,3 @@
+aggregateGeneration.C
+
+EXE = $(FOAM_APPBIN)/aggregateGeneration

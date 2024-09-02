@@ -1,0 +1,30 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../../src"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"simpleFoam.C": "cpp",
+			"mySimpleFoam.C": "cpp",
+			"regIOobjectWrite.C": "cpp",
+			"fvcGrad.C": "cpp",
+			"fvOptionListTemplates.C": "cpp",
+			"fvMatrix.C": "cpp",
+			"myTwoPhaseEulerFoam.C": "cpp",
+			"*.tcc": "cpp",
+			"subBody.C": "cpp",
+			"IOobject.C": "cpp",
+			"TimeIO.C": "cpp",
+			"profilingTrigger.C": "cpp",
+			"profiling.C": "cpp",
+			"objectRegistry.C": "cpp",
+			"fvMesh.C": "cpp",
+			"polyMesh.C": "cpp"
+		}
+	}
+}

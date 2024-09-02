@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "simpleFoam.C": "cpp",
+        "mySimpleFoam.C": "cpp",
+        "regIOobjectWrite.C": "cpp",
+        "fvcGrad.C": "cpp",
+        "fvOptionListTemplates.C": "cpp",
+        "fvMatrix.C": "cpp",
+        "myTwoPhaseEulerFoam.C": "cpp"
+    }
+}
