@@ -10,6 +10,23 @@
         "Aggregate.C": "cpp",
         "mainAggregate.C": "cpp",
         "blockMesh.C": "cpp",
-        "aggregateGeneration.C": "cpp"
+        "aggregateGeneration.C": "cpp",
+        "meshRefinement.C": "cpp",
+        "snappyHexMesh.C": "cpp",
+        "blockMeshTopology.C": "cpp",
+        "argList.C": "cpp",
+        "string": "cpp",
+        "deque": "cpp",
+        "vector": "cpp",
+        "cstdio": "cpp",
+        "iostream": "cpp",
+        "iosfwd": "cpp",
+        "ostream": "cpp",
+        "fstream": "cpp",
+        "istream": "cpp",
+        "sstream": "cpp",
+        "random": "cpp",
+        "*.tcc": "cpp",
+        "*.txx": "cpp"
     }
 }
