@@ -4,6 +4,6 @@
 
 int main(int argc, char *argv[])
 {
-    aggregate a(5.0,10.0,10);
+    Bashyal::aggregate a(5.0,10.0,10);
     
 }
