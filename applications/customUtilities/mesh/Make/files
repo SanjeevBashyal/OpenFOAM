@@ -1,3 +1,3 @@
-aggregateGeneration.C
+cubeAggregateGeneration.C
 
-EXE = $(FOAM_APPBIN)/aggregateGeneration
+EXE = $(FOAM_APPBIN)/cubeAggregateGeneration

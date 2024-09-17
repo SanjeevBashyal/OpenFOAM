@@ -10,13 +10,7 @@
 #include "Random.H"
 #include "triSurface.H"
 #include "triSurfaceMesh.H"
-#include <CGAL/Delaunay_triangulation_3.h>
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
-#include <CGAL/Triangulation_3.h>
 
-typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
-typedef CGAL::Delaunay_triangulation_3<K> Delaunay;
-typedef Delaunay::Point Point;
 
 Bashyal::aggregate::aggregate(float r1, float r2, int n)
 {
@@ -25,6 +19,8 @@ Bashyal::aggregate::aggregate(float r1, float r2, int n)
     Foam::Random randomGen(12);
 
     Foam::pointField Nodes(n);
+    // Foam::faceList foamFaces;
+
     this->r1 = r1;
     Foam::scalar r = 0;
     Foam::scalar phi = 0;
@@ -32,7 +28,6 @@ Bashyal::aggregate::aggregate(float r1, float r2, int n)
     float addTheta = (2 * 3.141592) / n;
     float addPhi = (3.141592) / n;
 
-    std::vector<Point> points;
 
     for (int i = 0; i < n; i++)
     {
@@ -49,18 +44,16 @@ Bashyal::aggregate::aggregate(float r1, float r2, int n)
 
         Foam::point xyz = this->sphericalToCartesian(r, theta, phi);
 
-        points.push_back(Point(xyz[0], xyz[1], xyz[2]));
+        // points.push_back(Point_3(xyz[0], xyz[1], xyz[2]));
 
         Nodes.append(xyz);
-        Foam::faceList faces = this->createFacesFromPoints(Nodes);
+
+        // Foam::faceList faces = this->createFacesFromPoints(Nodes);
         // Foam::triSurface surface(faces, Nodes);
         // Foam::fileName outputFile = argList::globalArgs()[1];  // Second argument is the output file name
         // surface.write(outputFile);
     }
 
-    Delaunay dt;
-    dt.insert(points.begin(), points.end());
-    int c = 0;
 }
 
 Foam::point Bashyal::aggregate::sphericalToCartesian(Foam::scalar r, Foam::scalar theta, Foam::scalar phi)

@@ -94,6 +94,8 @@
         "Time.C": "cpp",
         "constants.C": "cpp",
         "fundamentalConstants.C": "cpp",
-        "Constant.C": "cpp"
+        "Constant.C": "cpp",
+        "cubeAggregate.C": "cpp",
+        "cubeAggregateGeneration.C": "cpp"
     }
 }
