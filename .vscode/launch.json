@@ -7,11 +7,11 @@
         {
             "type": "cppdbg",
             "request": "launch",
-            "program": "${env:FOAM_APPBIN}/aggregateGeneration",
+            "program": "${env:FOAM_APPBIN}/cubeAggregateGeneration",
             "name": "Debug in OpenFOAM",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/run/aggregate/",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",

@@ -96,6 +96,9 @@
         "fundamentalConstants.C": "cpp",
         "Constant.C": "cpp",
         "cubeAggregate.C": "cpp",
-        "cubeAggregateGeneration.C": "cpp"
+        "cubeAggregateGeneration.C": "cpp",
+        "solverTemplate.C": "cpp",
+        "scalar.C": "cpp",
+        "polyMesh.C": "cpp"
     }
 }

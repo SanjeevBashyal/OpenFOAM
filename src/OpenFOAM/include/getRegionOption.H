@@ -26,7 +26,7 @@ Provided Variables
 
 Foam::word regionName
 (
-    args.getOrDefault<word>("region", Foam::polyMesh::defaultRegion)
+    args.getOrDefault<Foam::word>("region", Foam::polyMesh::defaultRegion)
 );
 
 
