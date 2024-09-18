@@ -11,6 +11,7 @@
 #include "scalar.H"
 
 #include "cubeAggregate.H"
+#include "cubeAggregates.H"
 
 
 int main(int argc, char *argv[])
@@ -116,8 +117,22 @@ int main(int argc, char *argv[])
 
     const Foam::IOdictionary& aggregateDict = *aggregateDictPtr;
     
+    Foam::List<float> PSD;
+    PSD[0] = 5.0;
+    PSD[1] = 10.0;
+    PSD[2] = 10.0;
+    PSD[3] = 15.0;
+    PSD[4] = 15.0;
+    PSD[5] = 10.0;
+    PSD[6] = 10.0;
+    PSD[7] = 10.0;
+    PSD[8] = 10.0;
+    PSD[9] = 5.0;
 
+    int nParticles = 100;
 
+    Bashyal::cubeAggregates sediments(PSD, nParticles)
+    
     Bashyal::cubeAggregate a(5.0,10.0);
     
 }

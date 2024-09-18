@@ -16,13 +16,13 @@ namespace Bashyal
     class cubeAggregate
     {
         public:
-            float s1;
-            float s2;
-            float s;
+            float s1_;
+            float s2_;
+            float s_;
 
             // Foam::scalar size_;    // Size of the bounding box for the aggregate
-            // Foam::pointField points_;  // Collection of points to form the aggregate surface
-            // Foam::triSurface surface_; // Triangulated surface mesh
+            Foam::pointField points_;  // Collection of points to form the aggregate surface
+            Foam::triSurface surface_; // Triangulated surface mesh
 
 
         private:

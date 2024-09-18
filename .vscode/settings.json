@@ -99,6 +99,11 @@
         "cubeAggregateGeneration.C": "cpp",
         "solverTemplate.C": "cpp",
         "scalar.C": "cpp",
-        "polyMesh.C": "cpp"
+        "polyMesh.C": "cpp",
+        "topoBoolSet.C": "cpp",
+        "sigSegv.C": "cpp",
+        "test.C": "cpp",
+        "messageStream.C": "cpp",
+        "dimensionSetIO.C": "cpp"
     }
 }

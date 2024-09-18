@@ -22,12 +22,11 @@ Bashyal::cubeAggregate::cubeAggregate(float s1, float s2)
 
     Foam::pointField Nodes(8);
 
-    this->s1 = s1;
-    this->s2 = s2;
+    this->s1_ = s1;
+    this->s2_ = s2;
 
     Foam::scalar r = randomGen.sample01<Foam::scalar>();
-    ;
-    this->s = s1 + (s2 - s1) * r;
+    Foam::scalar s = s1 + (s2 - s1) * r;
 
     // Define the 8 vertices of the cube
     Nodes[0] = Foam::point(0, 0, 0); // Point 0
@@ -45,6 +44,9 @@ Bashyal::cubeAggregate::cubeAggregate(float s1, float s2)
     Foam::fileName outputFile("/usr/lib/openfoam/openfoam2312/run/aggregate/cube.stl"); // Second argument is the output file name
 
     surface.write(outputFile);
+    this->surface_ = surface;
+    this->points_ = Nodes;
+    this->s_ = s;
 }
 
 // Function to find the nearest points and form triangles
