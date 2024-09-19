@@ -1,3 +1,6 @@
+#ifndef cubeAggregates_H
+#define cubeAggregates_H
+
 #include "List.H"
 #include "Random.H"
 #include "cubeAggregate.H"
@@ -31,3 +34,7 @@ namespace Bashyal
         }
     }
 }
+
+#endif
+
+// ************************************************************************* //

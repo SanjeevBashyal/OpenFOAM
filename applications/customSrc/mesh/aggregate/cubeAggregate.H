@@ -1,13 +1,8 @@
 #ifndef cubeAggregate_H
 #define cubeAggregate_H
 
-#include "point.H"
-#include "scalar.H"
-#include "pointField.H"
-#include "List.H"
+#include "quickInclude.H"
 
-#include "Time.H"
-#include "Random.H"
 #include "triSurface.H"
 #include "triSurfaceMesh.H"
 
@@ -21,6 +16,7 @@ namespace Bashyal
             float s_;
 
             // Foam::scalar size_;    // Size of the bounding box for the aggregate
+            Foam::point centroid_;
             Foam::pointField points_;  // Collection of points to form the aggregate surface
             Foam::triSurface surface_; // Triangulated surface mesh
 
@@ -30,6 +26,8 @@ namespace Bashyal
         public:
             explicit cubeAggregate(float s1, float s2);
             Foam::List<Foam::labelledTri> createFacesFromPoints(const Foam::pointField &points);
+            void translate(Foam::vector translationVector);
+            void rotate(Foam::tensor translationVector);
             ~cubeAggregate()=default;
     };
 

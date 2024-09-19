@@ -11,6 +11,8 @@
 #include "OFstream.H"
 #include "fileName.H"
 #include "Random.H"
+#include "transform.H"
+
 #include "triSurface.H"
 #include "triSurfaceMesh.H"
 
@@ -47,6 +49,7 @@ Bashyal::cubeAggregate::cubeAggregate(float s1, float s2)
     this->surface_ = surface;
     this->points_ = Nodes;
     this->s_ = s;
+    this->centroid_ = Foam::point(s/2,s/2,s/2)
 }
 
 // Function to find the nearest points and form triangles
@@ -79,4 +82,17 @@ Foam::List<Foam::labelledTri> Bashyal::cubeAggregate::createFacesFromPoints(cons
     triangles[11] = Foam::labelledTri(1, 6, 5); // Triangle 2 of the right face
 
     return triangles;
+}
+
+void Bashyal::cubeAggregate::translate(Foam::vector translationVector)
+{
+    for (Foam::label i = 0; i < points.size(); i++)
+    {
+        this->points_[i] += translationVector;
+    }
+}
+
+void Bashyal::cubeAggregate::rotate(Foam::tensor translationVector)
+{
+    this->points_ = Foam::transform::transform(rotationMatrix, this->points_);
 }

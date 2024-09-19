@@ -104,6 +104,12 @@
         "sigSegv.C": "cpp",
         "test.C": "cpp",
         "messageStream.C": "cpp",
-        "dimensionSetIO.C": "cpp"
+        "dimensionSetIO.C": "cpp",
+        "DPMFoam.C": "cpp",
+        "particle.C": "cpp",
+        "boundaryInfo.C": "cpp",
+        "blockMeshCreate.C": "cpp",
+        "blockCreate.C": "cpp",
+        "block.C": "cpp"
     }
 }

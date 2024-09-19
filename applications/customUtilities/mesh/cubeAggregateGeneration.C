@@ -116,6 +116,25 @@ int main(int argc, char *argv[])
     }
 
     const Foam::IOdictionary& aggregateDict = *aggregateDictPtr;
+
+    if (aggregateDict.found("PSD"))
+    {
+        Foam::dictionary psdDict = aggregateDict.subDict("PSD");
+
+        // Print the keys and values in the "PSD" sub-dictionary
+        Foam::Info << "Contents of sub-dictionary 'PSD':" << Foam::endl;
+        
+        forAllConstIter(Foam::dictionary, psdDict, iter)
+        {
+            // Print each key and value
+            Foam::Info << "Key: " << iter.key() 
+                       << ", Value: " << iter() << Foam::endl;
+        }
+    }
+    else
+    {
+        Foam::Warning << "Sub-dictionary 'PSD' not found!" << Foam::endl;
+    }
     
     Foam::List<float> PSD;
     PSD[0] = 5.0;

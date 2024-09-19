@@ -1,4 +1,5 @@
 EXE_INC = \
+    -I$(WM_PROJECT_DIR)/applications/customUtilites/lnInclude \
     -I$(WM_PROJECT_DIR)/applications/customSrc/mesh/aggregate \
     -I$(LIB_SRC)/mesh/blockMesh/lnInclude \
     -I$(LIB_SRC)/fileFormats/lnInclude \

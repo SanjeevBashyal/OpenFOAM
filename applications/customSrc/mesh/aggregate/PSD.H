@@ -86,7 +86,7 @@ namespace Bashyal
         {
             cumulativeFraction_[i] = sum;
             sum = sum + fraction_[i];
-            cumulativeParticleNumber_=std::round(cumulativeFraction_[i]*nParticles_)
+            cumulativeParticleNumber_[i]=std::round(cumulativeFraction_[i]*nParticles_)
         }
     }
 

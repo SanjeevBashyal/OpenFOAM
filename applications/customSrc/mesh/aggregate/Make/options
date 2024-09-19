@@ -1,4 +1,5 @@
 EXE_INC = \
+    -I$(WM_PROJECT_DIR)/applications/customUtilites/lnInclude \
     -I$(LIB_SRC)/OpenFOAM/lnInclude \
     -I$(LIB_SRC)/fileFormats/lnInclude \
     -I$(LIB_SRC)/surfMesh/lnInclude \
