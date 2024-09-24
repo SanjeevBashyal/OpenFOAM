@@ -1,3 +1,6 @@
+#ifndef PSD_H
+#define PSD_H
+
 #include "List.H"
 #include "scalar.H"
 #include "Random.H"
@@ -95,3 +98,7 @@ namespace Bashyal
     }
 
 }
+
+#endif
+
+// ************************************************************************* //

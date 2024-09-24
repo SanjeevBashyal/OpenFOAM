@@ -56,6 +56,7 @@ Foam::block::block
 {
     // Always need points, and demand-driven data leaves dangling addressing?
     createPoints();
+    createCells();
     createBoundary();
 }
 
@@ -77,6 +78,7 @@ Foam::block::block
 {
     // Always need points, and demand-driven data leaves dangling addressing?
     createPoints();
+    createCells();
     createBoundary();
 }
 

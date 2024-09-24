@@ -1,6 +1,7 @@
 EXE_INC = \
     -I$(WM_PROJECT_DIR)/applications/customUtilities/lnInclude \
     -I$(WM_PROJECT_DIR)/applications/customSrc/mesh/aggregate \
+    -I$(WM_PROJECT_DIR)/applications/customSrc/mesh/backgroundMesh \
     -I$(LIB_SRC)/mesh/blockMesh/lnInclude \
     -I$(LIB_SRC)/fileFormats/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude \
@@ -8,7 +9,7 @@ EXE_INC = \
     -I$(LIB_SRC)/dynamicMesh/lnInclude
 
 EXE_LIBS = \
-    -laggregate \
+    -lbackgroundMesh \
     -lblockMesh \
     -lfileFormats \
     -lmeshTools \

@@ -27,7 +27,7 @@ namespace Bashyal
             explicit cubeAggregate(float s1, float s2);
             Foam::List<Foam::labelledTri> createFacesFromPoints(const Foam::pointField &points);
             void translate(Foam::vector translationVector);
-            void rotate(Foam::tensor translationVector);
+            void rotate(Foam::tensor rotationMatrix);
             ~cubeAggregate()=default;
     };
 

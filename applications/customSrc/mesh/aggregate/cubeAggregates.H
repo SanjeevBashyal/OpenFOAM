@@ -17,7 +17,7 @@ namespace Bashyal
         Foam::List<Bashyal::cubeAggregate> sediments_;
 
         cubeAggregates(Foam::List<float> PSD, int nParticles);
-        Foam::List<Bashyal::cubeAggregate> generateAggregates();
+        // Foam::List<Bashyal::cubeAggregate> generateAggregates();
         ~cubeAggregates() = default;
     };
 
@@ -27,12 +27,12 @@ namespace Bashyal
         this->nParticles_ = nParticles;
     }
 
-    Foam::List<Bashyal::cubeAggregate> cubeAggregates::generateAggregates()
-    {
-        for (int i = 0; i < this->nParticles_; i++)
-        {
-        }
-    }
+    // Foam::List<Bashyal::cubeAggregate> cubeAggregates::generateAggregates()
+    // {
+    //     for (int i = 0; i < this->nParticles_; i++)
+    //     {
+    //     }
+    // }
 }
 
 #endif

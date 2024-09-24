@@ -4,7 +4,9 @@ cd "${0%/*}" || exit                                # Run from this directory
 
 #------------------------------------------------------------------------------
 wmakeLnInclude -u aggregate
+wmakeLnInclude -u backgroundMesh
 
 wmake $targetType aggregate
+wmake $targetType backgroundMesh
 
 #------------------------------------------------------------------------------

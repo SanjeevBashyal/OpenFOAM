@@ -60,6 +60,7 @@ class block
 :
     public blockDescriptor
 {
+public:
     // Private Data
 
         //- List of points

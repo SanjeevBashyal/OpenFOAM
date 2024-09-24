@@ -13,61 +13,50 @@
 #include "cubeAggregate.H"
 #include "cubeAggregates.H"
 
-
 int main(int argc, char *argv[])
 {
-    Foam::argList::addNote
-    (
+    Foam::argList::addNote(
         "Sediment Generator in given Particle Size Distribution.\n"
-        "Work is ongoing....."
-    );
+        "Work is ongoing.....");
 
     Foam::argList::noParallel();
     Foam::argList::noFunctionObjects();
 
-    Foam::argList::addBoolOption
-    (
+    Foam::argList::addBoolOption(
         "show",
-        "Display PSD"
-    );
+        "Display PSD");
 
-    #include "addRegionOption.H"
-    #include "setRootCase.H"
-    #include "createTime.H"
-    
-    
-    #include "getRegionOption.H"
-    
-        if (!Foam::polyMesh::regionName(regionName).empty())
+#include "addRegionOption.H"
+#include "setRootCase.H"
+#include "createTime.H"
+
+#include "getRegionOption.H"
+
+    if (!Foam::polyMesh::regionName(regionName).empty())
+    {
+        Foam::Info << Foam::nl << "Generating mesh for region " << regionName << Foam::nl;
+    }
+
+    // Instance for resulting mesh
+    bool useTime = false;
+    Foam::word meshInstance(runTime.constant());
+
+    if (
+        args.readIfPresent("time", meshInstance) && runTime.constant() != meshInstance)
+    {
+        // Verify that the value is actually good
+        Foam::scalar timeValue;
+
+        useTime = Foam::readScalar(meshInstance, timeValue);
+        if (!useTime)
         {
-            Foam::Info<< Foam::nl << "Generating mesh for region " << regionName << Foam::nl;
+            FatalErrorInFunction
+                << "Bad input value: " << meshInstance
+                << "Should be a scalar or 'constant'"
+                << Foam::nl << Foam::endl
+                << exit(Foam::FatalError);
         }
-
-        // Instance for resulting mesh
-        bool useTime = false;
-        Foam::word meshInstance(runTime.constant());
-
-        if
-        (
-            args.readIfPresent("time", meshInstance)
-        && runTime.constant() != meshInstance
-        )
-        {
-            // Verify that the value is actually good
-            Foam::scalar timeValue;
-
-            useTime = Foam::readScalar(meshInstance, timeValue);
-            if (!useTime)
-            {
-                FatalErrorInFunction
-                    << "Bad input value: " << meshInstance
-                    << "Should be a scalar or 'constant'"
-                    << Foam::nl << Foam::endl
-                    << exit(Foam::FatalError);
-            }
-        }
-    
-
+    }
 
     const Foam::word dictName("aggregateDict");
 
@@ -75,7 +64,7 @@ int main(int argc, char *argv[])
 
     {
         Foam::fileName dictPath;
-        const Foam::word& regionDir = Foam::polyMesh::regionName(regionName);
+        const Foam::word &regionDir = Foam::polyMesh::regionName(regionName);
 
         if (args.readIfPresent("dict", dictPath))
         {
@@ -90,17 +79,15 @@ int main(int argc, char *argv[])
         {
             // Assume dictionary is to be found in the system directory
 
-            dictPath = runTime.system()/regionDir/dictName;
+            dictPath = runTime.system() / regionDir / dictName;
         }
 
-        Foam::IOobject aggregateDictIO
-        (
+        Foam::IOobject aggregateDictIO(
             dictPath,
             runTime,
             Foam::IOobject::MUST_READ,
             Foam::IOobject::NO_WRITE,
-            Foam::IOobject::NO_REGISTER
-        );
+            Foam::IOobject::NO_REGISTER);
 
         if (!aggregateDictIO.typeHeaderOk<Foam::IOdictionary>(true))
         {
@@ -109,33 +96,40 @@ int main(int argc, char *argv[])
                 << exit(Foam::FatalError);
         }
 
-        Foam::Info<< "Creating aggregates from "
-            << aggregateDictIO.objectRelPath() << Foam::endl;
+        Foam::Info << "Creating aggregates from "
+                   << aggregateDictIO.objectRelPath() << Foam::endl;
 
         aggregateDictPtr = Foam::autoPtr<Foam::IOdictionary>::New(aggregateDictIO);
     }
 
-    const Foam::IOdictionary& aggregateDict = *aggregateDictPtr;
+    const Foam::IOdictionary &aggregateDict = *aggregateDictPtr;
 
     if (aggregateDict.found("PSD"))
     {
         Foam::dictionary psdDict = aggregateDict.subDict("PSD");
+        if (psdDict.found("Clay(<0.002)"))
+        {
+            
+            // Foam::dictionary clayDict = psdDict.subDict("Clay(<0.002)");
+            Foam::scalar clayFraction = psdDict.getOrDefault("Clay(<0.002)",2);
+            Foam::Info << "Here" << Foam::endl;
+        }
 
         // Print the keys and values in the "PSD" sub-dictionary
         Foam::Info << "Contents of sub-dictionary 'PSD':" << Foam::endl;
-        
+
         forAllConstIter(Foam::dictionary, psdDict, iter)
         {
             // Print each key and value
-            Foam::Info << "Key: " << iter.key() 
-                       << ", Value: " << iter() << Foam::endl;
+            // Foam::Info << "Key: " << iter.key()
+            //            << ", Value: " << iter() << Foam::endl;
         }
     }
     else
     {
         Foam::Warning << "Sub-dictionary 'PSD' not found!" << Foam::endl;
     }
-    
+
     Foam::List<float> PSD;
     PSD[0] = 5.0;
     PSD[1] = 10.0;
@@ -150,8 +144,7 @@ int main(int argc, char *argv[])
 
     int nParticles = 100;
 
-    Bashyal::cubeAggregates sediments(PSD, nParticles)
-    
-    Bashyal::cubeAggregate a(5.0,10.0);
-    
+    Bashyal::cubeAggregates sediments(PSD, nParticles);
+
+    Bashyal::cubeAggregate a(5.0, 10.0);
 }
