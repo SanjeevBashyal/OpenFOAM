@@ -27,23 +27,36 @@ namespace Bashyal
 
         Foam::word regionName("region0");
         Foam::word constantLocation = "constant";
-        this->createFacesAndCells();
-        // Foam::List<Foam::face> facelist = this->createFaces();
-        // Foam::List<Foam::cell> celllist = this->createCells();
+        
+        // this->createFacesAndCells();
+        this->createBoundaryFacesAndPatches();
+
+
         Foam::IOobject *io = new Foam::IOobject(
             regionName,
             constantLocation,
             *runTime,
             Foam::IOobject::NO_READ,
-            Foam::IOobject::AUTO_WRITE
-            );
+            Foam::IOobject::AUTO_WRITE);
 
         Foam::polyMesh mesh(
             *io,
             Foam::pointField(backgroundBlock.points_), // Use a copy of the block points
-            Foam::List<Foam::face>(this->faceListPtr_),
-            Foam::List<Foam::cell>(this->cellListPtr_),
+            backgroundBlock.shapes(),
+            this->boundaryFaces_,
+            this->boundaryPatchNemes_,
+            this->boundaryPatchTypes_,
+            this->defaultBoundaryPatchName_,
+            this->defaultBoundaryPatchType_,
+            this->boundaryPatchPhysicalTypes_,
             false);
+
+        // Foam::polyMesh mesh(
+        //     *io,
+        //     Foam::pointField(backgroundBlock.points_), // Use a copy of the block points
+        //     Foam::List<Foam::face>(this->faceListPtr_),
+        //     Foam::List<Foam::cell>(this->cellListPtr_),
+        //     false);
 
         this->meshPtr_ = &mesh;
 
@@ -136,4 +149,30 @@ namespace Bashyal
         this->cellListPtr_ = cells;
     }
 
+    void backgroundMesh::createBoundaryFacesAndPatches()
+    {
+        Foam::faceListList boundaryFaces(6);
+        Foam::wordList boundaryPatchNemes({"YZ-Xmin", "YZ-Xmax", "XZ-Ymin", "XZ-Ymax", "XY-Zmin", "XY-Zmax"});
+        Foam::wordList boundaryPatchTypes({"patch", "patch", "patch", "patch", "patch", "patch"});
+        Foam::word defaultBoundaryPatchName("boundaryPlane");
+        Foam::word defaultBoundaryPatchType("patch");
+        Foam::wordList boundaryPatchPhysicalTypes({"wall", "wall", "wall", "wall", "wall", "wall"});
+
+        for (int i = 0; i < 6; i++)
+        {
+            Foam::faceList singleBoundaryFace(this->blockPtr_->blockPatches_[i].size());
+            for (Foam::label j = 0; j < this->blockPtr_->blockPatches_[i].size(); j++)
+            {
+                singleBoundaryFace[j] = Foam::face(this->blockPtr_->blockPatches_[i][j]);
+            }
+            boundaryFaces[i] = singleBoundaryFace;
+        }
+
+        this->boundaryFaces_ = boundaryFaces;
+        this->boundaryPatchNemes_ = boundaryPatchNemes;
+        this->boundaryPatchTypes_ = boundaryPatchTypes;
+        this->defaultBoundaryPatchName_ = defaultBoundaryPatchName;
+        this->defaultBoundaryPatchType_ = defaultBoundaryPatchType;
+        this->boundaryPatchPhysicalTypes_ = boundaryPatchPhysicalTypes;
+    }
 }

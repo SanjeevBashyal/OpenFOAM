@@ -16,40 +16,49 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-5
+6
 (
-    inlet
+    YZ-Xmin
     {
         type            patch;
-        nFaces          30;
-        startFace       24170;
+        physicalType    wall;
+        nFaces          100;
+        startFace       2700;
     }
-    outlet
+    YZ-Xmax
     {
         type            patch;
-        nFaces          57;
-        startFace       24200;
+        physicalType    wall;
+        nFaces          100;
+        startFace       2800;
     }
-    upperWall
+    XZ-Ymin
     {
-        type            wall;
-        inGroups        1(wall);
-        nFaces          223;
-        startFace       24257;
+        type            patch;
+        physicalType    wall;
+        nFaces          100;
+        startFace       2900;
     }
-    lowerWall
+    XZ-Ymax
     {
-        type            wall;
-        inGroups        1(wall);
-        nFaces          250;
-        startFace       24480;
+        type            patch;
+        physicalType    wall;
+        nFaces          100;
+        startFace       3000;
     }
-    frontAndBack
+    XY-Zmin
     {
-        type            empty;
-        inGroups        1(empty);
-        nFaces          24450;
-        startFace       24730;
+        type            patch;
+        physicalType    wall;
+        nFaces          100;
+        startFace       3100;
+    }
+    XY-Zmax
+    {
+        type            patch;
+        physicalType    wall;
+        nFaces          100;
+        startFace       3200;
     }
 )
 
