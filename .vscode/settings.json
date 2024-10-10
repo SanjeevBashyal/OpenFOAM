@@ -153,6 +153,22 @@
         "face.C": "cpp",
         "faMesh.C": "cpp",
         "hash_set": "cpp",
-        "IOstreamOption.C": "cpp"
+        "IOstreamOption.C": "cpp",
+        "setFields.C": "cpp",
+        "faMeshNew.C": "cpp",
+        "hostCollatedFileOperation.C": "cpp",
+        "fvMesh.C": "cpp",
+        "surfaceInterpolation.C": "cpp",
+        "firstPrincipleFoam.C": "cpp",
+        "MSwindows.C": "cpp",
+        "interFoam.C": "cpp",
+        "simpleControl.C": "cpp",
+        "solutionControl.C": "cpp",
+        "easyFoam.C": "cpp",
+        "fvmLaplacian.C": "cpp",
+        "TimeIO.C": "cpp",
+        "facGrad.C": "cpp",
+        "dimensionSets.C": "cpp",
+        "p": "cpp"
     }
 }

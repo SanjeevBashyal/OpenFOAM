@@ -1,0 +1,3 @@
+easyFoam.C
+
+EXE = $(FOAM_APPBIN)/easyFoam
