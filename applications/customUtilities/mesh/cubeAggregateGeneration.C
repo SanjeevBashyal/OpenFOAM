@@ -13,6 +13,8 @@
 #include "cubeAggregate.H"
 #include "cubeAggregates.H"
 
+using namespace Foam;
+
 int main(int argc, char *argv[])
 {
     Foam::argList::addNote(
@@ -130,7 +132,7 @@ int main(int argc, char *argv[])
         Foam::Warning << "Sub-dictionary 'PSD' not found!" << Foam::endl;
     }
 
-    Foam::List<float> PSD;
+    Foam::List<float> PSD(10);
     PSD[0] = 5.0;
     PSD[1] = 10.0;
     PSD[2] = 10.0;
@@ -144,7 +146,12 @@ int main(int argc, char *argv[])
 
     int nParticles = 100;
 
-    Bashyal::cubeAggregates sediments(PSD, nParticles);
+    // Bashyal::cubeAggregates sediments(PSD, nParticles);
 
-    Bashyal::cubeAggregate a(5.0, 10.0);
+    Bashyal::cubeAggregate a(0.1, 0.25);
+    a.translate(vector(0.3,0.3,0.3));
+    a.rotate(30,30,30);
+    a.locate();
+    a.createSurface();
+    Info << "Here" << endl;
 }

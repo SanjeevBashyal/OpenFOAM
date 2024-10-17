@@ -20,28 +20,37 @@ internalField   uniform 0;
 
 boundaryField
 {
-    inlet
+    YZ-Xmin
     {
         type            fixedValue;  // Fixed value boundary condition
-        value           uniform 4;   // P = 4 at this boundary
+        value           uniform 2;   // P = 4 at this boundary
     }
 
-    outlet
-    {
-        type            fixedValue;
-        value           uniform 0;
-    }
-
-    upperWall
+    YZ-Xmax
     {
         type            zeroGradient;
     }
 
-    lowerWall
+    XZ-Ymin
+    {
+        type            fixedValue;  // Fixed value boundary condition
+        value           uniform 2;   // P = 4 at this boundary
+    }
+
+    XZ-Ymax
     {
         type            zeroGradient;
     }
 
+    XY-Zmin
+    {
+        type            zeroGradient;
+    }
+
+    XY-Zmax
+    {
+        type            zeroGradient;
+    }
     frontAndBack
     {
         type            empty;

@@ -1,86 +1,86 @@
 solid patch0
- facet normal 0 0 1
+ facet normal 0.625 -0.216506 0.75
   outer loop
-   vertex 0 0 0
-   vertex 6.02494 0 0
-   vertex 6.02494 6.02494 0
+   vertex 0.224265 0.228644 0.255349
+   vertex 0.322326 0.285259 0.189975
+   vertex 0.294018 0.399664 0.24659
   endloop
  endfacet
- facet normal 0 0 1
+ facet normal 0.625 -0.216506 0.75
   outer loop
-   vertex 0 0 0
-   vertex 6.02494 6.02494 0
-   vertex 0 6.02494 0
+   vertex 0.224265 0.228644 0.255349
+   vertex 0.294018 0.399664 0.24659
+   vertex 0.195957 0.343048 0.311964
   endloop
  endfacet
- facet normal 0 0 1
+ facet normal 0.625 -0.216506 0.75
   outer loop
-   vertex 0 0 6.02494
-   vertex 6.02494 0 6.02494
-   vertex 6.02494 6.02494 6.02494
+   vertex 0.305982 0.200336 0.35341
+   vertex 0.404043 0.256952 0.288036
+   vertex 0.375735 0.371356 0.344651
   endloop
  endfacet
- facet normal 0 0 1
+ facet normal 0.625 -0.216506 0.75
   outer loop
-   vertex 0 0 6.02494
-   vertex 6.02494 6.02494 6.02494
-   vertex 0 6.02494 6.02494
+   vertex 0.305982 0.200336 0.35341
+   vertex 0.375735 0.371356 0.344651
+   vertex 0.277674 0.314741 0.410025
   endloop
  endfacet
- facet normal 0 -1 0
+ facet normal 0.216506 -0.875 -0.433013
   outer loop
-   vertex 0 0 0
-   vertex 6.02494 0 0
-   vertex 6.02494 0 6.02494
+   vertex 0.224265 0.228644 0.255349
+   vertex 0.322326 0.285259 0.189975
+   vertex 0.404043 0.256952 0.288036
   endloop
  endfacet
- facet normal 0 -1 0
+ facet normal 0.216506 -0.875 -0.433013
   outer loop
-   vertex 0 0 0
-   vertex 6.02494 0 6.02494
-   vertex 0 0 6.02494
+   vertex 0.224265 0.228644 0.255349
+   vertex 0.404043 0.256952 0.288036
+   vertex 0.305982 0.200336 0.35341
   endloop
  endfacet
- facet normal 0 1 0
+ facet normal -0.216506 0.875 0.433013
   outer loop
-   vertex 6.02494 6.02494 0
-   vertex 0 6.02494 0
-   vertex 0 6.02494 6.02494
+   vertex 0.294018 0.399664 0.24659
+   vertex 0.195957 0.343048 0.311964
+   vertex 0.277674 0.314741 0.410025
   endloop
  endfacet
- facet normal 0 1 -0
+ facet normal -0.216506 0.875 0.433013
   outer loop
-   vertex 6.02494 6.02494 0
-   vertex 0 6.02494 6.02494
-   vertex 6.02494 6.02494 6.02494
+   vertex 0.294018 0.399664 0.24659
+   vertex 0.277674 0.314741 0.410025
+   vertex 0.375735 0.371356 0.344651
   endloop
  endfacet
- facet normal 1 0 0
+ facet normal 0.75 0.433013 -0.5
   outer loop
-   vertex 0 0 0
-   vertex 0 6.02494 0
-   vertex 0 6.02494 6.02494
+   vertex 0.224265 0.228644 0.255349
+   vertex 0.195957 0.343048 0.311964
+   vertex 0.277674 0.314741 0.410025
   endloop
  endfacet
- facet normal 1 0 0
+ facet normal 0.75 0.433013 -0.5
   outer loop
-   vertex 0 0 0
-   vertex 0 6.02494 6.02494
-   vertex 0 0 6.02494
+   vertex 0.224265 0.228644 0.255349
+   vertex 0.277674 0.314741 0.410025
+   vertex 0.305982 0.200336 0.35341
   endloop
  endfacet
- facet normal 1 0 0
+ facet normal 0.75 0.433013 -0.5
   outer loop
-   vertex 6.02494 0 0
-   vertex 6.02494 6.02494 0
-   vertex 6.02494 6.02494 6.02494
+   vertex 0.322326 0.285259 0.189975
+   vertex 0.294018 0.399664 0.24659
+   vertex 0.375735 0.371356 0.344651
   endloop
  endfacet
- facet normal 1 0 0
+ facet normal 0.75 0.433013 -0.5
   outer loop
-   vertex 6.02494 0 0
-   vertex 6.02494 6.02494 6.02494
-   vertex 6.02494 0 6.02494
+   vertex 0.322326 0.285259 0.189975
+   vertex 0.375735 0.371356 0.344651
+   vertex 0.404043 0.256952 0.288036
   endloop
  endfacet
 endsolid patch0

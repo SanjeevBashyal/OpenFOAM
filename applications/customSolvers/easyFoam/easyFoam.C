@@ -103,6 +103,24 @@ int main(int argc, char *argv[])
         dimensionedVector("constantVectorField", dimVelocity, vector(1.0, 0.0, 0.0))
     );
 
+    const dimensionSet dimOne(0, 2, 0, 0, 0, 0, 0);
+    const dimensionSet dimPressure2(0, 2, -2, 0, 0, 0, 0);
+
+    volScalarField constantScalarField
+    (
+        IOobject
+        (
+            "one",
+            runTime.timeName(),
+            mesh,
+            IOobject::NO_READ,
+            IOobject::AUTO_WRITE
+        ),
+        mesh,
+        dimensionedScalar("constantScalarField", dimPressure2, scalar(-5.0))
+    );
+    
+    
     volScalarField one
     (
         IOobject
@@ -114,7 +132,7 @@ int main(int argc, char *argv[])
             IOobject::AUTO_WRITE
         ),
         mesh,
-        dimensionedScalar("one", dimPressure, scalar(1.0))
+        dimensionedScalar("one", dimOne, scalar(1.0))
     );
 
 
