@@ -226,6 +226,8 @@
         "surfaceToCell.C": "cpp",
         "primitiveMeshTools.C": "cpp",
         "cubeAggregates.C": "cpp",
-        "tensor.C": "cpp"
+        "tensor.C": "cpp",
+        "faceIntersection.C": "cpp",
+        "boundBox.C": "cpp"
     }
 }

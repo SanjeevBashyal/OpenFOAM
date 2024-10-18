@@ -111,9 +111,9 @@ int main(int argc, char *argv[])
         Foam::dictionary psdDict = aggregateDict.subDict("PSD");
         if (psdDict.found("Clay(<0.002)"))
         {
-            
+
             // Foam::dictionary clayDict = psdDict.subDict("Clay(<0.002)");
-            Foam::scalar clayFraction = psdDict.getOrDefault("Clay(<0.002)",2);
+            Foam::scalar clayFraction = psdDict.getOrDefault("Clay(<0.002)", 2);
             Foam::Info << "Here" << Foam::endl;
         }
 
@@ -149,9 +149,11 @@ int main(int argc, char *argv[])
     // Bashyal::cubeAggregates sediments(PSD, nParticles);
 
     Bashyal::cubeAggregate a(0.1, 0.25);
-    a.translate(vector(0.3,0.3,0.3));
-    a.rotate(30,30,30);
+    a.translate(vector(0.3, 0.3, 0.3));
+    a.rotate(30, 30, 30);
     a.locate();
     a.createSurface();
+    a.getBoundBox();
+    a.hit(0);
     Info << "Here" << endl;
 }

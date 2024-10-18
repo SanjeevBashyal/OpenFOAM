@@ -21,10 +21,9 @@ using namespace Foam;
 namespace Bashyal
 {
     cubeAggregate::cubeAggregate(float s1, float s2) // to produce size between s1 and s2
-    :
-    xRotation_(0),
-    yRotation_(0),
-    zRotation_(0)
+        : xRotation_(0),
+          yRotation_(0),
+          zRotation_(0)
     {
 
         // Create an instance of the Random class with automatic seeding
@@ -55,17 +54,32 @@ namespace Bashyal
 
     void cubeAggregate::createSurface()
     {
-        Foam::List<Foam::labelledTri> triangles = this->createFacesFromPoints(this->globalPoints_);
+        Foam::List<Foam::labelledTri> triangles = this->createTriangularFacesFromPoints(this->globalPoints_);
         Foam::triSurface surface(triangles, this->globalPoints_);
 
         Foam::fileName outputFile("/usr/lib/openfoam/openfoam2312/run/aggregate/cube.stl"); // Second argument is the output file name
 
         surface.write(outputFile);
         this->surface_ = surface;
+        this->createQuadFaces();
+    }
+
+    Foam::List<Foam::face> cubeAggregate::createQuadFaces()
+    {
+        Foam::List<Foam::face> faces(6);
+        faces[0] = Foam::face({0, 1, 2, 3}); // Top Face
+        faces[1] = Foam::face({4, 5, 6, 7}); // Bottom Face
+        faces[2] = Foam::face({0, 1, 5, 4}); // Front Face
+        faces[3] = Foam::face({2, 3, 7, 6}); // Back Face
+        faces[4] = Foam::face({0, 3, 7, 4}); // Left Face
+        faces[5] = Foam::face({1, 2, 6, 5}); // Right Face
+
+        this->faces_ = faces;
+        return faces;
     }
 
     // Function to find the nearest points and form triangles
-    Foam::List<Foam::labelledTri> cubeAggregate::createFacesFromPoints(const Foam::pointField &points)
+    Foam::List<Foam::labelledTri> cubeAggregate::createTriangularFacesFromPoints(const Foam::pointField &points)
     {
         // Define the faces of the cube using triangular faces
         Foam::List<Foam::labelledTri> triangles(12);
@@ -156,6 +170,95 @@ namespace Bashyal
         pointField rotatedPoints = this->rotatePoints(this->rotationMatrixFromAngles());
         vector translationVector(this->centroid_[0], this->centroid_[1], this->centroid_[2]);
         this->globalPoints_ = this->translatePoints(rotatedPoints, translationVector);
+    }
+
+    void cubeAggregate::getBoundBox()
+    {
+        this->boundBox_ = boundBox(this->globalPoints_);
+        point min = this->floorPoint(this->boundBox_.min());
+        point max = this->ceilPoint(this->boundBox_.max());
+        this->roundedBoundBox_ = boundBox(min, max);
+    }
+
+    scalar cubeAggregate::roundToRequiredDecimal(scalar value)
+    {
+        return std::round(value * std::pow(10.0, this->backgroundFinenessIndex_)) / std::pow(10.0, this->backgroundFinenessIndex_);
+    }
+
+    scalar cubeAggregate::floorToRequiredDecimal(scalar value)
+    {
+        return std::floor(value * std::pow(10.0, this->backgroundFinenessIndex_)) / std::pow(10.0, this->backgroundFinenessIndex_);
+    }
+
+    scalar cubeAggregate::ceilToRequiredDecimal(scalar value)
+    {
+        return std::ceil(value * std::pow(10.0, this->backgroundFinenessIndex_)) / std::pow(10.0, this->backgroundFinenessIndex_);
+    }
+
+    point cubeAggregate::roundPoint(point value)
+    {
+        return point(this->roundToRequiredDecimal(value[0]), this->roundToRequiredDecimal(value[1]), this->roundToRequiredDecimal(value[2]));
+    }
+
+    point cubeAggregate::floorPoint(point value)
+    {
+        return point(this->floorToRequiredDecimal(value[0]), this->floorToRequiredDecimal(value[1]), this->floorToRequiredDecimal(value[2]));
+    }
+
+    point cubeAggregate::ceilPoint(point value)
+    {
+        return point(this->ceilToRequiredDecimal(value[0]), this->ceilToRequiredDecimal(value[1]), this->ceilToRequiredDecimal(value[2]));
+    }
+
+    void cubeAggregate::hit(scalar index)
+    {
+        point min = this->roundedBoundBox_.min();
+        point max = this->roundedBoundBox_.max();
+        int count = 0;
+
+        for (face face_0 : this->faces_)
+        {
+            pointField facePoints = face_0.points(this->globalPoints_);
+            for (scalar i = min[0]; i < max[0]; i = i + 0.1)
+            {
+                for (scalar j = min[1]; j < max[1]; j = j + 0.1)
+                {
+                    point p(i, j, min[2]);
+                    vector v(0, 0, 1);
+                    pointHit hit_0 = face_0.ray(p, v, this->globalPoints_);
+                    if (hit_0.hit())
+                    {
+                        facePoints.append(hit_0.point());
+                    }
+                }
+
+                for (scalar k = min[2]; k < max[2]; k = k + 0.1)
+                {
+                    point p(i, min[1], k);
+                    vector v(0, 1, 0);
+                    pointHit hit_0 = face_0.ray(p, v, this->globalPoints_);
+                    if (hit_0.hit())
+                    {
+                        facePoints.append(hit_0.point());
+                    }
+                }
+            }
+            for (scalar j = min[1]; j < max[1]; j = j + 0.1)
+            {
+                for (scalar k = min[2]; k < max[2]; k = k + 0.1)
+                {
+                    point p(min[0], j, k);
+                    vector v(1, 0, 0);
+                    pointHit hit_0 = face_0.ray(p, v, this->globalPoints_);
+                    if (hit_0.hit())
+                    {
+                        facePoints.append(hit_0.point());
+                    }
+                }
+            }
+            this->facePoints_.append(facePoints);
+            count++;
+        }
     }
 
 }
