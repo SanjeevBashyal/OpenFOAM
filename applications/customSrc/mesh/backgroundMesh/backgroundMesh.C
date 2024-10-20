@@ -1,10 +1,13 @@
 #include "backgroundMesh.H"
 #include "quickMesh.H"
 
+using namespace Foam;
+
 namespace Bashyal
 {
     backgroundMesh::backgroundMesh(Foam::Time *runTime, double size)
         : s_(size),
+          runTime_(runTime),
           vertices_(createVertices())
     {
         Foam::cellShape bshape;
@@ -27,10 +30,9 @@ namespace Bashyal
 
         Foam::word regionName("region0");
         Foam::word constantLocation = "constant";
-        
+
         // this->createFacesAndCells();
         this->createBoundaryFacesAndPatches();
-
 
         Foam::IOobject *io = new Foam::IOobject(
             regionName,

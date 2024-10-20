@@ -1,6 +1,8 @@
 # OpenFOAM
 My custom OpenFOAM to couple turbulence with sediment transport.
 
-An attempt to solve sediment transport by coupling DEM with CFD solvers.
+This repository have been forked from OpenFOAM 2312 version released by OpenCFD Ltd.
 
-Coming Soon ...
+Works in Progress:
+
+    Geometry Manipulation to account sediment movement.

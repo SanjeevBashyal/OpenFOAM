@@ -228,6 +228,18 @@
         "cubeAggregates.C": "cpp",
         "tensor.C": "cpp",
         "faceIntersection.C": "cpp",
-        "boundBox.C": "cpp"
+        "boundBox.C": "cpp",
+        "PrimitivePatchCheck.C": "cpp",
+        "searchableSurface.C": "cpp",
+        "triSurface.C": "cpp",
+        "triSurfaceStitch.C": "cpp",
+        "surfaceIntersection.C": "cpp",
+        "faceContactSphere.C": "cpp",
+        "faceAreaInContact.C": "cpp",
+        "meshRefinementGapRefine.C": "cpp",
+        "snappySnapDriver.C": "cpp",
+        "backgroundBlock.C": "cpp",
+        "backgroundMeshWriter.C": "cpp",
+        "dummyFileOperation.C": "cpp"
     }
 }

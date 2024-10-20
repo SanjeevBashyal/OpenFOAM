@@ -1,17 +1,41 @@
-#include "Time.H"
-#include "IOdictionary.H"
-#include "IOPtrList.H"
-
-#include "argList.H"
-#include "OSspecific.H"
-#include "OFstream.H"
-
-#include "wordPair.H"
-#include "slidingInterface.H"
-#include "scalar.H"
+#include "fvCFD.H"
 
 #include "cubeAggregate.H"
 #include "cubeAggregates.H"
+
+#include "argList.H"
+#include "Time.H"
+#include "fvMesh.H"
+#include "snappyRefineDriver.H"
+#include "snappySnapDriver.H"
+#include "snappyLayerDriver.H"
+#include "searchableSurfaces.H"
+#include "refinementSurfaces.H"
+#include "refinementFeatures.H"
+#include "shellSurfaces.H"
+#include "decompositionMethod.H"
+#include "fvMeshDistribute.H"
+#include "wallPolyPatch.H"
+#include "refinementParameters.H"
+#include "snapParameters.H"
+#include "layerParameters.H"
+#include "vtkCoordSetWriter.H"
+#include "vtkSurfaceWriter.H"
+#include "faceSet.H"
+#include "motionSmoother.H"
+#include "polyTopoChange.H"
+#include "indirectPrimitivePatch.H"
+#include "surfZoneIdentifierList.H"
+#include "UnsortedMeshedSurface.H"
+#include "MeshedSurface.H"
+#include "globalIndex.H"
+#include "IOmanip.H"
+#include "decompositionModel.H"
+#include "fvMeshTools.H"
+#include "profiling.H"
+#include "processorMeshes.H"
+#include "snappyVoxelMeshDriver.H"
+
 
 using namespace Foam;
 
@@ -28,37 +52,9 @@ int main(int argc, char *argv[])
         "show",
         "Display PSD");
 
-#include "addRegionOption.H"
-#include "setRootCase.H"
+#include "setRootCaseLists.H"
 #include "createTime.H"
-
-#include "getRegionOption.H"
-
-    if (!Foam::polyMesh::regionName(regionName).empty())
-    {
-        Foam::Info << Foam::nl << "Generating mesh for region " << regionName << Foam::nl;
-    }
-
-    // Instance for resulting mesh
-    bool useTime = false;
-    Foam::word meshInstance(runTime.constant());
-
-    if (
-        args.readIfPresent("time", meshInstance) && runTime.constant() != meshInstance)
-    {
-        // Verify that the value is actually good
-        Foam::scalar timeValue;
-
-        useTime = Foam::readScalar(meshInstance, timeValue);
-        if (!useTime)
-        {
-            FatalErrorInFunction
-                << "Bad input value: " << meshInstance
-                << "Should be a scalar or 'constant'"
-                << Foam::nl << Foam::endl
-                << exit(Foam::FatalError);
-        }
-    }
+#include "createMesh.H"
 
     const Foam::word dictName("aggregateDict");
 
@@ -154,6 +150,20 @@ int main(int argc, char *argv[])
     a.locate();
     a.createSurface();
     a.getBoundBox();
-    a.hit(0);
+    // a.hit(0);
+
+    meshRefinement meshRefiner
+    (
+        mesh,
+        0.000001,          // tolerance used in sorting coordinates
+        false,          // overwrite mesh files?
+        surfaces,           // for surface intersection refinement
+        features,           // for feature edges/point based refinement
+        shells,             // for volume (inside/outside) refinement
+        limitShells,        // limit of volume refinement
+        labelList(),        // initial faces to test
+        dryRun
+    );
+
     Info << "Here" << endl;
 }

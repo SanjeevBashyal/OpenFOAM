@@ -1,0 +1,1 @@
+ln -s /usr/lib/openfoam/openfoam2312/applications/customUtilities/quick/quickWriter.H /usr/lib/openfoam/openfoam2312/applications/customUtilities/lnInclude/quickWriter.H
