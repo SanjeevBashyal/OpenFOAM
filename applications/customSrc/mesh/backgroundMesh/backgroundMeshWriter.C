@@ -2,6 +2,79 @@
 
 namespace Bashyal
 {
+    void backgroundMesh::createPolyMesh()
+    {
+        // Ensure faces and owners have the same size
+        if (globalFaces_.size() != globalOwners_.size())
+        {
+            FatalErrorInFunction
+                << "Mismatch between number of faces and owners!" << exit(FatalError);
+        }
+
+        // Construct pointField (vertices)
+        pointField meshPoints = globalPoints_; // Already contains all points
+
+        // Construct faceList (faces)
+        faceList meshFaces = globalFaces_; // Already contains all faces
+
+        // Construct owner list
+        labelList meshOwners = globalOwners_;
+
+        // Construct neighbour list (some faces may not have neighbours)
+        labelList meshNeighbours = globalNeighbours_;
+
+        // Handle boundary faces separately: add them to the meshFaces but with no neighbour
+        for (const auto &boundaryFace : boundaryFaces_)
+        {
+            meshFaces.append(boundaryFace); // Add the boundary face
+            meshOwners.append(-1);          // Boundary faces have no owner
+            // meshNeighbours.append(-1);      // Boundary faces have no neighbour
+        }
+
+        // Construct the mesh data (note: this does not write anything to files)
+        // polyMesh constructor accepts points, faces, owners, neighbours, and boundary data
+        Foam::word regionName("region0");
+        Foam::word constantLocation = "constant";
+
+        Foam::IOobject *io = new Foam::IOobject(
+            regionName,
+            constantLocation,
+            *(this->runTime_),
+            Foam::IOobject::NO_READ,
+            Foam::IOobject::AUTO_WRITE);
+
+        this->meshPtr_ = new Foam::polyMesh(
+            *io,
+            Foam::pointField(meshPoints), // Use a copy of the block points
+            faceList(meshFaces),
+            labelList(meshOwners),
+            labelList(meshNeighbours),
+            false);
+    }
+
+    void backgroundMesh::writeBackgroundMesh(const std::string &meshDir)
+    {
+        // Step 1: Construct points, faces, owners, neighbours lists
+        pointField meshPoints = globalPoints_;
+        faceList meshFaces = globalFaces_;
+        labelList meshOwners = globalOwners_;
+        labelList meshNeighbours = globalNeighbours_;
+
+        // Step 2: Add boundary faces to the meshFaces and mark them with no neighbour
+        for (const auto &boundaryFace : boundaryFaces_)
+        {
+            Foam::face boundaryFaceCopy = Foam::face(boundaryFace);
+            std::sort(boundaryFaceCopy.begin(), boundaryFaceCopy.end());
+
+            meshFaces.append(boundaryFace);
+            meshOwners.append(boundaryFaceMap_[boundaryFaceCopy]);     // Boundary face, no owner
+            // meshNeighbours.append(-1); // Boundary face, no neighbour
+        }
+
+        // Step 3: Call the writePolyMeshPlain function to write the mesh data to files
+        writePolyMeshPlain(meshDir, meshPoints, meshFaces, meshOwners, meshNeighbours);
+    }
+
     // Static method to write polyMesh data
     void backgroundMesh::writePolyMeshPlain(
         const std::string &meshDir,
@@ -76,13 +149,13 @@ namespace Bashyal
         std::string neighbourFileName = meshDir + "/neighbour";
         OFstream neighbourFile(neighbourFileName);
         neighbourFile << "FoamFile\n"
-                  << "{\n"
-                  << "    version     2.0;\n"
-                  << "    format      ascii;\n"
-                  << "    class       labelList;\n"
-                  << "    location    " << outputDir << ";\n"
-                  << "    object      neighbour;\n"
-                  << "}\n\n";
+                      << "{\n"
+                      << "    version     2.0;\n"
+                      << "    format      ascii;\n"
+                      << "    class       labelList;\n"
+                      << "    location    " << outputDir << ";\n"
+                      << "    object      neighbour;\n"
+                      << "}\n\n";
         neighbourFile << neighbours.size() << "\n(\n";
         for (const auto &neighbour : neighbours)
         {
@@ -93,23 +166,22 @@ namespace Bashyal
         // Write boundary file
         OFstream boundaryFile(meshDir + "/boundary");
         boundaryFile << "FoamFile\n"
-                  << "{\n"
-                  << "    version     2.0;\n"
-                  << "    format      ascii;\n"
-                  << "    class       polyBoundaryMesh;\n"
-                  << "    location    " << outputDir << ";\n"
-                  << "    object      boundary;\n"
-                  << "}\n\n";
+                     << "{\n"
+                     << "    version     2.0;\n"
+                     << "    format      ascii;\n"
+                     << "    class       polyBoundaryMesh;\n"
+                     << "    location    " << outputDir << ";\n"
+                     << "    object      boundary;\n"
+                     << "}\n\n";
         boundaryFile << "1\n(\n";
         boundaryFile << "cube\n{\n";
         boundaryFile << "    type patch;\n";
-        boundaryFile << "    nFaces " << faces.size() << ";\n";
-        boundaryFile << "    startFace 0;\n";
+        boundaryFile << "    nFaces " << owners.size() - neighbours.size() << ";\n";
+        boundaryFile << "    startFace " << neighbours.size() << ";\n";
         boundaryFile << "}\n)\n";
 
         Info << "Mesh written to " << meshDir << nl;
     }
-
 
     void backgroundMesh::writePolyMeshFromOwnerNeighbour(
         const std::string &meshDir,
@@ -120,7 +192,7 @@ namespace Bashyal
     {
         Foam::word regionName("region0");
         Foam::word constantLocation = "constant";
-        
+
         Foam::IOobject *io = new Foam::IOobject(
             regionName,
             constantLocation,

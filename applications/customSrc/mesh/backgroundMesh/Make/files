@@ -1,5 +1,7 @@
 backgroundMesh.C
+backgroundMeshCreator.C
 backgroundMeshWriter.C
+backgroundMeshOld.C
 backgroundBlock.C
 
 LIB = $(FOAM_LIBBIN)/libbackgroundMesh

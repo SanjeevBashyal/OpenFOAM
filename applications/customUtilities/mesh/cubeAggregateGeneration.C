@@ -152,18 +152,18 @@ int main(int argc, char *argv[])
     a.getBoundBox();
     // a.hit(0);
 
-    meshRefinement meshRefiner
-    (
-        mesh,
-        0.000001,          // tolerance used in sorting coordinates
-        false,          // overwrite mesh files?
-        surfaces,           // for surface intersection refinement
-        features,           // for feature edges/point based refinement
-        shells,             // for volume (inside/outside) refinement
-        limitShells,        // limit of volume refinement
-        labelList(),        // initial faces to test
-        dryRun
-    );
+    // meshRefinement meshRefiner
+    // (
+    //     mesh,
+    //     0.000001,          // tolerance used in sorting coordinates
+    //     false,          // overwrite mesh files?
+    //     surfaces,           // for surface intersection refinement
+    //     features,           // for feature edges/point based refinement
+    //     shells,             // for volume (inside/outside) refinement
+    //     limitShells,        // limit of volume refinement
+    //     labelList(),        // initial faces to test
+    //     dryRun
+    // );
 
     Info << "Here" << endl;
 }

@@ -1,18 +1,11 @@
 #include "quickInclude.H"
-#include "backgroundMesh.H"
+
+using namespace Foam;
 
 int main(int argc, char *argv[])
 {
-    Foam::argList::addNote(
-        "backgroundMesh Generator to generate foundation mesh where fluids and sediments will traverse.\n"
-        "Work is ongoing.....");
-
-#include "setRootCase.H"
-#include "createTime.H"
-
-    Bashyal::backgroundMesh a(&runTime, 1.0);
-
-    Foam::Info << "Run Successfully" << Foam::endl;
-
-    return 0;
+    Vector<int> v(0, 0, 1);
+    Vector<int> dim(4, 2, 3);
+    Foam::Vector<int> c = (v + 1) * dim;
+    Info << "Here";
 }
