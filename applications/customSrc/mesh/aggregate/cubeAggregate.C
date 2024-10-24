@@ -57,7 +57,7 @@ namespace Bashyal
         Foam::List<Foam::labelledTri> triangles = this->createTriangularFacesFromPoints(this->globalPoints_);
         Foam::triSurface surface(triangles, this->globalPoints_);
 
-        Foam::fileName outputFile("/usr/lib/openfoam/openfoam2312/run/aggregate/cube.stl"); // Second argument is the output file name
+        Foam::fileName outputFile("/usr/lib/openfoam/openfoam2312/run/test/cube.stl"); // Second argument is the output file name
 
         surface.write(outputFile);
         this->surface_ = surface;

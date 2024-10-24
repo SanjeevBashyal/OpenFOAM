@@ -243,6 +243,19 @@
         "dummyFileOperation.C": "cpp",
         "backgroundMeshOld.C": "cpp",
         "backgroundMeshCreater.C": "cpp",
-        "backgroundMeshCreator.C": "cpp"
+        "backgroundMeshCreator.C": "cpp",
+        "polySurface.C": "cpp",
+        "subsetMesh.C": "cpp",
+        "mergeMeshes.C": "cpp",
+        "insideCells.C": "cpp",
+        "moveMesh.C": "cpp",
+        "CV2D.C": "cpp",
+        "motionSolver.C": "cpp",
+        "codedPoints0MotionSolver.C": "cpp",
+        "twoDPointCorrector.C": "cpp",
+        "plane.C": "cpp",
+        "surfaceToPoint.C": "cpp",
+        "backgroundBlockSearch.C": "cpp",
+        "boolList.C": "cpp"
     }
 }

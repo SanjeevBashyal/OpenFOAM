@@ -1,31 +1,13 @@
-#include "fvCFD.H"
-
-#include "cubeAggregate.H"
-#include "cubeAggregates.H"
 
 
-using namespace Foam;
+const Foam::word dictName("aggregateDict");
 
-int main(int argc, char *argv[])
-{
-    Foam::argList::addNote(
-        "Sediment Generator in given Particle Size Distribution.\n"
-        "Work is ongoing.....");
+Foam::autoPtr<Foam::IOdictionary> aggregateDictPtr;
 
-    Foam::argList::noParallel();
-    Foam::argList::noFunctionObjects();
-
-    Foam::argList::addBoolOption(
-        "show",
-        "Display PSD");
-
-#include "setRootCaseLists.H"
-#include "createTime.H"
-#include "createMesh.H"
-
-    const Foam::word dictName("aggregateDict");
-
-    Foam::autoPtr<Foam::IOdictionary> aggregateDictPtr;
+Foam::word regionName
+(
+    args.getOrDefault<word>("region", Foam::polyMesh::defaultRegion)
+);
 
     {
         Foam::fileName dictPath;
@@ -111,26 +93,10 @@ int main(int argc, char *argv[])
 
     // Bashyal::cubeAggregates sediments(PSD, nParticles);
 
-    Bashyal::cubeAggregate a(0.1, 0.25);
-    a.translate(vector(0.3, 0.3, 0.3));
-    a.rotate(30, 30, 30);
+    Bashyal::cubeAggregate a(0.12, 0.14);
+    a.translate(vector(0.15, 0.15, 0.15));
+    a.rotate(30, 0, 0);
     a.locate();
     a.createSurface();
     a.getBoundBox();
-    // a.hit(0);
 
-    // meshRefinement meshRefiner
-    // (
-    //     mesh,
-    //     0.000001,          // tolerance used in sorting coordinates
-    //     false,          // overwrite mesh files?
-    //     surfaces,           // for surface intersection refinement
-    //     features,           // for feature edges/point based refinement
-    //     shells,             // for volume (inside/outside) refinement
-    //     limitShells,        // limit of volume refinement
-    //     labelList(),        // initial faces to test
-    //     dryRun
-    // );
-
-    Info << "Here" << endl;
-}

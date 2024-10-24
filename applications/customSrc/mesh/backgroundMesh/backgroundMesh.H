@@ -53,7 +53,7 @@ namespace Bashyal
         
         ~backgroundMesh() = default;
 
-        void createMesh();
+        void developMesh();
         void addPoints(const pointField &blockPoints);
         void addFaces(const pointField &blockPoints, const faceList &blockFaces, const labelList &owners, const labelList &neighbours);
 

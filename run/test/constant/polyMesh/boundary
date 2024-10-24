@@ -12,7 +12,7 @@ FoamFile
 cube
 {
     type patch;
-    nFaces 24;
-    startFace 12;
+    nFaces 54;
+    startFace 54;
 }
 )

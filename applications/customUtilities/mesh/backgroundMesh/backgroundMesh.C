@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     Bashyal::backgroundMesh a(&runTime, point(0, 0, 0), point(0.2, 0.1, 0.1), 0.1);
     // a.createBlockMesh();
 
-    a.createMesh();
+    a.developMesh();
     Foam::fileName runDir = args.path();
     fileName meshDir0 = "constant/polyMesh";
     a.writeBackgroundMesh(runDir / meshDir0);

@@ -69,53 +69,67 @@ Description
 #include "simpleControl.H"
 #include "fvOptions.H"
 
+#include "quickInclude.H"
+#include "backgroundMesh.H"
+#include "backgroundBlock.C"
+#include "cubeAggregate.H"
+#include "cubeAggregates.H"
+
+using namespace Bashyal;
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 int main(int argc, char *argv[])
 {
-    argList::addNote
-    (
-        "Steady-state solver for incompressible, turbulent flows."
-    );
+    argList::addNote(
+        "Coupled solver for sediment mix turbulent flows.");
 
-    #include "postProcess.H"
+// #include "postProcess.H"
+// #include "addCheckCaseOptions.H"
+// #include "setRootCaseLists.H"
+// #include "createTime.H"
+// #include "createMesh.H"
+// #include "createControl.H"
+// #include "createFields.H"
+// #include "initContinuityErrs.H"
 
-    #include "addCheckCaseOptions.H"
-    #include "setRootCaseLists.H"
-    #include "createTime.H"
-    #include "createMesh.H"
-    #include "createControl.H"
-    #include "createFields.H"
-    #include "initContinuityErrs.H"
+#include "addRegionOption.H"
+#include "setRootCase.H" //defines argList args
+#include "createTime.H"
+#include "createBackgroundMesh.H"
+#include "createAggregates.H"
 
-    turbulence->validate();
 
-    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-    Info<< "\nStarting time loop\n" << endl;
+//     turbulence->validate();
 
-    while (simple.loop())
-    {
-        Info<< "Time = " << runTime.timeName() << nl << endl;
+//     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-        // --- Pressure-velocity SIMPLE corrector
-        {
-            #include "UEqn.H"
-            #include "pEqn.H"
-        }
+//     Info << "\nStarting time loop\n"
+//          << endl;
 
-        laminarTransport.correct();
-        turbulence->correct();
+//     while (simple.loop())
+//     {
+//         Info << "Time = " << runTime.timeName() << nl << endl;
 
-        runTime.write();
+//         // --- Pressure-velocity SIMPLE corrector
+//         {
+// // #include "UEqn.H"
+// // #include "pEqn.H"
+//         }
 
-        runTime.printExecutionTime(Info);
-    }
+//         laminarTransport.correct();
+//         turbulence->correct();
 
-    Info<< "End\n" << endl;
+//         runTime.write();
+
+//         runTime.printExecutionTime(Info);
+//     }
+
+//     Info << "End\n"
+//          << endl;
 
     return 0;
 }
-
 
 // ************************************************************************* //

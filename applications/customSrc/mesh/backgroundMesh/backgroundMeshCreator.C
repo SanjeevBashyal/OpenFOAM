@@ -5,7 +5,7 @@ using namespace Foam;
 
 namespace Bashyal
 {
-    void backgroundMesh::createMesh()
+    void backgroundMesh::developMesh()
     {
         // Loop through each level of the List structure
         for (auto &blockListLevel1 : backgroundBlocks_)

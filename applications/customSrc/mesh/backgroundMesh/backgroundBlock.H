@@ -1,3 +1,6 @@
+#ifndef backgroundBlock_H
+#define backgroundBlock_H
+
 #include "quickMesh.H"
 
 using namespace Foam;
@@ -14,6 +17,9 @@ namespace Bashyal
 
         label ncells_;
         label blockID_;
+
+        bool dead_ = false;
+        bool edited_ = false;
 
         pointField points_;    // Stores the vertices of the cube
         faceList faces_;       // Stores the six faces of the cube
@@ -37,3 +43,5 @@ namespace Bashyal
         ~backgroundBlock();
     };
 }
+
+#endif
