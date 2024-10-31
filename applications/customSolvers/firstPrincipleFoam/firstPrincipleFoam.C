@@ -99,6 +99,8 @@ int main(int argc, char *argv[])
 #include "createBackgroundMesh.H"
 #include "createAggregates.H"
 
+bMesh.intersectCube(a);
+
 
 
 //     turbulence->validate();

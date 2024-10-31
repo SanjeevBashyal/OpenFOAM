@@ -93,8 +93,8 @@ Foam::word regionName
 
     // Bashyal::cubeAggregates sediments(PSD, nParticles);
 
-    Bashyal::cubeAggregate a(0.12, 0.14);
-    a.translate(vector(0.15, 0.15, 0.15));
+    Bashyal::cubeAggregate a(0.1, 0.1);
+    a.translate(vector(0.1, 0.1, 0.1));
     a.rotate(30, 0, 0);
     a.locate();
     a.createSurface();

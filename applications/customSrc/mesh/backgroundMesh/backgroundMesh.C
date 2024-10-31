@@ -77,4 +77,29 @@ namespace Bashyal
 
         return nestedList;
     }
+
+    Vector<int> backgroundMesh::getBlockIndexContainingPoint(point &pt)
+    {
+        // Ensure the point is within the bounds of the mesh
+        if (!this->contains(pt))
+        {
+            return Vector<int>(dim_[0] - 1, dim_[1] - 1, dim_[2] - 1);
+        }
+
+        // Determine the index in each dimension by scaling the point's position
+        int i = floor((pt.x() - meshMin_.x()) / resolution_);
+        int j = floor((pt.y() - meshMin_.y()) / resolution_);
+        int k = floor((pt.z() - meshMin_.z()) / resolution_);
+
+        // Return the index vector (i, j, k)
+        return Vector<int>(i, j, k);
+    }
+
+    bool backgroundMesh::contains(const point &pt)
+    {
+        return (pt.x() >= meshMin_.x() && pt.x() <= meshMax_.x()) &&
+               (pt.y() >= meshMin_.y() && pt.y() <= meshMax_.y()) &&
+               (pt.z() >= meshMin_.z() && pt.z() <= meshMax_.z());
+    }
+
 }

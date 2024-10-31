@@ -256,6 +256,11 @@
         "plane.C": "cpp",
         "surfaceToPoint.C": "cpp",
         "backgroundBlockSearch.C": "cpp",
-        "boolList.C": "cpp"
+        "boolList.C": "cpp",
+        "backgroundBlockIntersection.C": "cpp",
+        "backgroundMeshIntersector.C": "cpp",
+        "domainDecompositionMesh.C": "cpp",
+        "pointFaceHit.C": "cpp",
+        "meshSearch.C": "cpp"
     }
 }

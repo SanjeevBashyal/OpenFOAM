@@ -1,7 +1,10 @@
+pointFaceHit.C
 backgroundMesh.C
 backgroundMeshCreator.C
 backgroundMeshWriter.C
+backgroundMeshIntersector.C
 backgroundMeshOld.C
 backgroundBlock.C
+backgroundBlockIntersection.C
 
 LIB = $(FOAM_LIBBIN)/libbackgroundMesh

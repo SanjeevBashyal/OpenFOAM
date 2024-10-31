@@ -39,13 +39,13 @@ namespace Bashyal
 
         // Define the 8 vertices of the cube
         Nodes[0] = Foam::point(-s / 2, -s / 2, -s / 2); // Point 0
-        Nodes[1] = Foam::point(s / 2, -s / 2, -s / 2);  // Point 1
+        Nodes[1] = Foam::point(-s / 2, s / 2, -s / 2);  // Point 1
         Nodes[2] = Foam::point(s / 2, s / 2, -s / 2);   // Point 2
-        Nodes[3] = Foam::point(-s / 2, s / 2, -s / 2);  // Point 3
+        Nodes[3] = Foam::point(s / 2, -s / 2, -s / 2);  // Point 3
         Nodes[4] = Foam::point(-s / 2, -s / 2, s / 2);  // Point 4
-        Nodes[5] = Foam::point(s / 2, -s / 2, s / 2);   // Point 5
+        Nodes[5] = Foam::point(-s / 2, s / 2, s / 2);   // Point 5
         Nodes[6] = Foam::point(s / 2, s / 2, s / 2);    // Point 6
-        Nodes[7] = Foam::point(-s / 2, s / 2, s / 2);   // Point 7
+        Nodes[7] = Foam::point(s / 2, -s / 2, s / 2);   // Point 7
         this->localPoints_ = Nodes;
 
         this->s_ = s;
@@ -67,12 +67,12 @@ namespace Bashyal
     Foam::List<Foam::face> cubeAggregate::createQuadFaces()
     {
         Foam::List<Foam::face> faces(6);
-        faces[0] = Foam::face({0, 1, 2, 3}); // Top Face
-        faces[1] = Foam::face({4, 5, 6, 7}); // Bottom Face
-        faces[2] = Foam::face({0, 1, 5, 4}); // Front Face
-        faces[3] = Foam::face({2, 3, 7, 6}); // Back Face
-        faces[4] = Foam::face({0, 3, 7, 4}); // Left Face
-        faces[5] = Foam::face({1, 2, 6, 5}); // Right Face
+        faces[0] = Foam::face({0, 1, 2, 3}); // Bottom Face
+        faces[1] = Foam::face({4, 7, 6, 5}); // Top Face
+        faces[2] = Foam::face({0, 4, 5, 1}); // Left Face
+        faces[3] = Foam::face({3, 2, 6, 7}); // Right Face
+        faces[4] = Foam::face({0, 3, 7, 4}); // Front Face
+        faces[5] = Foam::face({1, 5, 6, 2}); // Back Face
 
         this->faces_ = faces;
         return faces;
@@ -88,24 +88,24 @@ namespace Bashyal
         triangles[1] = Foam::labelledTri(0, 2, 3); // Triangle 2 of the bottom face
 
         // Top face (4, 5, 6, 7) split into two triangles
-        triangles[2] = Foam::labelledTri(4, 5, 6); // Triangle 1 of the top face
-        triangles[3] = Foam::labelledTri(4, 6, 7); // Triangle 2 of the top face
+        triangles[2] = Foam::labelledTri(4, 7, 6); // Triangle 1 of the top face
+        triangles[3] = Foam::labelledTri(4, 6, 5); // Triangle 2 of the top face
 
         // Front face (0, 1, 5, 4) split into two triangles
-        triangles[4] = Foam::labelledTri(0, 1, 5); // Triangle 1 of the front face
-        triangles[5] = Foam::labelledTri(0, 5, 4); // Triangle 2 of the front face
+        triangles[4] = Foam::labelledTri(0, 4, 5); // Triangle 1 of the front face
+        triangles[5] = Foam::labelledTri(0, 5, 1); // Triangle 2 of the front face
 
         // Back face (2, 3, 7, 6) split into two triangles
-        triangles[6] = Foam::labelledTri(2, 3, 7); // Triangle 1 of the back face
-        triangles[7] = Foam::labelledTri(2, 7, 6); // Triangle 2 of the back face
+        triangles[6] = Foam::labelledTri(3, 2, 6); // Triangle 1 of the back face
+        triangles[7] = Foam::labelledTri(3, 6, 7); // Triangle 2 of the back face
 
         // Left face (0, 3, 7, 4) split into two triangles
         triangles[8] = Foam::labelledTri(0, 3, 7); // Triangle 1 of the left face
         triangles[9] = Foam::labelledTri(0, 7, 4); // Triangle 2 of the left face
 
         // Right face (1, 2, 6, 5) split into two triangles
-        triangles[10] = Foam::labelledTri(1, 2, 6); // Triangle 1 of the right face
-        triangles[11] = Foam::labelledTri(1, 6, 5); // Triangle 2 of the right face
+        triangles[10] = Foam::labelledTri(1, 5, 6); // Triangle 1 of the right face
+        triangles[11] = Foam::labelledTri(1, 6, 2); // Triangle 2 of the right face
 
         return triangles;
     }
@@ -172,12 +172,13 @@ namespace Bashyal
         this->globalPoints_ = this->translatePoints(rotatedPoints, translationVector);
     }
 
-    void cubeAggregate::getBoundBox()
+    boundBox cubeAggregate::getBoundBox()
     {
         this->boundBox_ = boundBox(this->globalPoints_);
         point min = this->floorPoint(this->boundBox_.min());
         point max = this->ceilPoint(this->boundBox_.max());
-        this->roundedBoundBox_ = boundBox(min, max);
+        // this->roundedBoundBox_ = boundBox(min, max);
+        return boundBox(min, max);
     }
 
     scalar cubeAggregate::roundToRequiredDecimal(scalar value)

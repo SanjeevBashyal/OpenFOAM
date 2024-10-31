@@ -6,6 +6,7 @@
 #include "quickWriter.H"
 #include "block.H"
 #include "backgroundBlock.H"
+#include "cubeAggregate.H"
 
 using namespace Foam;
 
@@ -50,12 +51,16 @@ namespace Bashyal
         Foam::pointField createVertices();
         Vector<int> countBlocksPerAxis() const;
         List<List<List<autoPtr<backgroundBlock>>>> createListPointers();
+        Vector<int> getBlockIndexContainingPoint(point& pt);
+        bool contains(const point &pt);
         
         ~backgroundMesh() = default;
 
         void developMesh();
         void addPoints(const pointField &blockPoints);
         void addFaces(const pointField &blockPoints, const faceList &blockFaces, const labelList &owners, const labelList &neighbours);
+
+        void intersectCube(cubeAggregate &cubeAgg);
 
         void createPolyMesh();
         void writeBackgroundMesh(const std::string &meshDir);

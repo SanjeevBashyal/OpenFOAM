@@ -7,7 +7,7 @@
         {
             "type": "cppdbg",
             "request": "launch",
-            "program": "${env:FOAM_APPBIN}/backgroundMesh",
+            "program": "${env:FOAM_APPBIN}/firstPrincipleFoam",
             "name": "Debug in OpenFOAM",
             "args": [],
             "stopAtEntry": false,

@@ -50,7 +50,8 @@ namespace Bashyal
         tensor rotationMatrixFromAngles();
         void locate();
 
-        void getBoundBox();
+        point getCentroid() {return centroid_;}
+        boundBox getBoundBox();
         point roundPoint(point value); 
         point floorPoint(point value); 
         point ceilPoint(point value); 
@@ -64,7 +65,7 @@ namespace Bashyal
         ~cubeAggregate() = default;
     };
 
-    tensor operator*(const tensor &A, const tensor &B)
+    inline tensor operator*(const tensor &A, const tensor &B)
     {
         tensor C = tensor::zero; // Initialize result tensor to zero
 
