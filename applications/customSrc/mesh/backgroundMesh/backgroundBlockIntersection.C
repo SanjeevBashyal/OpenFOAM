@@ -2,29 +2,43 @@
 
 namespace Bashyal
 {
-    void backgroundBlock::intersectCube(cubeAggregate &cubeAgg)
+    void backgroundBlock::intersectClosedSurface(const faceList &faces, const pointField &points, point insidePoint)
     {
-        const faceList &cubeFaces = cubeAgg.faces_;
+
+        Foam::HashTable<label, point> pointMap;
+        Foam::HashTable<label, face> faceMap;
+
         pointField outputPoints;
         face outputFace;
+
+        // List<List<point>> blockFaceHitPoints;
+        // HashTable<pointFaceHit, point> blockHitMap;
         // Loop through each face in cubeAggregate's face list
-        for (const face &cubeFace : cubeFaces)
+        for (const face &faceI : faces)
         {
-            this->intersectOthersFace(cubeFace, cubeAgg.globalPoints_, outputFace, outputPoints, cubeAgg.getCentroid());
+            this->intersectSurfaceFace(faceI, points, outputFace, outputPoints, insidePoint);
+
+        }
+
+        for (int i = 0; i < faces_.size(), i++)
+        {
+            List<point> blockFaceHitPointsI = blockFaceHitPoints[i];
+            this->generateBlockFace(blockFaceHitPointsI, blockHitMap, outputFace, outputPoints, insidePoint);
         }
     }
 
-    void backgroundBlock::intersectBlockFace(const face &cubeFace, const pointField &cubePoints)
+    void backgroundBlock::intersectBlockFace(List<point> &blockFaceHitPoints, HashTable<pointFaceHit, point> &blockHitMap, const face &faceI, const pointField &points)
     {
+
     }
 
-    void backgroundBlock::intersectOthersFace(const face &cubeFace, const pointField &cubePoints, face &outputFace, pointField &outputPoints, point targetPoint)
+    void backgroundBlock::intersectSurfaceFace(const face &faceI, const pointField &points, face &outputFace, pointField &outputPoints, point targetPoint)
     {
-        int countVerticesInside = this->countVerticesInsideBlock(cubeFace, cubePoints);
-        if (countVerticesInside == cubeFace.size())
+        int countVerticesInside = this->countVerticesInsideBlock(faceI, points);
+        if (countVerticesInside == faceI.size())
         {
-            face reversedFace = cubeFace.reverseFace();
-            outputPoints = reversedFace.points(cubePoints);
+            face reversedFace = faceI.reverseFace();
+            outputPoints = reversedFace.points(points);
             outputFace.setSize(reversedFace.size());
             for (label i = 0; i < outputFace.size(); ++i)
             {
@@ -42,12 +56,17 @@ namespace Bashyal
         for (const face &blockFace : this->getFaces())
         {
 
-            // Call findIntersections between cubeFace and the current blockFace
+            // Call findIntersections between faceI and the current blockFace
             this->findIntersections(
-                cubeFace, blockFace,           // Faces to intersect
-                cubePoints, this->getPoints(), // Points for each face
-                pts,                           // Store intersections
+                faceI, blockFace,          // Faces to intersect
+                points, this->getPoints(), // Points for each face
+                pts,                       // Store intersections
                 hitMap);
+        }
+
+        if (pts.size() == 0)
+        {
+            return;
         }
 
         this->generateFace(pts, hitMap, outputFace, outputPoints, targetPoint);
@@ -67,12 +86,12 @@ namespace Bashyal
         List<point> &pts,
         HashTable<pointFaceHit, point> &hitMap)
     {
-        // Use shootRays method to shoot rays from face1 to face2 and vice versa
-        shootRays(face1, points1, face2, points2, pts, hitMap);
-        shootEdges(face2, points2, face1, points1, pts, hitMap);
+        // Use shootSurfaceRays method to shoot rays from face1 to face2 and vice versa
+        shootSurfaceRays(face1, points1, face2, points2, pts, hitMap);
+        shootBlockRays(face2, points2, face1, points1, pts, hitMap);
     }
 
-    void backgroundBlock::shootRays(
+    void backgroundBlock::shootSurfaceRays(
         const face &srcFace,
         const UList<point> &srcPoints,
         const face &tgtFace,
@@ -125,7 +144,8 @@ namespace Bashyal
                     if (!hitMap.found(hit.point()))
                     {
                         pointFaceHit intersection1 = pointFaceHit(hit, startPoint);
-                        intersection1.setFaceFlag();
+                        intersection1.setBlockFaceFlag();
+                        intersection1.setCutEdgeFlag();
                         intersection1.face1_ = this->faces_.found(tgtFace);
                         pts.append(hit.point());
                         hitMap.insert(hit.point(), intersection1);
@@ -136,7 +156,7 @@ namespace Bashyal
         }
     }
 
-    void backgroundBlock::shootEdges(
+    void backgroundBlock::shootBlockRays(
         const face &srcFace,
         const UList<point> &srcPoints,
         const face &tgtFace,
@@ -350,6 +370,18 @@ namespace Bashyal
 
         // If the number of intersections is odd, the point is inside the surface
         return (intersections % 2 == 1);
+    }
+
+    void backgroundBlock::addPoints(const pointField &points, Foam::HashTable<label, point> pointMap, const pointField &mergedPoints)
+    {
+        for (const auto &pt : points)
+        {
+            if (!pointMap.found(pt))
+            {
+                pointMap.insert(pt, mergedPoints.size());
+                mergedPoints.append(pt);
+            }
+        }
     }
 
 }

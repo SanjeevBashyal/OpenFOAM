@@ -22,9 +22,13 @@ namespace Bashyal
         label face1_ = -1;
         label face2_ = -1;
 
-        bool isFace_ = false;
-        bool isEdge_ = false;
-        bool isInside_ = false;
+        bool isBlockFace_ = false;
+        bool isBlockEdge_ = false;
+        bool isBlockInside_ = false;
+
+        bool isCutFace_ = false;
+        bool isCutEdge_ = false;
+        bool isCutInside_ = false;
 
     public:
         pointFaceHit();
@@ -32,9 +36,13 @@ namespace Bashyal
         pointFaceHit(pointHit hit);
         pointFaceHit(pointHit hit, point startPoint);
 
-        void setFaceFlag();
-        void setEdgeFlag();
-        void setInsideFlag();
+        void setBlockFaceFlag();
+        void setBlockEdgeFlag();
+        void setBlockInsideFlag();
+
+        void setCutFaceFlag();
+        void setCutEdgeFlag();
+        void setCutInsideFlag();
 
         ~pointFaceHit();
     };

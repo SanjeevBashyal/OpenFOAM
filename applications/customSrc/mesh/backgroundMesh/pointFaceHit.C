@@ -23,19 +23,34 @@ namespace Bashyal
     {
     }
 
-    void pointFaceHit::setFaceFlag()
+    void pointFaceHit::setBlockFaceFlag()
     {
-        this->isFace_ = true;
+        this->isBlockFace_ = true;
     }
 
-    void pointFaceHit::setEdgeFlag()
+    void pointFaceHit::setBlockEdgeFlag()
     {
-        this->isEdge_ = true;
+        this->isBlockEdge_ = true;
     }
 
-    void pointFaceHit::setInsideFlag()
+    void pointFaceHit::setBlockInsideFlag()
     {
-        this->isInside_ = true;
+        this->isBlockInside_ = true;
+    }
+
+    void pointFaceHit::setCutFaceFlag()
+    {
+        this->isCutFace_ = true;
+    }
+
+    void pointFaceHit::setCutEdgeFlag()
+    {
+        this->isCutEdge_ = true;
+    }
+
+    void pointFaceHit::setCutInsideFlag()
+    {
+        this->isCutInside_ = true;
     }
 
     pointFaceHit::~pointFaceHit()
