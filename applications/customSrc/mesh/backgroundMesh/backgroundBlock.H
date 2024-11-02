@@ -42,16 +42,19 @@ namespace Bashyal
         labelList getNeighbours() { return neighbours_; }
 
         void intersectClosedSurface(const faceList &faces, const pointField &points, point insidePoint);
-        void generateBlockFace(List<point> &blockFaceHitPoints, HashTable<pointFaceHit, point> &blockHitMap, const face &faceI, const pointField &points);
-        void intersectOthersFace(const face &faceI, const pointField &points, face &outputFace, pointField &outputPoints, point targetPoint);
-        void findIntersections(const face &face1, const face &face2, const UList<point> &points1, const UList<point> &points2, List<point> &pts, HashTable<pointFaceHit, point> &hitMap);
-        void shootSurfaceRays(const face &srcFace, const UList<point> &srcPoints, const face &tgtFace, const UList<point> &tgtPoints, List<point> &pts, HashTable<pointFaceHit, point> &hitMap);
-        void shootBlockRays(const face &srcFace, const UList<point> &srcPoints, const face &tgtFace, const UList<point> &tgtPoints, List<point> &pts, HashTable<pointFaceHit, point> &hitMap);
+        void generateBlockFace(List<point> &pts, HashTable<pointFaceHit, point> &hitMap, int faceIndex, const faceList &faces, const Foam::pointField &points, face &outputFace, pointField &outputPoints);
+        void intersectSurfaceFace(const face &faceI, const int faceIndex, const pointField &points, face &outputFace, pointField &outputPoints, point targetPoint, HashTable<pointFaceHit, point> &hitMap, List<List<point>> &blockFaceHitPoints);
+        void findIntersections(const face &face1, const int faceIndex, const face &face2, const UList<point> &points1, const UList<point> &points2, List<point> &pts, HashTable<pointFaceHit, point> &hitMap, List<List<point>> &blockFaceHitPoints);
+        void shootSurfaceRays(const face &srcFace, const int faceIndex, const UList<point> &srcPoints, const face &tgtFace, const UList<point> &tgtPoints, List<point> &pts, HashTable<pointFaceHit, point> &hitMap, List<List<point>> &blockFaceHitPoints);
+        void shootBlockRays(const face &srcFace, const UList<point> &srcPoints, const face &tgtFace, const int faceIndex, const UList<point> &tgtPoints, List<point> &pts, HashTable<pointFaceHit, point> &hitMap, List<List<point>> &blockFaceHitPoints);
         void generateFace(List<point> pts, HashTable<pointFaceHit, point> &hitMap, face &outputFace, pointField &outputPoints, point &targetPoint);
 
-        bool isPointInsideSurface(const point &p);
-        int countVerticesInsideBlock(const face &face, const pointField &points);
-        int countVerticesInsideSurface(const faceList &faces, const pointField &points);
+        bool isPointInsideSurface(const point &p, const faceList &faces, const pointField &points);
+        int countVerticesInsideBlockBounds(const face &face1, const pointField &points);
+        int countVerticesInsideSurface(const pointField &pts, const faceList &faces, const pointField &points);
+
+        void addPoints(const pointField &points, Foam::HashTable<label, point> &pointMap, pointField &mergedPoints);
+        void addFace(const pointField &points, const face &faceI, Foam::HashTable<label, point> &pointMap, faceList &mergedFaces, pointField &mergedPoints);
 
         ~backgroundBlock();
     };

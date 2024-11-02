@@ -101,6 +101,10 @@ int main(int argc, char *argv[])
 
 bMesh.intersectCube(a);
 
+bMesh.developMesh();
+bMesh.writeBackgroundMesh(runDir / meshDir0);
+Foam::Info << "Run Successfully" << Foam::endl;
+
 
 
 //     turbulence->validate();

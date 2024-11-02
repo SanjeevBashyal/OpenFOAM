@@ -19,8 +19,11 @@ namespace Bashyal
         pointHit hit_;
         point previousPoint_;
         point nextPoint_;
-        label face1_ = -1;
-        label face2_ = -1;
+        
+        label blockFace1_ = -1;
+        label blockFace2_ = -1;
+        label cutFace1_ = -1;
+        label cutFace2_ = -1;
 
         bool isBlockFace_ = false;
         bool isBlockEdge_ = false;
