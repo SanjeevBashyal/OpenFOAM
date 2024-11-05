@@ -59,6 +59,7 @@ namespace Bashyal
         void developMesh();
         void addPoints(const pointField &blockPoints);
         void addFaces(const pointField &blockPoints, const faceList &blockFaces, const labelList &owners, const labelList &neighbours);
+        void reset();
 
         void intersectCube(cubeAggregate &cubeAgg);
 

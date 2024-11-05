@@ -17,9 +17,10 @@ namespace Bashyal
     public:
         point pt_;
         pointHit hit_;
-        point previousPoint_;
+        point rayVertex1_;
+        point rayVertex2_;
         point nextPoint_;
-        
+
         label blockFace1_ = -1;
         label blockFace2_ = -1;
         label cutFace1_ = -1;

@@ -9,7 +9,8 @@ namespace Bashyal
         Foam::HashTable<label, point> pointMap;
         Foam::HashTable<label, face> faceMap;
 
-        
+        List<List<point>> cutFaceHitPoints;
+        cutFaceHitPoints.setSize(faces.size());
 
         List<List<point>> blockFaceHitPoints;
         blockFaceHitPoints.setSize(faces_.size());
@@ -19,20 +20,28 @@ namespace Bashyal
         // Loop through each face in cubeAggregate's face list
         for (int i = 0; i < faces.size(); i++)
         {
+            this->intersectSurfaceFace(faces[i], i, points, insidePoint, hitMap, blockFaceHitPoints, cutFaceHitPoints[i]);
+        }
+
+        // Generation of Intersected Cut Face
+        for (int i = 0; i < faces.size(); i++)
+        {
             pointField outputPoints;
             outputPoints.clear();
             face outputFace;
             outputFace.clear();
 
-            this->intersectSurfaceFace(faces[i], i, points, outputFace, outputPoints, insidePoint, hitMap, blockFaceHitPoints);
-            if (outputPoints.size()>0)
+            List<point> cutFaceHitPointsI = cutFaceHitPoints[i];
+
+            if (cutFaceHitPointsI.size() > 0)
             {
+                this->generateCutFace(cutFaceHitPointsI, hitMap, i, outputFace, outputPoints, insidePoint);
                 this->addPoints(outputPoints, pointMap, mergedPoints);
                 this->addFace(outputPoints, outputFace, pointMap, mergedFaces, mergedPoints);
             }
-            
         }
 
+        // Generation of Intersected Block Face
         for (int i = 0; i < faces_.size(); i++)
         {
             pointField outputPoints;
@@ -101,7 +110,6 @@ namespace Bashyal
                 }
                 else
                 {
-                    vertexFlag = true;
                 }
                 // continue;
             }
@@ -109,13 +117,22 @@ namespace Bashyal
             if (vertexFlag)
             {
                 vertexFlag = false;
-                point pt = outputPoints[outputPoints.size() - 1];
+                point pt = points_[faceI[vertexIndexer]];
                 for (int i = 0; i < ls.size(); i++)
                 {
                     pointFaceHit hitI = hitMap[pts[ls[i]]];
                     if (hitI.isBlockEdge_ == true)
                     {
-                        if (hitI.previousPoint_ == pt)
+                        point rayPoint;
+                        if (hitI.blockFace1_ == faceIndex)
+                        {
+                            rayPoint = hitI.rayVertex1_;
+                        }
+                        else if (hitI.blockFace2_ == faceIndex)
+                        {
+                            rayPoint = hitI.rayVertex2_;
+                        }
+                        if (this->arePointsSame(rayPoint, pt, 1e-6))
                         {
                             outputPoints[currentIndexer] = hitI.pt_;
                             outputFace[currentIndexer] = currentIndexer;
@@ -133,7 +150,7 @@ namespace Bashyal
             if (edgeThroughVertexFlag)
             {
                 edgeThroughVertexFlag = false;
-                pointFaceHit hitPrevious = hitMap[outputPoints[outputPoints.size() - 1]];
+                pointFaceHit hitPrevious = hitMap[outputPoints[currentIndexer - 1]];
                 for (int i = 0; i < ls.size(); i++)
                 {
                     pointFaceHit hitI = hitMap[pts[ls[i]]];
@@ -170,7 +187,7 @@ namespace Bashyal
             if (faceFlag)
             {
                 faceFlag = false;
-                pointFaceHit hitPrevious = hitMap[outputPoints[outputPoints.size() - 1]];
+                pointFaceHit hitPrevious = hitMap[outputPoints[currentIndexer - 1]];
                 for (int i = 0; i < ls.size(); i++)
                 {
                     pointFaceHit hitI = hitMap[pts[ls[i]]];
@@ -206,11 +223,19 @@ namespace Bashyal
 
             if (edgeThroughFaceFlag)
             {
+                point prevPoint;
                 edgeThroughFaceFlag = false;
-                pointFaceHit hitPrevious = hitMap[outputPoints[outputPoints.size() - 1]];
-                point prevPoint = hitPrevious.previousPoint_;
+                pointFaceHit hitPrevious = hitMap[outputPoints[currentIndexer - 1]];
+                if (hitPrevious.blockFace1_ == faceIndex)
+                {
+                    prevPoint = hitPrevious.rayVertex1_;
+                }
+                else if ((hitPrevious.blockFace2_ == faceIndex))
+                {
+                    prevPoint = hitPrevious.rayVertex2_;
+                }
 
-                label whichVertex = faces_[faceIndex].found(points_.found(prevPoint));
+                label whichVertex = faces_[faceIndex].find(points_.find(prevPoint));
                 vertexIndexer = whichVertex + 1;
                 initFlag = true;
             }
@@ -223,24 +248,23 @@ namespace Bashyal
         }
     }
 
-    void backgroundBlock::intersectSurfaceFace(const face &faceI, const int faceIndex, const pointField &points, face &outputFace, pointField &outputPoints, point targetPoint, HashTable<pointFaceHit, point> &hitMap, List<List<point>> &blockFaceHitPoints)
+    void backgroundBlock::intersectSurfaceFace(const face &faceI, const int faceIndex, const pointField &points, point targetPoint, HashTable<pointFaceHit, point> &hitMap, List<List<point>> &blockFaceHitPoints, List<point> &cutFaceHitPointsI)
     {
-        int countVerticesInside = this->countVerticesInsideSurface(faceI.points(points), faces_, points_);
-        if (countVerticesInside == faceI.size())
-        {
-            face reversedFace = faceI.reverseFace();
-            outputPoints = reversedFace.points(points);
-            outputFace.setSize(reversedFace.size());
-            for (label i = 0; i < outputFace.size(); ++i)
-            {
-                // Set the vertex index directly, assuming ordered sequentially
-                outputFace[i] = i;
-            }
-            return;
-        }
+        // int countVerticesInside = this->countVerticesInsideSurface(faceI.points(points), faces_, points_);
+        // if (countVerticesInside == faceI.size())
+        // {
+        //     face reversedFace = faceI.reverseFace();
+        //     outputPoints = reversedFace.points(points);
+        //     outputFace.setSize(reversedFace.size());
+        //     for (label i = 0; i < outputFace.size(); ++i)
+        //     {
+        //         // Set the vertex index directly, assuming ordered sequentially
+        //         outputFace[i] = i;
+        //     }
+        //     return;
+        // }
 
-        List<point> pts;
-        pts.clear();
+        cutFaceHitPointsI.clear();
 
         // Loop through each face in the backgroundBlock
         for (const face &blockFace : this->getFaces())
@@ -250,20 +274,15 @@ namespace Bashyal
             this->findIntersections(
                 faceI, faceIndex, blockFace, // Faces to intersect
                 points, this->getPoints(),   // Points for each face
-                pts,                         // Store intersections
+                cutFaceHitPointsI,           // Store intersections
                 hitMap,
                 blockFaceHitPoints);
         }
 
-        if (pts.size() == 0)
+        if (cutFaceHitPointsI.size() == 0)
         {
             return;
         }
-
-        this->generateFace(pts, hitMap, outputFace, outputPoints, targetPoint);
-
-        // Append points to pointMap
-        // Append face to faceMap
 
         // Process intersections if needed, or pass them back to caller if needed
         // (Currently intersections is only collected within this function scope)
@@ -313,9 +332,10 @@ namespace Bashyal
                     }
                     else
                     {
-                        // Alert!! Need to update hitMap data       Hint: Use two start points and the problem will be solved
-                        // Alert!! Need to connect inside Vertices  Hint: If blockFace, search for inside point
-                        if (!pts.found(startPoint))
+
+                        // Alert!! Need to check for OR || can do problem
+                        // Alert!! Need mesh and face refiner for smaller intersections
+                        if (!this->foundOnList(pts, startPoint, 1e-6))
                         {
                             pts.append(startPoint);
                         }
@@ -345,13 +365,15 @@ namespace Bashyal
                 // Only include the hit if the distance is less than the edge distance
                 if (hitDistance >= 0 && hitDistance <= edgeDistance)
                 {
-                    if (!hitMap.found(hit.point()))
+                    // if (!hitMap.found(hit.point()))
+                    point hitPt;
+                    if (!this->pointOnList(hitMap.toc(), hit.point(), hitPt, 1e-6))
                     {
                         pointFaceHit intersection1 = pointFaceHit(hit, startPoint);
                         intersection1.setBlockFaceFlag();
                         intersection1.setCutEdgeFlag();
 
-                        label blockFaceIndex = this->faces_.found(tgtFace);
+                        label blockFaceIndex = this->faces_.find(tgtFace);
                         intersection1.blockFace1_ = blockFaceIndex;
                         intersection1.cutFace1_ = faceIndex;
 
@@ -362,19 +384,19 @@ namespace Bashyal
                     }
                     else
                     {
-                        pointFaceHit intersection1 = hitMap[hit.point()];
+                        pointFaceHit &intersection1 = hitMap[hitPt];
+                        intersection1.rayVertex2_ = startPoint;
                         intersection1.cutFace2_ = faceIndex;
 
-                        label blockFaceIndex = this->faces_.found(tgtFace);
-                        if (!blockFaceHitPoints[blockFaceIndex].found(hit.point()))
+                        label blockFaceIndex = this->faces_.find(tgtFace);
+                        if (!this->foundOnList(blockFaceHitPoints[blockFaceIndex], hitPt, 1e-6))
                         {
-                            blockFaceHitPoints[blockFaceIndex].append(hit.point());
+                            blockFaceHitPoints[blockFaceIndex].append(hitPt);
                         }
-                        
 
-                        if (!pts.found(hit.point()))
+                        if (!this->foundOnList(pts, hitPt, 1e-6))
                         {
-                            pts.append(hit.point());
+                            pts.append(hitPt);
                         }
                     }
                 }
@@ -421,13 +443,15 @@ namespace Bashyal
                 // Only include the hit if the distance is less than the edge distance
                 if (hitDistance >= 0 && hitDistance <= edgeDistance)
                 {
-                    if (!hitMap.found(hit.point()))
+                    // if (!hitMap.found(hit.point()))
+                    point hitPt;
+                    if (!this->pointOnList(hitMap.toc(), hit.point(), hitPt, 1e-6))
                     {
                         pointFaceHit intersection1 = pointFaceHit(hit, startPoint);
                         intersection1.setBlockEdgeFlag();
                         intersection1.setCutFaceFlag();
 
-                        label blockFaceIndex = this->faces_.found(srcFace);
+                        label blockFaceIndex = this->faces_.find(srcFace);
                         intersection1.blockFace1_ = blockFaceIndex;
                         intersection1.cutFace1_ = faceIndex;
 
@@ -438,18 +462,19 @@ namespace Bashyal
                     }
                     else
                     {
-                        pointFaceHit intersection1 = hitMap[hit.point()];
-                        label blockFaceIndex = this->faces_.found(srcFace);
+                        pointFaceHit &intersection1 = hitMap[hitPt];
+                        label blockFaceIndex = this->faces_.find(srcFace);
                         intersection1.blockFace2_ = blockFaceIndex;
+                        intersection1.rayVertex2_ = startPoint;
 
-                        if (!blockFaceHitPoints[blockFaceIndex].found(hit.point()))
+                        if (!this->foundOnList(blockFaceHitPoints[blockFaceIndex], hitPt, 1e-6))
                         {
-                            blockFaceHitPoints[blockFaceIndex].append(hit.point());
+                            blockFaceHitPoints[blockFaceIndex].append(hitPt);
                         }
 
-                        if (!pts.found(hit.point()))
+                        if (!this->foundOnList(pts, hitPt, 1e-6))
                         {
-                            pts.append(hit.point());
+                            pts.append(hitPt);
                         }
                     }
                 }
@@ -457,7 +482,7 @@ namespace Bashyal
         }
     }
 
-    void backgroundBlock::generateFace(List<point> pts, HashTable<pointFaceHit, point> &hitMap, face &outputFace, pointField &outputPoints, point &targetPoint)
+    void backgroundBlock::generateCutFace(List<point> pts, HashTable<pointFaceHit, point> &hitMap, int faceIndex, face &outputFace, pointField &outputPoints, point &targetPoint)
     {
         // Info << "Here" << endl;
         if (pts.size() < 3)
@@ -489,7 +514,7 @@ namespace Bashyal
                 for (int j = 0; j < ls.size(); j++)
                 {
                     pointFaceHit hitJ = hitMap[pts[ls[j]]];
-                    if (pts[current] == hitJ.previousPoint_)
+                    if (this->arePointsSame(pts[current], hitJ.rayVertex1_, 1e-6) || this->arePointsSame(pts[current], hitJ.rayVertex2_, 1e-6))
                     {
                         current = ls[j];
                         outputFace[count] = current;
@@ -504,7 +529,18 @@ namespace Bashyal
                 for (int j = 0; j < ls.size(); j++)
                 {
                     pointFaceHit hitJ = hitMap[pts[ls[j]]];
-                    if (hitI.blockFace1_ == hitJ.blockFace1_ || hitI.blockFace1_ == hitJ.blockFace2_)
+                    if (hitJ.isBlockInside_)
+                    {
+                        if (this->arePointsSame(hitI.rayVertex1_, hitJ.pt_, 1e-6) || this->arePointsSame(hitI.rayVertex2_, hitJ.pt_, 1e-6))
+                        {
+                            current = ls[j];
+                            outputFace[count] = current;
+                            ls.remove(j);
+                            count++;
+                            break;
+                        }
+                    }
+                    else if (hitI.blockFace1_ == hitJ.blockFace1_ || hitI.blockFace1_ == hitJ.blockFace2_)
                     {
                         current = ls[j];
                         outputFace[count] = current;
@@ -638,6 +674,54 @@ namespace Bashyal
             globalFace.append(globalPointIdx);
         }
         mergedFaces.append(globalFace);
+    }
+
+    bool backgroundBlock::pointOnList(const Foam::List<Foam::point> &pointList, const Foam::point &checkPoint, Foam::point &outputPoint, const double tolerance)
+    {
+        for (const Foam::point &pt : pointList)
+        {
+            // Calculate the distance between the points
+            double distance = Foam::mag(pt - checkPoint);
+
+            // Check if the distance is within the specified tolerance
+            if (distance <= tolerance)
+            {
+                outputPoint = pt;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool backgroundBlock::foundOnList(const Foam::List<Foam::point> &pointList, const Foam::point &checkPoint, const double tolerance)
+    {
+        for (const Foam::point &pt : pointList)
+        {
+            // Calculate the distance between the points
+            double distance = Foam::mag(pt - checkPoint);
+
+            // Check if the distance is within the specified tolerance
+            if (distance <= tolerance)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    bool backgroundBlock::arePointsSame(const Foam::point &point1, const Foam::point &point2, const double tolerance)
+    {
+        double distance = Foam::mag(point1 - point2);
+
+        // Check if the distance is within the specified tolerance
+        if (distance <= tolerance)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 }

@@ -7,6 +7,8 @@ namespace Bashyal
 {
     void backgroundMesh::developMesh()
     {
+        this->reset();
+
         // Loop through each level of the List structure
         for (auto &blockListLevel1 : backgroundBlocks_)
         {
@@ -87,11 +89,11 @@ namespace Bashyal
                 // Pop the face from boundaryFaces_ and add it to globalFaces_ (becomes internal face)
                 label faceOwnerIndex = boundaryFaceMap_[globalFaceCopy];
 
-                label ownerFaceLocation=boundaryFaces_.find(globalFace);
+                label ownerFaceLocation = boundaryFaces_.find(globalFace);
 
-                globalFaces_.append(boundaryFaces_[ownerFaceLocation]);       // Add to global faces
-                globalOwners_.append(faceOwnerIndex);  // Keep the previous owner
-                globalNeighbours_.append(currentCell); // Set neighbor for internal face
+                globalFaces_.append(boundaryFaces_[ownerFaceLocation]); // Add to global faces
+                globalOwners_.append(faceOwnerIndex);                   // Keep the previous owner
+                globalNeighbours_.append(currentCell);                  // Set neighbor for internal face
 
                 // Remove from boundaryFaces_
                 boundaryFaces_.remove(ownerFaceLocation);
@@ -111,5 +113,16 @@ namespace Bashyal
                 // globalOwners_.append(currentCell); // Set owner for this boundary face
             }
         }
+    }
+    void backgroundMesh::reset()
+    {
+        globalPoints_.clear();
+        globalFaces_.clear();
+        globalOwners_.clear();
+        globalNeighbours_.clear();
+        boundaryFaces_.clear();
+        pointMap_.clear();
+        faceMap_.clear();
+        boundaryFaceMap_.clear();
     }
 }

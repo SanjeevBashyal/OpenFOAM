@@ -262,6 +262,7 @@
         "domainDecompositionMesh.C": "cpp",
         "pointFaceHit.C": "cpp",
         "meshSearch.C": "cpp",
-        "gambitToFoam.L.C": "cpp"
+        "gambitToFoam.L.C": "cpp",
+        "fileName.C": "cpp"
     }
 }

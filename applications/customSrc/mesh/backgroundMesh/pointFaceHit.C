@@ -19,7 +19,7 @@ namespace Bashyal
     }
 
     pointFaceHit::pointFaceHit(pointHit hit, point startPoint)
-        : pt_(hit.point()), hit_(hit), previousPoint_(startPoint)
+        : pt_(hit.point()), hit_(hit), rayVertex1_(startPoint)
     {
     }
 
