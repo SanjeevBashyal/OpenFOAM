@@ -1,6 +1,6 @@
 
 
-Bashyal::backgroundMesh bMesh(&runTime, point(0, 0, 0), point(0.3, 0.3, 0.3), 0.1);
+Bashyal::backgroundMesh bMesh(&runTime, point(0, 0, 0), point(0.2, 0.1, 0.1), 0.1);
 bMesh.developMesh();
 Foam::fileName runDir = args.path();
 fileName meshDir0 = "constant/polyMesh";
