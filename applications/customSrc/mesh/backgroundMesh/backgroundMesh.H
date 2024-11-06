@@ -29,7 +29,9 @@ namespace Bashyal
         faceList globalFaces_;
         labelList globalOwners_;
         labelList globalNeighbours_;
+        
         DynamicList<Foam::face> boundaryFaces_; // Stores boundary faces temporarily
+        DynamicList<Foam::word> boundaryPatches_;
 
         Foam::HashTable<label, point> pointMap_;
         Foam::HashTable<label, face> faceMap_;
@@ -58,14 +60,14 @@ namespace Bashyal
 
         void developMesh();
         void addPoints(const pointField &blockPoints);
-        void addFaces(const pointField &blockPoints, const faceList &blockFaces, const labelList &owners, const labelList &neighbours);
+        void addFaces(const pointField &blockPoints, const faceList &blockFaces, const wordList &blockPatches);
         void reset();
 
         void intersectCube(cubeAggregate &cubeAgg);
 
         void createPolyMesh();
         void writeBackgroundMesh(const std::string &meshDir);
-        static void writePolyMeshPlain(const std::string &meshDir, const pointField &points, const faceList &faces, const labelList &owners, const labelList &neighbours);
+        static void writePolyMeshPlain(const std::string &meshDir, const pointField &points, const faceList &faces, const labelList &owners, const labelList &neighbours, const Foam::labelList &boundaryFaceSizes, const Foam::wordList &patchNames, const Foam::wordList &patchTypes);
         void writePolyMeshFromOwnerNeighbour(const std::string &meshDir, const pointField &points, const faceList &faces, const labelList &owners, const labelList &neighbours);
 
         void createBlockMesh();

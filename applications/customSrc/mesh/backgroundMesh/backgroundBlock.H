@@ -22,8 +22,11 @@ namespace Bashyal
         bool dead_ = false;
         bool edited_ = false;
 
-        pointField points_;    // Stores the vertices of the cube
-        faceList faces_;       // Stores the six faces of the cube
+        pointField points_; // Stores the vertices of the cube
+        faceList faces_;    // Stores the six faces of the cube
+        wordList patches_;
+        labelList aggregateFaceMap_;
+
         labelList owners_;     // Stores owner cells
         labelList neighbours_; // Stores neighbor cells
 
@@ -38,6 +41,8 @@ namespace Bashyal
         label getBlockID() { return blockID_; }
         pointField getPoints() { return points_; }
         faceList getFaces() { return faces_; }
+        wordList getPatches() { return patches_; }
+
         labelList getOwners() { return owners_; }
         labelList getNeighbours() { return neighbours_; }
 

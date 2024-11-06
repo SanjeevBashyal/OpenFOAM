@@ -59,20 +59,60 @@ namespace Bashyal
         faceList meshFaces = globalFaces_;
         labelList meshOwners = globalOwners_;
         labelList meshNeighbours = globalNeighbours_;
+        wordList meshPatches = boundaryPatches_;
 
-        // Step 2: Add boundary faces to the meshFaces and mark them with no neighbour
+        // Step 2: Initialize containers for sorted boundary faces and patch information
+        wordList patchNames;
+        HashTable<faceList, word> boundaryFacesMap;
+
+        // Step 3: Sort boundary faces by patch name in globalPatches_
+        int i = 0;
         for (const auto &boundaryFace : boundaryFaces_)
         {
-            Foam::face boundaryFaceCopy = Foam::face(boundaryFace);
-            std::sort(boundaryFaceCopy.begin(), boundaryFaceCopy.end());
+            word &facePatchName = meshPatches[i];
 
-            meshFaces.append(boundaryFace);
-            meshOwners.append(boundaryFaceMap_[boundaryFaceCopy]);     // Boundary face, no owner
-            // meshNeighbours.append(-1); // Boundary face, no neighbour
+            if (boundaryFacesMap.found(facePatchName))
+            {
+                boundaryFacesMap[facePatchName].append(boundaryFace);
+            }
+            else
+            {
+                faceList newPatchFaces;
+                newPatchFaces.append(boundaryFace);
+                boundaryFacesMap.insert(facePatchName, newPatchFaces);
+                patchNames.append(facePatchName);
+            }
+            i++;
+        }
+
+        // Step 2: Add boundary faces to the meshFaces and mark them with no neighbour
+        i = 0;
+
+        labelList patchBoundarySizes;
+        patchBoundarySizes.setSize(patchNames.size());
+
+        wordList patchTypes;
+        patchTypes.setSize(patchNames.size());
+        for (const word &patchName : patchNames)
+        {
+            faceList &boundaryFacesI = boundaryFacesMap[patchName];
+            patchBoundarySizes[i] = boundaryFacesI.size();
+            patchTypes[i] = "patch";
+            i++;
+
+            for (const face &boundaryFace : boundaryFacesI)
+            {
+                Foam::face boundaryFaceCopy = Foam::face(boundaryFace);
+                std::sort(boundaryFaceCopy.begin(), boundaryFaceCopy.end());
+
+                meshFaces.append(boundaryFace);
+                meshOwners.append(boundaryFaceMap_[boundaryFaceCopy]); // Boundary face, no owner
+                // meshNeighbours.append(-1); // Boundary face, no neighbour
+            }
         }
 
         // Step 3: Call the writePolyMeshPlain function to write the mesh data to files
-        writePolyMeshPlain(meshDir, meshPoints, meshFaces, meshOwners, meshNeighbours);
+        writePolyMeshPlain(meshDir, meshPoints, meshFaces, meshOwners, meshNeighbours, patchBoundarySizes, patchNames, patchTypes);
     }
 
     // Static method to write polyMesh data
@@ -81,7 +121,10 @@ namespace Bashyal
         const pointField &points,
         const faceList &faces,
         const labelList &owners,
-        const labelList &neighbours)
+        const labelList &neighbours,
+        const Foam::labelList &boundaryFaceSizes,
+        const Foam::wordList &patchNames,
+        const Foam::wordList &patchTypes)
     {
         mkDir(meshDir.c_str(), 0777); // Create the mesh directory if it doesn't exist
 
@@ -173,12 +216,21 @@ namespace Bashyal
                      << "    location    " << outputDir << ";\n"
                      << "    object      boundary;\n"
                      << "}\n\n";
-        boundaryFile << "1\n(\n";
-        boundaryFile << "cube\n{\n";
-        boundaryFile << "    type patch;\n";
-        boundaryFile << "    nFaces " << owners.size() - neighbours.size() << ";\n";
-        boundaryFile << "    startFace " << neighbours.size() << ";\n";
-        boundaryFile << "}\n)\n";
+        boundaryFile << patchNames.size() << "\n(\n";
+
+        // Start face index for each patch
+        label startFace = neighbours.size();
+
+        for (Foam::label i = 0; i < patchNames.size(); ++i)
+        {
+            boundaryFile << patchNames[i] << "\n{\n";
+            boundaryFile << "    type " << patchTypes[i] << ";\n";
+            boundaryFile << "    nFaces " << boundaryFaceSizes[i] << ";\n";
+            boundaryFile << "    startFace " << startFace << ";\n";
+            boundaryFile << "}\n";
+            startFace += boundaryFaceSizes[i];
+        }
+        boundaryFile << ")\n";
 
         Info << "Mesh written to " << meshDir << nl;
     }

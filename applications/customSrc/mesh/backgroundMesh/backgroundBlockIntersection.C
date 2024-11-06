@@ -6,6 +6,8 @@ namespace Bashyal
     {
         pointField mergedPoints;
         faceList mergedFaces;
+        wordList mergePatches;
+
         Foam::HashTable<label, point> pointMap;
         Foam::HashTable<label, face> faceMap;
 
@@ -38,6 +40,7 @@ namespace Bashyal
                 this->generateCutFace(cutFaceHitPointsI, hitMap, i, outputFace, outputPoints, insidePoint);
                 this->addPoints(outputPoints, pointMap, mergedPoints);
                 this->addFace(outputPoints, outputFace, pointMap, mergedFaces, mergedPoints);
+                mergePatches.append("aggregate");
             }
         }
 
@@ -53,9 +56,11 @@ namespace Bashyal
             this->generateBlockFace(blockFaceHitPointsI, hitMap, i, faces, points, outputFace, outputPoints);
             this->addPoints(outputPoints, pointMap, mergedPoints);
             this->addFace(outputPoints, outputFace, pointMap, mergedFaces, mergedPoints);
+            mergePatches.append(patches_[i]);
         }
         this->points_ = mergedPoints;
         this->faces_ = mergedFaces;
+        this->patches_ = mergePatches;
     }
 
     void backgroundBlock::generateBlockFace(List<point> &pts, HashTable<pointFaceHit, point> &hitMap, int faceIndex, const faceList &faces, const Foam::pointField &points, face &outputFace, pointField &outputPoints)

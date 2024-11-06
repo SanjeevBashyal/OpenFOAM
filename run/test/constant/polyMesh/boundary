@@ -9,10 +9,10 @@ FoamFile
 
 1
 (
-cube
+aggregate
 {
     type patch;
-    nFaces 96;
-    startFace 45;
+    nFaces 16;
+    startFace 1;
 }
 )

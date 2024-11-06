@@ -23,7 +23,7 @@ namespace Bashyal
                     addPoints(block.getPoints());
 
                     // Add faces with updated point indices
-                    addFaces(block.getPoints(), block.getFaces(), block.getOwners(), block.getNeighbours());
+                    addFaces(block.getPoints(), block.getFaces(), block.getPatches());
 
                     cellCount_ = cellCount_ + block.ncells_;
                 }
@@ -46,9 +46,10 @@ namespace Bashyal
         }
     }
 
-    void backgroundMesh::addFaces(const pointField &blockPoints, const faceList &blockFaces, const labelList &owners, const labelList &neighbours)
+    void backgroundMesh::addFaces(const pointField &blockPoints, const faceList &blockFaces, const wordList &blockPatches)
     {
         label currentCell = cellCount_;
+        int count = 0;
 
         for (const auto &face : blockFaces)
         {
@@ -97,6 +98,8 @@ namespace Bashyal
 
                 // Remove from boundaryFaces_
                 boundaryFaces_.remove(ownerFaceLocation);
+                boundaryPatches_.remove(ownerFaceLocation);
+
                 boundaryFaceMap_.erase(globalFaceCopy); // Remove from boundaryFaceMap_
             }
             else if (faceMap_.found(globalFace))
@@ -110,10 +113,14 @@ namespace Bashyal
                 // New boundary face, add to boundaryFaces_ and boundaryFaceMap_
                 boundaryFaceMap_.insert(globalFaceCopy, currentCell);
                 boundaryFaces_.append(globalFace);
+
+                boundaryPatches_.append(blockPatches[count]);
                 // globalOwners_.append(currentCell); // Set owner for this boundary face
             }
+            count++;
         }
     }
+
     void backgroundMesh::reset()
     {
         globalPoints_.clear();
@@ -121,6 +128,7 @@ namespace Bashyal
         globalOwners_.clear();
         globalNeighbours_.clear();
         boundaryFaces_.clear();
+        boundaryPatches_.clear();
         pointMap_.clear();
         faceMap_.clear();
         boundaryFaceMap_.clear();
