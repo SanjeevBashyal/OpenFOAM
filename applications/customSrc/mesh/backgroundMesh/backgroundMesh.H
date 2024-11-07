@@ -62,6 +62,8 @@ namespace Bashyal
         void addPoints(const pointField &blockPoints);
         void addFaces(const pointField &blockPoints, const faceList &blockFaces, const wordList &blockPatches);
         void reset();
+        point roundPoint(point value);
+        scalar roundToSeven(scalar value);
 
         void intersectCube(cubeAggregate &cubeAgg);
 

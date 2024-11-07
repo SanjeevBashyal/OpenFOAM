@@ -38,10 +38,11 @@ namespace Bashyal
     {
         for (const auto &pt : blockPoints)
         {
-            if (!pointMap_.found(pt))
+            Foam::point roundPt = this->roundPoint(pt);
+            if (!pointMap_.found(roundPt))
             {
-                pointMap_.insert(pt, globalPoints_.size());
-                globalPoints_.append(pt);
+                pointMap_.insert(roundPt, globalPoints_.size());
+                globalPoints_.append(roundPt);
             }
         }
     }
@@ -58,20 +59,22 @@ namespace Bashyal
             for (const auto &pt : face)
             {
                 // Retrieve the point coordinates using pt as an index into blockPoints
-                const Foam::point &pointCoords = blockPoints[pt]; // Using blockPoints to get the actual coordinates
+                Foam::point pointCoords = blockPoints[pt]; // Using blockPoints to get the actual coordinates
+
+                const Foam::point roundPt = this->roundPoint(pointCoords);
 
                 // Add to pointMap_ if not already present, and retrieve the global index
                 label globalPointIdx;
-                if (pointMap_.found(pointCoords))
+                if (pointMap_.found(roundPt))
                 {
-                    globalPointIdx = pointMap_[pointCoords];
+                    globalPointIdx = pointMap_[roundPt];
                 }
                 else
                 {
                     // If not found, add the point and assign it a new global index
                     globalPointIdx = globalPoints_.size();
-                    globalPoints_.append(pointCoords);
-                    pointMap_.insert(pointCoords, globalPointIdx);
+                    globalPoints_.append(roundPt);
+                    pointMap_.insert(roundPt, globalPointIdx);
                 }
 
                 // Add global point index to the globalFace
@@ -123,6 +126,7 @@ namespace Bashyal
 
     void backgroundMesh::reset()
     {
+        cellCount_ = 0;
         globalPoints_.clear();
         globalFaces_.clear();
         globalOwners_.clear();
@@ -133,4 +137,15 @@ namespace Bashyal
         faceMap_.clear();
         boundaryFaceMap_.clear();
     }
+
+    point backgroundMesh::roundPoint(point value)
+    {
+        return point(this->roundToSeven(value[0]), this->roundToSeven(value[1]), this->roundToSeven(value[2]));
+    }
+
+    scalar backgroundMesh::roundToSeven(scalar value)
+    {
+        return std::round(value * std::pow(10.0, 7)) / std::pow(10.0, 7);
+    }
+
 }
