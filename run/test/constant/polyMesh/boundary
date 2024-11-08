@@ -9,46 +9,46 @@ FoamFile
 
 7
 (
-aggregate
-{
-    type patch;
-    nFaces 24;
-    startFace 12;
-}
 XY-Zmin
 {
     type patch;
-    nFaces 4;
-    startFace 36;
+    nFaces 75;
+    startFace 516;
 }
 YZ-Xmin
 {
     type patch;
-    nFaces 4;
-    startFace 40;
+    nFaces 9;
+    startFace 591;
 }
 XZ-Ymin
 {
     type patch;
-    nFaces 4;
-    startFace 44;
+    nFaces 75;
+    startFace 600;
 }
 XY-Zmax
 {
     type patch;
-    nFaces 4;
-    startFace 48;
+    nFaces 75;
+    startFace 675;
 }
 XZ-Ymax
 {
     type patch;
-    nFaces 4;
-    startFace 52;
+    nFaces 75;
+    startFace 750;
+}
+aggregate
+{
+    type patch;
+    nFaces 120;
+    startFace 825;
 }
 YZ-Xmax
 {
     type patch;
-    nFaces 4;
-    startFace 56;
+    nFaces 9;
+    startFace 945;
 }
 )
