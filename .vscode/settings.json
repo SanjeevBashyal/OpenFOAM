@@ -263,6 +263,10 @@
         "pointFaceHit.C": "cpp",
         "meshSearch.C": "cpp",
         "gambitToFoam.L.C": "cpp",
-        "fileName.C": "cpp"
+        "fileName.C": "cpp",
+        "aggregate copy.C": "cpp",
+        "roundAggregate.C": "cpp",
+        "cubeAggregate copy.C": "cpp",
+        "PSD.C": "cpp"
     }
 }

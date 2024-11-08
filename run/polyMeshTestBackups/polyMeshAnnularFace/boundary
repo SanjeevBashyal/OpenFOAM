@@ -1,0 +1,19 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       polyBoundaryMesh;
+    location    "constant/polyMesh";
+    object      boundary;
+}
+
+1
+(
+XY-Zmin
+{
+    type patch;
+    nFaces 9;
+    startFace 0;
+}
+
+)

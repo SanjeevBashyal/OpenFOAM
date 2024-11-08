@@ -27,4 +27,14 @@ namespace Bashyal
         // ...
     }
 
+    void backgroundMesh::intersectCubes(cubeAggregates &cubeAggs)
+    {
+        int count = 0;
+        for (cubeAggregate &cubeAgg : cubeAggs.sediments_)
+        {
+            this->intersectCube(cubeAgg);
+            count++;
+        }
+    }
+
 }

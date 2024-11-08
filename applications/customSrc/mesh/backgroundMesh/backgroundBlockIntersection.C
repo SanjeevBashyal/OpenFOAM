@@ -249,6 +249,18 @@ namespace Bashyal
             {
                 vertexIndexer++;
                 initFlag = true;
+                if (vertexIndexer >= faceI.size() && currentIndexer < totalOutputPoints)
+                {
+                    // pointFaceHit hitI = hitMap[pts[ls[0]]];
+                    // outputPoints[currentIndexer] = hitI.pt_;
+                    // outputFace[currentIndexer] = currentIndexer;
+                    // currentIndexer++;
+                    // faceFlag = true;
+
+                    // ls.remove(0);
+                    // hitIndexer++;
+                    break;
+                }
             }
         }
     }

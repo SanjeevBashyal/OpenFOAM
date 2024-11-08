@@ -7,6 +7,7 @@
 #include "block.H"
 #include "backgroundBlock.H"
 #include "cubeAggregate.H"
+#include "cubeAggregates.H"
 
 using namespace Foam;
 
@@ -66,6 +67,7 @@ namespace Bashyal
         scalar roundToSeven(scalar value);
 
         void intersectCube(cubeAggregate &cubeAgg);
+        void intersectCubes(cubeAggregates &cubeAggs);
 
         void createPolyMesh();
         void writeBackgroundMesh(const std::string &meshDir);

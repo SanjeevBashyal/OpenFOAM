@@ -1,4 +1,4 @@
-#include "cubeAggregate.H"
+#include "roundAggregate.H"
 #include "point.H"
 #include "scalar.H"
 #include "pointField.H"
@@ -20,10 +20,6 @@ using namespace Foam;
 
 namespace Bashyal
 {
-    cubeAggregate::cubeAggregate()
-    {
-    }
-
     cubeAggregate::cubeAggregate(float s1, float s2) // to produce size between s1 and s2
         : xRotation_(0),
           yRotation_(0),
@@ -56,12 +52,7 @@ namespace Bashyal
         this->centroid_ = Foam::point(0, 0, 0);
     }
 
-    void cubeAggregate::createFaces()
-    {
-        this->createQuadFaces();
-    }
-
-    void cubeAggregate::createTriSurface()
+    void cubeAggregate::createSurface()
     {
         Foam::List<Foam::labelledTri> triangles = this->createTriangularFacesFromPoints(this->globalPoints_);
         Foam::triSurface surface(triangles, this->globalPoints_);
@@ -70,6 +61,7 @@ namespace Bashyal
 
         surface.write(outputFile);
         this->surface_ = surface;
+        this->createQuadFaces();
     }
 
     Foam::List<Foam::face> cubeAggregate::createQuadFaces()

@@ -4,6 +4,7 @@
 #include "List.H"
 #include "Random.H"
 #include "cubeAggregate.H"
+#include "PSD.H"
 
 namespace Bashyal
 {
@@ -12,12 +13,12 @@ namespace Bashyal
     private:
         /* data */
     public:
-        Foam::List<float> PSD_;
+        PSD PSD_;
         int nParticles_;
-        Foam::List<Bashyal::cubeAggregate> sediments_;
+        Foam::PtrList<Bashyal::cubeAggregate> sediments_;
 
-        cubeAggregates(Foam::List<float> PSD, int nParticles);
-        // Foam::List<Bashyal::cubeAggregate> generateAggregates();
+        cubeAggregates(PSD psd, int nParticles);
+        void generateAggregates();
         ~cubeAggregates() = default;
     };
 

@@ -1,5 +1,5 @@
-#ifndef cubeAggregate_H
-#define cubeAggregate_H
+#ifndef roundAggregate_H
+#define roundAggregate_H
 
 #include "quickInclude.H"
 
@@ -36,12 +36,10 @@ namespace Bashyal
     private:
         /* data */
     public:
-        cubeAggregate();
         explicit cubeAggregate(float s1, float s2);
 
-        void createFaces();
+        void createSurface();
         Foam::List<Foam::face> createQuadFaces();
-        void createTriSurface();
         Foam::List<Foam::labelledTri> createTriangularFacesFromPoints(const Foam::pointField &points);
 
         void translate(Foam::vector translationVector);

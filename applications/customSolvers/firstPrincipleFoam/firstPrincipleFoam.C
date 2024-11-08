@@ -73,6 +73,7 @@ Description
 #include "backgroundMesh.H"
 #include "backgroundBlock.C"
 #include "cubeAggregate.H"
+#include "PSD.H"
 #include "cubeAggregates.H"
 
 using namespace Bashyal;
@@ -99,7 +100,7 @@ int main(int argc, char *argv[])
 #include "createBackgroundMesh.H"
 #include "createAggregates.H"
 
-bMesh.intersectCube(a);
+bMesh.intersectCubes(aggregates);
 
 bMesh.developMesh();
 bMesh.writeBackgroundMesh(runDir / meshDir0);

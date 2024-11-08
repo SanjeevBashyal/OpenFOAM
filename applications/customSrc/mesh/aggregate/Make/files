@@ -1,4 +1,6 @@
-cubeAggregate.C
 aggregate.C
+cubeAggregate.C
+PSD.C
+cubeAggregates.C
 
 LIB = $(FOAM_LIBBIN)/libaggregate
