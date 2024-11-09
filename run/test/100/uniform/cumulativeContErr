@@ -10,49 +10,15 @@ FoamFile
     version     2.0;
     format      ascii;
     arch        "LSB;label=32;scalar=64";
-    class       volScalarField;
-    location    "100";
-    object      one;
+    class       uniformDimensionedScalarField;
+    location    "100/uniform";
+    object      cumulativeContErr;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 2 0 0 0 0 0];
+dimensions      [0 0 0 0 0 0 0];
+value           0;
 
-internalField   uniform 1;
-
-boundaryField
-{
-    YZ-Xmin
-    {
-        type            calculated;
-        value           uniform 1;
-    }
-    YZ-Xmax
-    {
-        type            calculated;
-        value           uniform 1;
-    }
-    XZ-Ymin
-    {
-        type            calculated;
-        value           uniform 1;
-    }
-    XZ-Ymax
-    {
-        type            calculated;
-        value           uniform 1;
-    }
-    XY-Zmin
-    {
-        type            calculated;
-        value           uniform 1;
-    }
-    XY-Zmax
-    {
-        type            calculated;
-        value           uniform 1;
-    }
-}
 
 
 // ************************************************************************* //

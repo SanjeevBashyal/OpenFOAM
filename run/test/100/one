@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  v2312                                 |
+|  \\    /   O peration     | Version:  2312                                  |
 |   \\  /    A nd           | Website:  www.openfoam.com                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -9,57 +9,53 @@ FoamFile
 {
     version     2.0;
     format      ascii;
+    arch        "LSB;label=32;scalar=64";
     class       volScalarField;
-    object      p;
+    location    "100";
+    object      one;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 2 -2 0 0 0 0];
+dimensions      [0 2 0 0 0 0 0];
 
-internalField   uniform 0;
+internalField   uniform 1;
 
 boundaryField
 {
-    YZ-Xmin
-    {
-        type            fixedValue;  // Fixed value boundary condition
-        value           uniform 2;   // P = 4 at this boundary
-    }
-
-    YZ-Xmax
-    {
-        type            zeroGradient;
-    }
-
-    XZ-Ymin
-    {
-        type            fixedValue;  // Fixed value boundary condition
-        value           uniform 2;   // P = 4 at this boundary
-    }
-
-    XZ-Ymax
-    {
-        type            zeroGradient;
-    }
-
-    XY-Zmin
-    {
-        type            zeroGradient;
-    }
-
-    XY-Zmax
-    {
-        type            zeroGradient;
-    }
-
     aggregate
     {
-        type            zeroGradient;
+        type            calculated;
+        value           uniform 1;
     }
-
-    frontAndBack
+    XY-Zmin
     {
-        type            empty;
+        type            calculated;
+        value           uniform 1;
+    }
+    YZ-Xmin
+    {
+        type            calculated;
+        value           uniform 1;
+    }
+    XZ-Ymin
+    {
+        type            calculated;
+        value           uniform 1;
+    }
+    XY-Zmax
+    {
+        type            calculated;
+        value           uniform 1;
+    }
+    XZ-Ymax
+    {
+        type            calculated;
+        value           uniform 1;
+    }
+    YZ-Xmax
+    {
+        type            calculated;
+        value           uniform 1;
     }
 }
 

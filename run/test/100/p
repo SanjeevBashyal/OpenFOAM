@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  v2312                                 |
+|  \\    /   O peration     | Version:  2312                                  |
 |   \\  /    A nd           | Website:  www.openfoam.com                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -9,57 +9,79 @@ FoamFile
 {
     version     2.0;
     format      ascii;
+    arch        "LSB;label=32;scalar=64";
     class       volScalarField;
+    location    "100";
     object      p;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 dimensions      [0 2 -2 0 0 0 0];
 
-internalField   uniform 0;
+internalField   nonuniform List<scalar> 
+27
+(
+1.55372
+1.66303
+1.3847
+1.58979
+1.86068
+1.29949
+2.17879
+2.2089
+1.69356
+1.71726
+2.02901
+1.35332
+2.60985
+4.29248
+2.55884
+5.98996
+6.44206
+4.84404
+3.45497
+3.98419
+2.40368
+6.24257
+9.22661
+6.93246
+14.9178
+17.7759
+17.7925
+)
+;
 
 boundaryField
 {
-    YZ-Xmin
-    {
-        type            fixedValue;  // Fixed value boundary condition
-        value           uniform 2;   // P = 4 at this boundary
-    }
-
-    YZ-Xmax
-    {
-        type            zeroGradient;
-    }
-
-    XZ-Ymin
-    {
-        type            fixedValue;  // Fixed value boundary condition
-        value           uniform 2;   // P = 4 at this boundary
-    }
-
-    XZ-Ymax
-    {
-        type            zeroGradient;
-    }
-
-    XY-Zmin
-    {
-        type            zeroGradient;
-    }
-
-    XY-Zmax
-    {
-        type            zeroGradient;
-    }
-
     aggregate
     {
         type            zeroGradient;
     }
-
-    frontAndBack
+    XY-Zmin
     {
-        type            empty;
+        type            zeroGradient;
+    }
+    YZ-Xmin
+    {
+        type            fixedValue;
+        value           uniform 2;
+    }
+    XZ-Ymin
+    {
+        type            fixedValue;
+        value           uniform 2;
+    }
+    XY-Zmax
+    {
+        type            zeroGradient;
+    }
+    XZ-Ymax
+    {
+        type            zeroGradient;
+    }
+    YZ-Xmax
+    {
+        type            zeroGradient;
     }
 }
 

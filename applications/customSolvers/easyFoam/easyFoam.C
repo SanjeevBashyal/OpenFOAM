@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
     (
         IOobject
         (
-            "one",
+            "constantScalarField",
             runTime.timeName(),
             mesh,
             IOobject::NO_READ,
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
 
         // volVectorField gradP = fvc::grad(p);
         // Solve the equation
-        solve(pEqn == one);
+        solve(pEqn == constantScalarField);
 
         runTime.write();
 
