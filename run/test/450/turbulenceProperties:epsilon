@@ -1,0 +1,94 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2312                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    arch        "LSB;label=32;scalar=64";
+    class       volScalarField;
+    location    "450";
+    object      turbulenceProperties:epsilon;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -3 0 0 0 0];
+
+internalField   nonuniform List<scalar> 
+27
+(
+1.10434
+0.45663
+0.703768
+0.590505
+0.119321
+0.84712
+2.08171
+0.72038
+0.932783
+0.698324
+0.607753
+3.41249
+1.00524
+0.141372
+0.0335223
+0.0156533
+0.0920141
+1.02167
+1.89495e-05
+9.49943e-05
+0.00342439
+0.00457419
+0.00404917
+2.13679
+6.3531
+9.07751
+44.2846
+)
+;
+
+boundaryField
+{
+    aggregate
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    XY-Zmin
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    YZ-Xmin
+    {
+        type            calculated;
+        value           nonuniform List<scalar> 9(0.568043 0.32505 0.452615 0.368772 0.136323 0.263819 0.618471 0.329893 0.588797);
+    }
+    XZ-Ymin
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    XY-Zmax
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    XZ-Ymax
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    YZ-Xmax
+    {
+        type            calculated;
+        value           nonuniform List<scalar> 9(2.07829e-05 9.78548e-05 0.00340446 0.00440321 0.00431867 2.07748 5.94403 8.05397 43.2658);
+    }
+}
+
+
+// ************************************************************************* //

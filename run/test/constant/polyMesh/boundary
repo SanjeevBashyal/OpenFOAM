@@ -11,13 +11,13 @@ FoamFile
 (
 aggregate
 {
-    type patch;
+    type wall;
     nFaces 24;
     startFace 54;
 }
 XY-Zmin
 {
-    type patch;
+    type wall;
     nFaces 9;
     startFace 78;
 }
@@ -29,19 +29,19 @@ YZ-Xmin
 }
 XZ-Ymin
 {
-    type patch;
+    type wall;
     nFaces 9;
     startFace 96;
 }
 XY-Zmax
 {
-    type patch;
+    type wall;
     nFaces 9;
     startFace 105;
 }
 XZ-Ymax
 {
-    type patch;
+    type wall;
     nFaces 9;
     startFace 114;
 }

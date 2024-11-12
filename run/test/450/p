@@ -1,0 +1,91 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2312                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    arch        "LSB;label=32;scalar=64";
+    class       volScalarField;
+    location    "450";
+    object      p;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   nonuniform List<scalar> 
+27
+(
+99.3309
+69.7314
+-18.893
+106.866
+128.284
+42.322
+163.495
+161.648
+148.851
+-68.2607
+-99.5359
+-17.633
+-100.003
+-78.0846
+-27.6492
+13.5821
+8.09647
+-12.408
+-23.9367
+11.2923
+14.1635
+48.701
+56.6587
+47.5345
+40.4173
+23.9104
+12.2591
+)
+;
+
+boundaryField
+{
+    aggregate
+    {
+        type            zeroGradient;
+    }
+    XY-Zmin
+    {
+        type            zeroGradient;
+    }
+    YZ-Xmin
+    {
+        type            freestreamPressure;
+        freestreamValue uniform 0;
+        value           nonuniform List<scalar> 9(98.8479 69.3926 -18.8012 106.347 127.661 42.117 162.701 160.862 148.129);
+    }
+    XZ-Ymin
+    {
+        type            zeroGradient;
+    }
+    XY-Zmax
+    {
+        type            zeroGradient;
+    }
+    XZ-Ymax
+    {
+        type            zeroGradient;
+    }
+    YZ-Xmax
+    {
+        type            freestreamPressure;
+        freestreamValue uniform 0;
+        value           nonuniform List<scalar> 9(-0.0104817 0.0264569 0.0456639 0.294768 0.388224 0.230251 0.244832 0.0850797 0.0205476);
+    }
+}
+
+
+// ************************************************************************* //

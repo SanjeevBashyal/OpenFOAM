@@ -24,11 +24,21 @@ solvers
         smoother        GaussSeidel;
     }
 
-    "(U|k|epsilon|omega|f|v2)"
+    U
     {
         solver          smoothSolver;
-        smoother        symGaussSeidel;
-        tolerance       1e-05;
+        smoother        GaussSeidel;
+        nSweeps         2;
+        tolerance       1e-08;
+        relTol          0.1;
+    }
+
+    nuTilda
+    {
+        solver          smoothSolver;
+        smoother        GaussSeidel;
+        nSweeps         2;
+        tolerance       1e-08;
         relTol          0.1;
     }
 }
@@ -36,22 +46,25 @@ solvers
 SIMPLE
 {
     nNonOrthogonalCorrectors 0;
-    consistent      yes;
 
     residualControl
     {
-        p               1e-2;
-        U               1e-3;
-        "(k|epsilon|omega|f|v2)" 1e-3;
+        p               1e-5;
+        U               1e-5;
+        nuTilda         1e-5;
     }
 }
 
 relaxationFactors
 {
+    fields
+    {
+        p               0.3;
+    }
     equations
     {
-        U               0.9; // 0.9 is more stable but 0.95 more convergent
-        ".*"            0.9; // 0.9 is more stable but 0.95 more convergent
+        U               0.7;
+        nuTilda         0.7;
     }
 }
 

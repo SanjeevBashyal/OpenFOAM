@@ -17,6 +17,7 @@
 
 
 #include "transform.H"
+#include "dictionary.H"
 #include "IOdictionary.H"
 
 

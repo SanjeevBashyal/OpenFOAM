@@ -97,7 +97,7 @@ namespace Bashyal
         {
             faceList &boundaryFacesI = boundaryFacesMap[patchName];
             patchBoundarySizes[i] = boundaryFacesI.size();
-            patchTypes[i] = "patch";
+            patchTypes[i] = boundaryDict_.getOrDefault<Foam::word>(patchName,"patch");
             i++;
 
             for (const face &boundaryFace : boundaryFacesI)

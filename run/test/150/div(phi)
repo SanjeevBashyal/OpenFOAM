@@ -1,0 +1,122 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2312                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    arch        "LSB;label=32;scalar=64";
+    class       volScalarField;
+    location    "150";
+    object      div(phi);
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 -1 0 0 0 0];
+
+internalField   nonuniform List<scalar> 
+27
+(
+-2.80831
+14.4294
+-5.53357
+-13.9778
+26.0918
+5.22742
+26.5227
+21.1766
+32.008
+32.0986
+-44.4833
+-18.5413
+-67.0073
+-34.4204
+-51.1662
+-40.1056
+-18.3534
+-28.0858
+9.67073
+27.4814
+-5.63168
+52.1968
+78.4469
+30.6399
+22.7156
+7.69848
+2.09926
+)
+;
+
+boundaryField
+{
+    aggregate
+    {
+        type            extrapolatedCalculated;
+        value           nonuniform List<scalar> 
+24
+(
+-2.80831
+-2.80831
+-2.80831
+14.4294
+14.4294
+14.4294
+-13.9778
+-13.9778
+-13.9778
+26.0918
+26.0918
+26.0918
+32.0986
+32.0986
+32.0986
+-44.4833
+-44.4833
+-44.4833
+-67.0073
+-67.0073
+-67.0073
+-34.4204
+-34.4204
+-34.4204
+)
+;
+    }
+    XY-Zmin
+    {
+        type            extrapolatedCalculated;
+        value           nonuniform List<scalar> 9(-2.80831 -13.9778 26.5227 32.0986 -67.0073 -40.1056 9.67073 52.1968 22.7156);
+    }
+    YZ-Xmin
+    {
+        type            extrapolatedCalculated;
+        value           nonuniform List<scalar> 9(-2.80831 14.4294 -5.53357 -13.9778 26.0918 5.22742 26.5227 21.1766 32.008);
+    }
+    XZ-Ymin
+    {
+        type            extrapolatedCalculated;
+        value           nonuniform List<scalar> 9(-2.80831 14.4294 -5.53357 32.0986 -44.4833 -18.5413 9.67073 27.4814 -5.63168);
+    }
+    XY-Zmax
+    {
+        type            extrapolatedCalculated;
+        value           nonuniform List<scalar> 9(-5.53357 5.22742 32.008 -18.5413 -51.1662 -28.0858 -5.63168 30.6399 2.09926);
+    }
+    XZ-Ymax
+    {
+        type            extrapolatedCalculated;
+        value           nonuniform List<scalar> 9(26.5227 21.1766 32.008 -40.1056 -18.3534 -28.0858 22.7156 7.69848 2.09926);
+    }
+    YZ-Xmax
+    {
+        type            extrapolatedCalculated;
+        value           nonuniform List<scalar> 9(9.67073 27.4814 -5.63168 52.1968 78.4469 30.6399 22.7156 7.69848 2.09926);
+    }
+}
+
+
+// ************************************************************************* //

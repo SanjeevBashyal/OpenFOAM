@@ -1,0 +1,94 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2312                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    arch        "LSB;label=32;scalar=64";
+    class       volScalarField;
+    location    "200";
+    object      turbulenceProperties:I;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 0 0 0 0];
+
+internalField   nonuniform List<scalar> 
+27
+(
+0.00564945
+0.0048547
+0.00659387
+0.00478498
+0.00307028
+0.00529832
+0.00641584
+0.00512287
+0.00594095
+0.00483289
+0.00179643
+0.000752573
+0.00139035
+0.00145789
+0.00285679
+0.00340454
+0.00361032
+0.00540159
+0.0016762
+0.000874458
+0.0098965
+0.00978049
+0.00730604
+0.0155367
+0.018631
+0.0156333
+0.021357
+)
+;
+
+boundaryField
+{
+    aggregate
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    XY-Zmin
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    YZ-Xmin
+    {
+        type            calculated;
+        value           nonuniform List<scalar> 9(0.00529254 0.00460375 0.00500542 0.00475001 0.00370462 0.0043724 0.00540988 0.0046231 0.00534408);
+    }
+    XZ-Ymin
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    XY-Zmax
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    XZ-Ymax
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    YZ-Xmax
+    {
+        type            calculated;
+        value           nonuniform List<scalar> 9(0.00171516 0.000880142 0.00986852 0.0096774 0.0074189 0.0154272 0.0183298 0.0151827 0.0212406);
+    }
+}
+
+
+// ************************************************************************* //

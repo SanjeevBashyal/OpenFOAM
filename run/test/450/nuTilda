@@ -1,0 +1,96 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2312                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    arch        "LSB;label=32;scalar=64";
+    class       volScalarField;
+    location    "450";
+    object      nuTilda;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -1 0 0 0 0];
+
+internalField   nonuniform List<scalar> 
+27
+(
+4.9897e-05
+4.67836e-05
+4.30203e-05
+5.00997e-05
+4.9695e-05
+5.43357e-05
+5.64266e-05
+4.89965e-05
+4.50241e-05
+5.03484e-05
+5.61411e-05
+7.58077e-05
+6.21637e-05
+4.69653e-05
+2.25968e-05
+1.5766e-05
+2.77621e-05
+4.45155e-05
+4.34323e-06
+7.11866e-06
+1.36416e-05
+1.60683e-05
+2.73086e-05
+8.78911e-05
+0.000101161
+0.000219544
+0.000466565
+)
+;
+
+boundaryField
+{
+    aggregate
+    {
+        type            fixedValue;
+        value           uniform 0;
+    }
+    XY-Zmin
+    {
+        type            fixedValue;
+        value           uniform 0;
+    }
+    YZ-Xmin
+    {
+        type            freestream;
+        freestreamValue uniform 4e-05;
+        value           uniform 4e-05;
+    }
+    XZ-Ymin
+    {
+        type            fixedValue;
+        value           uniform 0;
+    }
+    XY-Zmax
+    {
+        type            fixedValue;
+        value           uniform 0;
+    }
+    XZ-Ymax
+    {
+        type            fixedValue;
+        value           uniform 0;
+    }
+    YZ-Xmax
+    {
+        type            freestream;
+        freestreamValue uniform 4e-05;
+        value           nonuniform List<scalar> 9(4.34323e-06 7.11866e-06 1.36416e-05 1.60683e-05 2.73086e-05 8.78911e-05 0.000101161 0.000219544 0.000466565);
+    }
+}
+
+
+// ************************************************************************* //

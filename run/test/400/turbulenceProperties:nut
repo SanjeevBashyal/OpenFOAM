@@ -1,0 +1,124 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2312                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    arch        "LSB;label=32;scalar=64";
+    class       volScalarField;
+    location    "400";
+    object      turbulenceProperties:nut;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -1 0 0 0 0];
+
+internalField   nonuniform List<scalar> 
+27
+(
+1.29326e-05
+1.05206e-05
+8.10951e-06
+1.3292e-05
+1.31369e-05
+1.74336e-05
+1.95329e-05
+1.19304e-05
+8.68587e-06
+1.29947e-05
+1.80206e-05
+3.98754e-05
+2.05643e-05
+7.45372e-06
+1.85822e-07
+1.70025e-08
+1.70774e-06
+1.04169e-05
+1.50098e-09
+1.07771e-08
+1.23141e-07
+3.50826e-09
+4.61669e-06
+7.33613e-05
+9.16797e-05
+0.000232965
+0.000499694
+)
+;
+
+boundaryField
+{
+    aggregate
+    {
+        type            nutUSpaldingWallFunction;
+        value           nonuniform List<scalar> 
+24
+(
+0.00151989
+0.00015904
+0.00114859
+0.00112895
+0.000156174
+0.00149397
+0.00117274
+0.000162563
+0.00155175
+0.00150509
+0.000157405
+0.0011374
+0.00120447
+0.000124189
+0.000909722
+0.000979288
+0.000134338
+0.00129634
+0.00105554
+0.000145463
+0.00139699
+0.00141284
+0.000147212
+0.00106754
+)
+;
+    }
+    XY-Zmin
+    {
+        type            nutUSpaldingWallFunction;
+        value           nonuniform List<scalar> 9(0.00205354 0.0020776 0.00196503 0.0016236 0.00186848 0.00216075 0.00156887 0.00160091 0.00192883);
+    }
+    YZ-Xmin
+    {
+        type            freestream;
+        freestreamValue uniform 1e-05;
+        value           uniform 1e-05;
+    }
+    XZ-Ymin
+    {
+        type            nutUSpaldingWallFunction;
+        value           nonuniform List<scalar> 9(0.0020345 0.00201816 0.00185601 0.0016086 0.00174871 0.00179624 0.00156887 0.00140456 0.00139018);
+    }
+    XY-Zmax
+    {
+        type            nutUSpaldingWallFunction;
+        value           nonuniform List<scalar> 9(0.00185601 0.00194381 0.00195075 0.00179624 0.00206004 0.00207196 0.00139018 0.00183636 0.00224468);
+    }
+    XZ-Ymax
+    {
+        type            nutUSpaldingWallFunction;
+        value           nonuniform List<scalar> 9(0.00196503 0.00197721 0.00195075 0.00216075 0.00212242 0.00207196 0.00192883 0.00219473 0.00224468);
+    }
+    YZ-Xmax
+    {
+        type            freestream;
+        freestreamValue uniform 1e-05;
+        value           nonuniform List<scalar> 9(1.50098e-09 1.07771e-08 1.23141e-07 3.50826e-09 4.61669e-06 7.33613e-05 9.16797e-05 0.000232965 0.000499694);
+    }
+}
+
+
+// ************************************************************************* //

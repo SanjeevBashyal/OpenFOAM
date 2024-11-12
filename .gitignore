@@ -80,3 +80,7 @@ doc/Doxygen/DTAGS
 
 # Ignore the test directory
 /tutorialsTest
+
+# Ignore the module directory
+/modules/swak4Foam
+/modules/sedFoam

@@ -1,0 +1,122 @@
+Auto-Transcript Start Time:  12:23:12, 10 Nov 2024 Nepal Standard Time 
+Current Directory: "\\wsl.localhost\Ubuntu\usr\lib\openfoam\openfoam2312\run\test\fluentInterface"
+
+              Welcome to ANSYS Fluent 2024 R1
+
+              Copyright 1987-2024 ANSYS, Inc. All Rights Reserved.
+              Unauthorized use, distribution or duplication is prohibited.
+              This product is subject to U.S. laws governing export and re-export.
+              For full Legal Notice, see documentation.
+
+Build Time: Nov 22 2023 10:31:01 EST  Build Id: 10184  
+ 
+Connected License Server List:	1055@localhost
+Host spawning Node 0 on machine "SANJEEV" (win64).
+
+-----------------------------------------------------------------------------------
+ID    Hostname  Core  O.S.         PID    Vendor                                  
+-----------------------------------------------------------------------------------
+n0    SANJEEV   1/20  Windows-x64  45732  12th Gen Intel(R) Core(TM) i7-12700H    
+host  SANJEEV         Windows-x64  1972   12th Gen Intel(R) Core(TM) i7-12700H    
+
+MPI Option Selected: intel
+-----------------------------------------------------------------------------------
+
+Cleanup script file is \\\\wsl.localhost\\Ubuntu\\usr\\lib\\openfoam\\openfoam2312\\run\\test\\fluentInterface\\cleanup-fluent-SANJEEV-1972.bat
+(cx-gui-do cx-activate-tab-index "NavigationPane*Frame1(TreeTab)" 0)
+Reading "//wsl.localhost/Ubuntu/usr/lib/openfoam/openfoam2312/run/test/fluentInterface/test.msh"...
+3D mesh
+nodes: 89
+cells: 27
+faces: 132
+generating pointers...done.
+extracting boundary entities...
+ moved 82 nodes from interior zone to zone 17.
+ 82 boundary nodes.
+ 78 boundary faces.
+ 7 boundary face zones.
+done.
+generating cells...done.
+analyzing boundary connectivity...done.
+'\\\\wsl.localhost\\Ubuntu\\usr\\lib\\openfoam\\openfoam2312\\run\\test\\fluentInterface'
+CMD.EXE was started with the above path as the current directory.
+UNC paths are not supported.  Defaulting to Windows directory.
+'\\\\wsl.localhost\\Ubuntu\\usr\\lib\\openfoam\\openfoam2312\\run\\test\\fluentInterface'
+CMD.EXE was started with the above path as the current directory.
+UNC paths are not supported.  Defaulting to Windows directory.
+
+Meshing> (newline)
+
+
+Meshing> (cx-gui-do cx-activate-item "Key Behavioral Changes*PanelButtons*PushButton1(OK)")
+(cx-gui-do cx-activate-tab-index "NavigationPane*Frame1(TreeTab)" 1)
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Mesh Generation|Model|Mesh Objects"))
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Mesh Generation|Model|Mesh Objects"))
+(cx-gui-do cx-activate-item "NavigationPane*Frame2*Table1*List_Tree2")
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Mesh Generation|Model|Mesh Objects"))
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Mesh Generation|Model|Unreferenced|Cell Zones(1)"))
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Mesh Generation|Model|Unreferenced|Cell Zones(1)"))
+(cx-gui-do cx-activate-item "NavigationPane*Frame2*Table1*List_Tree2")
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Mesh Generation|Model|Unreferenced|Cell Zones(1)"))
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Mesh Generation|Model|Unreferenced|Cell Zones(1)"))
+(cx-gui-do cx-list-tree-right-click "NavigationPane*Frame2*Table1*List_Tree2" )
+(cx-gui-do cx-activate-item "MenuBar*PopupMenuTree-m-Unreferenced Cells*Draw")
+(cx-use-window-id 51)
+(cx-use-window-id 51)
+zone not found.
+(cx-use-window-id 51)
+(cx-set-camera-relative '(2.26474 1.33898 -0.790594) '(0 0 0) '(0.117667 -0.080861 -0.375955) 0 0)
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Mesh Generation|Model|Unreferenced|Boundary Face Zones(7)"))
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Mesh Generation|Model|Unreferenced|Boundary Face Zones(7)"))
+(cx-gui-do cx-activate-item "NavigationPane*Frame2*Table1*List_Tree2")
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Mesh Generation|Model|Unreferenced|Boundary Face Zones(7)"))
+(cx-use-window-id 51)
+(cx-set-camera-relative '(-0.602391 1.09498 -0.228223) '(0 0 0) '(-0.13447 -0.0767933 -0.16273) 0 0)
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Mesh Generation|Model|Unreferenced|Cell Zones(1)"))
+(cx-gui-do cx-set-list-tree-selections "NavigationPane*Frame2*Table1*List_Tree2" (list "Mesh Generation|Model|Unreferenced|Cell Zones(1)"))
+(cx-gui-do cx-activate-item "Ribbon*Frame1*Frame2(Task Page)*Table1*Table3(Mesh)*PushButton1(  Check)")
+(cx-gui-do cx-activate-item "MenuBar*PopupMenuCheck*Perform Mesh Check")
+
+----------------------------------------
+Mesh Check Scope   : 0 Objects, 7 Face Zones, 1 Cell Zones
+----------------------------------------
+Domain extents.
+  x-coordinate: min = 0.000000e+00, max = 3.000000e-01.
+  y-coordinate: min = 0.000000e+00, max = 3.000000e-01.
+  z-coordinate: min = 0.000000e+00, max = 3.000000e-01.
+Volume statistics.
+  minimum volume: 8.750000e-04.
+  maximum volume: 1.000000e-03.
+    total volume: 2.600000e-02.
+Face area statistics.
+   minimum face area: 1.056607e-03.
+   maximum face area: 1.000000e-02.
+   average face area: 8.385651e-03.
+Checking number of nodes per edge.
+Checking number of nodes per face.
+Checking number of nodes per cell.
+Checking number of faces/neighbors per cell.
+Checking cell faces/neighbors.
+Checking isolated cells.
+Checking face handedness.
+Checking periodic face pairs.
+Checking face children.
+Checking face zone boundary conditions.
+Checking for invalid node coordinates.
+Checking poly cells.
+Checking zones.
+Checking neighborhood.
+Checking modified centroid.
+Info: Used modified centroid in 8 cell(s) to prevent left-handed faces.
+Checking face zones thread type.
+Done.
+----------------------------------------(newline)
+
+
+Meshing> (cx-use-window-id 51)
+/exit y
+'\\\\wsl.localhost\\Ubuntu\\usr\\lib\\openfoam\\openfoam2312\\run\\test\\fluentInterface'
+CMD.EXE was started with the above path as the current directory.
+UNC paths are not supported.  Defaulting to Windows directory.
+Auto-Transcript Stop Time:  12:33:22, 10 Nov 2024 Nepal Standard Time 
+Total Transcript Time: 10 Minute 10 Second.

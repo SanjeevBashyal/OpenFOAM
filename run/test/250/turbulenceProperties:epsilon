@@ -1,0 +1,94 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2312                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    arch        "LSB;label=32;scalar=64";
+    class       volScalarField;
+    location    "250";
+    object      turbulenceProperties:epsilon;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -3 0 0 0 0];
+
+internalField   nonuniform List<scalar> 
+27
+(
+1.54088
+0.778102
+1.36415
+0.842735
+0.131194
+0.743984
+1.6997
+0.717178
+1.28498
+0.282901
+0.00168696
+1.62742e-06
+0.00348848
+0.00356821
+0.0536338
+0.140205
+0.144991
+0.619753
+0.00315893
+0.00667688
+2.05365
+2.28428
+0.409533
+8.06606
+19.9175
+13.5744
+39.3043
+)
+;
+
+boundaryField
+{
+    aggregate
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    XY-Zmin
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    YZ-Xmin
+    {
+        type            calculated;
+        value           nonuniform List<scalar> 9(0.568047 0.325051 0.452609 0.368772 0.136324 0.263817 0.618473 0.329893 0.588812);
+    }
+    XZ-Ymin
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    XY-Zmax
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    XZ-Ymax
+    {
+        type            calculated;
+        value           uniform 0;
+    }
+    YZ-Xmax
+    {
+        type            calculated;
+        value           nonuniform List<scalar> 9(0.00346444 0.00687774 2.04157 2.19881 0.436703 7.84225 18.6351 12.0439 38.4021);
+    }
+}
+
+
+// ************************************************************************* //

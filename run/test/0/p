@@ -22,19 +22,19 @@ boundaryField
 {
     YZ-Xmin
     {
-        type            fixedValue;  // Fixed value boundary condition
-        value           uniform 2;   // P = 4 at this boundary
+        type            freestreamPressure;
+        freestreamValue $internalField;
     }
 
     YZ-Xmax
     {
-        type            zeroGradient;
+        type            freestreamPressure;
+        freestreamValue $internalField;
     }
 
     XZ-Ymin
     {
-        type            fixedValue;  // Fixed value boundary condition
-        value           uniform 2;   // P = 4 at this boundary
+        type            zeroGradient;
     }
 
     XZ-Ymax

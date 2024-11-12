@@ -21,33 +21,33 @@ dimensions      [0 2 -2 0 0 0 0];
 internalField   nonuniform List<scalar> 
 27
 (
-1.55372
-1.66303
-1.3847
-1.58979
-1.86068
-1.29949
-2.17879
-2.2089
-1.69356
-1.71726
-2.02901
-1.35332
-2.60985
-4.29248
-2.55884
-5.98996
-6.44206
-4.84404
-3.45497
-3.98419
-2.40368
-6.24257
-9.22661
-6.93246
-14.9178
-17.7759
-17.7925
+99.3306
+69.7327
+-18.8901
+106.87
+128.288
+42.3248
+163.496
+161.646
+148.848
+-68.2676
+-99.5443
+-17.6375
+-100.015
+-78.101
+-27.6653
+13.5736
+8.09321
+-12.4077
+-23.938
+11.2872
+14.154
+48.696
+56.6547
+47.5238
+40.4641
+23.9849
+12.3397
 )
 ;
 
@@ -63,13 +63,13 @@ boundaryField
     }
     YZ-Xmin
     {
-        type            fixedValue;
-        value           uniform 2;
+        type            freestreamPressure;
+        freestreamValue uniform 0;
+        value           nonuniform List<scalar> 9(98.8475 69.3939 -18.7984 106.35 127.665 42.1198 162.701 160.86 148.126);
     }
     XZ-Ymin
     {
-        type            fixedValue;
-        value           uniform 2;
+        type            zeroGradient;
     }
     XY-Zmax
     {
@@ -81,7 +81,9 @@ boundaryField
     }
     YZ-Xmax
     {
-        type            zeroGradient;
+        type            freestreamPressure;
+        freestreamValue uniform 0;
+        value           nonuniform List<scalar> 9(-0.0104669 0.0264353 0.045623 0.294826 0.388477 0.230387 0.245164 0.0852921 0.0206548);
     }
 }
 

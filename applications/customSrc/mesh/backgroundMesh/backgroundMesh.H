@@ -33,6 +33,7 @@ namespace Bashyal
         
         DynamicList<Foam::face> boundaryFaces_; // Stores boundary faces temporarily
         DynamicList<Foam::word> boundaryPatches_;
+        Foam::dictionary boundaryDict_;
 
         Foam::HashTable<label, point> pointMap_;
         Foam::HashTable<label, face> faceMap_;
@@ -51,6 +52,7 @@ namespace Bashyal
 
     public:
         explicit backgroundMesh(Foam::Time *runTime, point meshMin, point meshMax, float resolution);
+        void setBoundaryPatchType(Foam::dictionary &boundaryDict);
         Foam::pointField createVertices();
         Vector<int> countBlocksPerAxis() const;
         List<List<List<autoPtr<backgroundBlock>>>> createListPointers();

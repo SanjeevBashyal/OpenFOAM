@@ -32,6 +32,11 @@ namespace Bashyal
         Foam::Info << "Here" << Foam::endl;
     }
 
+    void backgroundMesh::setBoundaryPatchType(Foam::dictionary &boundaryDict)
+    {
+        boundaryDict_ = boundaryDict;
+    }
+
     inline Foam::pointField backgroundMesh::createVertices()
     {
         Foam::pointField Nodes(8);
