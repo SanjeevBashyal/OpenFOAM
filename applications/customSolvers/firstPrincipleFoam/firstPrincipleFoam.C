@@ -100,9 +100,9 @@ int main(int argc, char *argv[])
 #include "createBackgroundMesh.H"
 #include "createAggregates.H"
 
-    // bMesh.intersectCubes(aggregates);
+    bMesh.intersectCubes(aggregates);
 
-    bMesh.intersectCube(a);
+    // bMesh.intersectCube(a);
 
     bMesh.developMesh();
     bMesh.writeBackgroundMesh(runDir / meshDir0);

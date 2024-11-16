@@ -54,9 +54,12 @@ namespace Bashyal
 
             List<point> blockFaceHitPointsI = blockFaceHitPoints[i];
             this->generateBlockFace(blockFaceHitPointsI, hitMap, i, faces, points, outputFace, outputPoints);
-            this->addPoints(outputPoints, pointMap, mergedPoints);
-            this->addFace(outputPoints, outputFace, pointMap, mergedFaces, mergedPoints);
-            mergePatches.append(patches_[i]);
+            if (outputPoints.size() > 2)
+            {
+                this->addPoints(outputPoints, pointMap, mergedPoints);
+                this->addFace(outputPoints, outputFace, pointMap, mergedFaces, mergedPoints);
+                mergePatches.append(patches_[i]);
+            }
         }
         this->points_ = mergedPoints;
         this->faces_ = mergedFaces;
@@ -558,6 +561,14 @@ namespace Bashyal
                         }
                     }
                     else if (hitI.blockFace1_ == hitJ.blockFace1_ || hitI.blockFace1_ == hitJ.blockFace2_)
+                    {
+                        current = ls[j];
+                        outputFace[count] = current;
+                        ls.remove(j);
+                        count++;
+                        break;
+                    }
+                    else if (this->arePointsSame(hitI.rayVertex1_, hitJ.rayVertex1_, 1e-6) && this->arePointsSame(hitI.rayVertex2_, hitJ.rayVertex2_, 1e-6))
                     {
                         current = ls[j];
                         outputFace[count] = current;
