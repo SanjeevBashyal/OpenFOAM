@@ -18,7 +18,7 @@ namespace Bashyal
                 for (int k = minIndex.z(); k <= maxIndex.z(); ++k)
                 {
                     backgroundBlock &block = *backgroundBlocks_[i][j][k];
-                    block.intersectClosedSurface(cubeAgg.faces_, cubeAgg.globalPoints_, cubeAgg.getCentroid());
+                    block.intersectClosedSurface(cubeAgg.faces_, cubeAgg.globalPoints_, cubeAgg.getCentroid(), cubeAgg.stringPtr());
                 }
             }
         }

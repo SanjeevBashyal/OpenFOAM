@@ -3,16 +3,17 @@
 
 #include "quickMesh.H"
 #include "pointFaceHit.H"
+#include "baseClass.H"
 
 using namespace Foam;
 namespace Bashyal
 {
     class backgroundMesh;
 
-    class backgroundBlock
+    class backgroundBlock : public baseClass
     {
     public:
-        backgroundMesh *ref_;  // Reference to another backgroundBlock (if needed)
+        backgroundMesh *ref_;  // Reference to backgroundMesh
         Vector<int> identity_; // Identifier for the block
         boundBox bounds_;      // Bounding box for the block
 
@@ -25,6 +26,7 @@ namespace Bashyal
         pointField points_; // Stores the vertices of the cube
         faceList faces_;    // Stores the six faces of the cube
         wordList patches_;
+        wordList stringPtrs_;
         labelList aggregateFaceMap_;
 
         labelList owners_;     // Stores owner cells
@@ -42,11 +44,12 @@ namespace Bashyal
         pointField getPoints() { return points_; }
         faceList getFaces() { return faces_; }
         wordList getPatches() { return patches_; }
+        wordList getStringPtrs() { return stringPtrs_; }
 
         labelList getOwners() { return owners_; }
         labelList getNeighbours() { return neighbours_; }
 
-        void intersectClosedSurface(const faceList &faces, const pointField &points, point insidePoint);
+        void intersectClosedSurface(const faceList &faces, const pointField &points, point insidePoint, word stringPtr);
         void generateBlockFace(List<point> &pts, HashTable<pointFaceHit, point> &hitMap, int faceIndex, const faceList &faces, const Foam::pointField &points, face &outputFace, pointField &outputPoints);
         void intersectSurfaceFace(const face &faceI, const int faceIndex, const pointField &points, point targetPoint, HashTable<pointFaceHit, point> &hitMap, List<List<point>> &blockFaceHitPoints, List<point> &cutFaceHitPointsI);
         void findIntersections(const face &face1, const int faceIndex, const face &face2, const UList<point> &points1, const UList<point> &points2, List<point> &pts, HashTable<pointFaceHit, point> &hitMap, List<List<point>> &blockFaceHitPoints);

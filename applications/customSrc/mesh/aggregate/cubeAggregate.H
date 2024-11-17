@@ -2,6 +2,7 @@
 #define cubeAggregate_H
 
 #include "quickInclude.H"
+#include "baseClass.H"
 
 #include "triSurface.H"
 #include "triSurfaceMesh.H"
@@ -10,14 +11,14 @@ using namespace Foam;
 
 namespace Bashyal
 {
-    class cubeAggregate
+    class cubeAggregate : public baseClass
     {
     public:
         float s1_;
         float s2_;
         float s_;
 
-        float backgroundFinenessIndex_ = 1;     //1 for 0.1, 2 for 0.01
+        float backgroundFinenessIndex_ = 1; // 1 for 0.1, 2 for 0.01
 
         // Foam::scalar size_;    // Size of the bounding box for the aggregate
         Foam::point centroid_;
@@ -38,6 +39,7 @@ namespace Bashyal
     public:
         cubeAggregate();
         explicit cubeAggregate(float s1, float s2);
+        // cubeAggregate *getPtr() { return this; }
 
         void createFaces();
         Foam::List<Foam::face> createQuadFaces();
@@ -52,15 +54,15 @@ namespace Bashyal
         tensor rotationMatrixFromAngles();
         void locate();
 
-        point getCentroid() {return centroid_;}
+        point getCentroid() { return centroid_; }
         boundBox getBoundBox();
-        point roundPoint(point value); 
-        point floorPoint(point value); 
-        point ceilPoint(point value); 
+        point roundPoint(point value);
+        point floorPoint(point value);
+        point ceilPoint(point value);
         scalar roundToRequiredDecimal(scalar value);
         scalar ceilToRequiredDecimal(scalar value);
         scalar floorToRequiredDecimal(scalar value);
-        
+
         void hit(scalar index);
         List<pointField> facePoints_;
 

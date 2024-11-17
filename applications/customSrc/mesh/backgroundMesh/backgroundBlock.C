@@ -28,30 +28,37 @@ namespace Bashyal
         // Define the 6 faces of the cube (each face with 4 vertices in counterclockwise order)
         faces_.setSize(6);
         patches_.setSize(6);
+        stringPtrs_.setSize(6);
 
         // Bottom face (zmin): counterclockwise when viewed from below
         faces_[0] = face({0, 1, 2, 3});
         patches_[0] = "XY-Zmin";
+        stringPtrs_[0] = word::null;
 
         // Top face (zmax): counterclockwise when viewed from above
         faces_[1] = face({4, 7, 6, 5});
         patches_[1] = "XY-Zmax";
+        stringPtrs_[1] = word::null;
 
         // Left face (xmin): counterclockwise when viewed from the left
         faces_[2] = face({0, 4, 5, 1});
         patches_[2] = "YZ-Xmin";
+        stringPtrs_[2] = word::null;
 
         // Right face (xmax): counterclockwise when viewed from the right
         faces_[3] = face({3, 2, 6, 7});
         patches_[3] = "YZ-Xmax";
+        stringPtrs_[3] = word::null;
 
         // Front face (ymin): counterclockwise when viewed from the front
         faces_[4] = face({0, 3, 7, 4});
         patches_[4] = "XZ-Ymin";
+        stringPtrs_[4] = word::null;
 
         // Back face (ymax): counterclockwise when viewed from the back
         faces_[5] = face({1, 5, 6, 2});
         patches_[5] = "XZ-Ymax";
+        stringPtrs_[5] = word::null;
 
         owners_ = labelList{0, 0, 0, 0, 0, 0};           // All faces owned by a single cell
         neighbours_ = labelList{-1, -1, -1, -1, -1, -1}; // No neighbor cells (external boundary)

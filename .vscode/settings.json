@@ -267,6 +267,11 @@
         "aggregate copy.C": "cpp",
         "roundAggregate.C": "cpp",
         "cubeAggregate copy.C": "cpp",
-        "PSD.C": "cpp"
+        "PSD.C": "cpp",
+        "basic.C": "cpp",
+        "baseClass.C": "cpp",
+        "word.C": "cpp",
+        "pimpleFoam.C": "cpp",
+        "pisoFoam.C": "cpp"
     }
 }

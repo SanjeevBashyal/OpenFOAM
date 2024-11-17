@@ -31,26 +31,26 @@ const Foam::IOdictionary &aggregateDict = *aggregateDictPtr;
 // PSD psd(aggregateDict);
 
 
-Foam::List<float> percentagePSD(10);
-percentagePSD[0] = 0;
-percentagePSD[1] = 0;
-percentagePSD[2] = 0;
-percentagePSD[3] = 0;
-percentagePSD[4] = 0;
-percentagePSD[5] = 0;
-percentagePSD[6] = 0;
-percentagePSD[7] = 0;
-percentagePSD[8] = 0;
-percentagePSD[9] = 100;
+// Foam::List<float> percentagePSD(10);
+// percentagePSD[0] = 0;
+// percentagePSD[1] = 0;
+// percentagePSD[2] = 0;
+// percentagePSD[3] = 0;
+// percentagePSD[4] = 0;
+// percentagePSD[5] = 0;
+// percentagePSD[6] = 0;
+// percentagePSD[7] = 0;
+// percentagePSD[8] = 0;
+// percentagePSD[9] = 100;
 
-PSD psd(percentagePSD);
-int nParticles = 5;
-cubeAggregates aggregates(psd, nParticles);
-aggregates.generateAggregates();
+// PSD psd(percentagePSD);
+// int nParticles = 5;
+// cubeAggregates aggregates(psd, nParticles);
+// aggregates.generateAggregates();
 
-// Bashyal::cubeAggregate a(0.1, 0.1);
-// a.translate(vector(0.1, 0.1, 0.1));
-// a.rotate(30, 0, 0);
-// a.locate();
-// a.createFaces();
-// a.getBoundBox();
+Bashyal::cubeAggregate a(0.1, 0.1);
+a.translate(vector(0.2, 0.2, 0.2));
+a.rotate(30, 0, 0);
+a.locate();
+a.createFaces();
+a.getBoundBox();

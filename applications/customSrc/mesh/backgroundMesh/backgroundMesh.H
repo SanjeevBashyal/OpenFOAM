@@ -38,6 +38,7 @@ namespace Bashyal
         Foam::HashTable<label, point> pointMap_;
         Foam::HashTable<label, face> faceMap_;
         Foam::HashTable<label, face> boundaryFaceMap_; // For tracking boundary faces
+        Foam::HashTable<faceList, word> stringPtrMap_; // For tracking boundary faces
 
         double s_;
         Foam::Time *runTime_;
@@ -63,7 +64,8 @@ namespace Bashyal
 
         void developMesh();
         void addPoints(const pointField &blockPoints);
-        void addFaces(const pointField &blockPoints, const faceList &blockFaces, const wordList &blockPatches);
+        void addFaces(const pointField &blockPoints, const faceList &blockFaces, const wordList &blockPatches, const wordList &stringPtrs);
+
         void reset();
         point roundPoint(point value);
         scalar roundToSeven(scalar value);

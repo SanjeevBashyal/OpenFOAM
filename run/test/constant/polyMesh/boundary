@@ -12,43 +12,43 @@ FoamFile
 XY-Zmin
 {
     type wall;
-    nFaces 125;
-    startFace 1592;
+    nFaces 25;
+    startFace 300;
 }
 YZ-Xmin
 {
     type patch;
     nFaces 25;
-    startFace 1717;
+    startFace 325;
 }
 XZ-Ymin
 {
     type wall;
-    nFaces 125;
-    startFace 1742;
+    nFaces 25;
+    startFace 350;
 }
 XY-Zmax
 {
     type wall;
-    nFaces 125;
-    startFace 1867;
+    nFaces 25;
+    startFace 375;
 }
 XZ-Ymax
 {
     type wall;
-    nFaces 125;
-    startFace 1992;
+    nFaces 25;
+    startFace 400;
 }
 aggregate
 {
     type wall;
-    nFaces 208;
-    startFace 2117;
+    nFaces 24;
+    startFace 425;
 }
 YZ-Xmax
 {
     type patch;
     nFaces 25;
-    startFace 2325;
+    startFace 449;
 }
 )

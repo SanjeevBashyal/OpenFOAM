@@ -23,7 +23,7 @@ namespace Bashyal
                     addPoints(block.getPoints());
 
                     // Add faces with updated point indices
-                    addFaces(block.getPoints(), block.getFaces(), block.getPatches());
+                    addFaces(block.getPoints(), block.getFaces(), block.getPatches(), block.getStringPtrs());
 
                     cellCount_ = cellCount_ + block.ncells_;
                 }
@@ -47,7 +47,7 @@ namespace Bashyal
         }
     }
 
-    void backgroundMesh::addFaces(const pointField &blockPoints, const faceList &blockFaces, const wordList &blockPatches)
+    void backgroundMesh::addFaces(const pointField &blockPoints, const faceList &blockFaces, const wordList &blockPatches, const wordList &stringPtrs)
     {
         label currentCell = cellCount_;
         int count = 0;
@@ -119,6 +119,20 @@ namespace Bashyal
 
                 boundaryPatches_.append(blockPatches[count]);
                 // globalOwners_.append(currentCell); // Set owner for this boundary face
+
+                if (!(stringPtrs[count] == word::null))
+                {
+                    if (stringPtrMap_.found(stringPtrs[count]))
+                    {
+                        stringPtrMap_[stringPtrs[count]].append(globalFace);
+                    }
+                    else
+                    {
+                        faceList newFaceList;
+                        newFaceList.append(globalFace);
+                        stringPtrMap_.insert(stringPtrs[count], newFaceList);
+                    }
+                }
             }
             count++;
         }
@@ -136,6 +150,7 @@ namespace Bashyal
         pointMap_.clear();
         faceMap_.clear();
         boundaryFaceMap_.clear();
+        stringPtrMap_.clear();
     }
 
     point backgroundMesh::roundPoint(point value)
