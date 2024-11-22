@@ -24,7 +24,7 @@ namespace Bashyal
         labelList meshNeighbours = globalNeighbours_;
 
         // Handle boundary faces separately: add them to the meshFaces but with no neighbour
-        for (const auto &boundaryFace : boundaryFaces_)
+        for (const auto &boundaryFace : allFaces_)
         {
             meshFaces.append(boundaryFace); // Add the boundary face
             meshOwners.append(-1);          // Boundary faces have no owner
@@ -59,7 +59,7 @@ namespace Bashyal
         faceList meshFaces = globalFaces_;
         labelList meshOwners = globalOwners_;
         labelList meshNeighbours = globalNeighbours_;
-        wordList meshPatches = boundaryPatches_;
+        wordList meshPatches = facePatches_;
 
         // Step 2: Initialize containers for sorted boundary faces and patch information
         wordList patchNames;
@@ -67,20 +67,23 @@ namespace Bashyal
 
         // Step 3: Sort boundary faces by patch name in globalPatches_
         int i = 0;
-        for (const auto &boundaryFace : boundaryFaces_)
+        for (const auto &boundaryFace : allFaces_)
         {
-            word &facePatchName = meshPatches[i];
+            if (boolBoundaryFaces_[i])
+            {
+                word &facePatchName = meshPatches[i];
 
-            if (boundaryFacesMap.found(facePatchName))
-            {
-                boundaryFacesMap[facePatchName].append(boundaryFace);
-            }
-            else
-            {
-                faceList newPatchFaces;
-                newPatchFaces.append(boundaryFace);
-                boundaryFacesMap.insert(facePatchName, newPatchFaces);
-                patchNames.append(facePatchName);
+                if (boundaryFacesMap.found(facePatchName))
+                {
+                    boundaryFacesMap[facePatchName].append(boundaryFace);
+                }
+                else
+                {
+                    faceList newPatchFaces;
+                    newPatchFaces.append(boundaryFace);
+                    boundaryFacesMap.insert(facePatchName, newPatchFaces);
+                    patchNames.append(facePatchName);
+                }
             }
             i++;
         }
@@ -97,7 +100,7 @@ namespace Bashyal
         {
             faceList &boundaryFacesI = boundaryFacesMap[patchName];
             patchBoundarySizes[i] = boundaryFacesI.size();
-            patchTypes[i] = boundaryDict_.getOrDefault<Foam::word>(patchName,"patch");
+            patchTypes[i] = boundaryDict_.getOrDefault<Foam::word>(patchName, "patch");
             i++;
 
             for (const face &boundaryFace : boundaryFacesI)
@@ -106,7 +109,7 @@ namespace Bashyal
                 std::sort(boundaryFaceCopy.begin(), boundaryFaceCopy.end());
 
                 meshFaces.append(boundaryFace);
-                meshOwners.append(boundaryFaceMap_[boundaryFaceCopy]); // Boundary face, no owner
+                meshOwners.append(faceOwnerMap_[boundaryFaceCopy]); // Boundary face, no owner
                 // meshNeighbours.append(-1); // Boundary face, no neighbour
             }
         }

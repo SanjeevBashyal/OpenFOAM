@@ -48,8 +48,8 @@ const Foam::IOdictionary &aggregateDict = *aggregateDictPtr;
 // cubeAggregates aggregates(psd, nParticles);
 // aggregates.generateAggregates();
 
-Bashyal::cubeAggregate a(0.1, 0.1);
-a.translate(vector(0.2, 0.2, 0.2));
+Bashyal::cubeAggregate a(0.002, 0.002);
+a.translate(vector(0.0025, 0.3905, 0.0025));
 a.rotate(30, 0, 0);
 a.locate();
 a.createFaces();

@@ -84,3 +84,6 @@ doc/Doxygen/DTAGS
 # Ignore the module directory
 /modules/swak4Foam
 /modules/sedFoam
+
+# Ignore the others directory
+/others

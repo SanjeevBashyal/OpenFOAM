@@ -68,6 +68,11 @@ namespace Bashyal
         this->faces_ = mergedFaces;
         this->patches_ = mergePatches;
         this->stringPtrs_ = mergeStringPtrs;
+
+        if (this->points_.size() == 0)
+        {
+            this->ncells_ = 0;
+        }
     }
 
     void backgroundBlock::generateBlockFace(List<point> &pts, HashTable<pointFaceHit, point> &hitMap, int faceIndex, const faceList &faces, const Foam::pointField &points, face &outputFace, pointField &outputPoints)

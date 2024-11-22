@@ -272,6 +272,10 @@
         "baseClass.C": "cpp",
         "word.C": "cpp",
         "pimpleFoam.C": "cpp",
-        "pisoFoam.C": "cpp"
+        "pisoFoam.C": "cpp",
+        "UList.C": "cpp",
+        "symGaussSeidelSmoother.C": "cpp",
+        "smoothSolver.C": "cpp",
+        "scotchDecomp.C": "cpp"
     }
 }

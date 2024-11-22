@@ -22,26 +22,26 @@ boundaryField
 {
     YZ-Xmin
     {
-        type            freestream;
-        freestreamValue $internalField;
+        type            fixedValue;
+        value           uniform 0;
     }
 
     YZ-Xmax
     {
-        type            freestream;
-        freestreamValue $internalField;
+        type            fixedValue;
+        value           uniform 0;
     }
 
     XZ-Ymin
     {
-        type            fixedValue;
-        value           uniform 0;
+        type            freestream;
+        freestreamValue $internalField;
     }
 
     XZ-Ymax
     {
-        type            fixedValue;
-        value           uniform 0;
+        type            freestream;
+        freestreamValue $internalField;
     }
 
     XY-Zmin

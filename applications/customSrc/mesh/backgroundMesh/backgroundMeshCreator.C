@@ -30,7 +30,7 @@ namespace Bashyal
             }
         }
 
-        // Write polyMesh here using globalPoints_, globalFaces_, globalOwners_, globalNeighbours_, and boundaryFaces_
+        // Write polyMesh here using globalPoints_, globalFaces_, globalOwners_, globalNeighbours_, and allFaces_
         // writePolyMesh();
     }
 
@@ -86,38 +86,31 @@ namespace Bashyal
             // Sort the face points to ensure unique representation (important for shared faces)
             std::sort(globalFaceCopy.begin(), globalFaceCopy.end());
 
-            // Check if the face exists in the boundaryFaceMap_ (first encounter)
-            if (boundaryFaceMap_.found(globalFaceCopy))
+            // Check if the face exists in the faceOwnerMap_ (first encounter)
+            if (faceOwnerMap_.found(globalFaceCopy))
             {
                 // The face is a boundary face but now we encounter it again
-                // Pop the face from boundaryFaces_ and add it to globalFaces_ (becomes internal face)
-                label faceOwnerIndex = boundaryFaceMap_[globalFaceCopy];
+                // Pop the face from allFaces_ and add it to globalFaces_ (becomes internal face)
+                label faceOwnerIndex = faceOwnerMap_[globalFaceCopy];
 
-                label ownerFaceLocation = boundaryFaces_.find(globalFace);
+                label faceLocation = facePositionMap_[globalFaceCopy];
 
-                globalFaces_.append(boundaryFaces_[ownerFaceLocation]); // Add to global faces
-                globalOwners_.append(faceOwnerIndex);                   // Keep the previous owner
-                globalNeighbours_.append(currentCell);                  // Set neighbor for internal face
+                globalFaces_.append(allFaces_[faceLocation]); // Add to global faces
+                boolBoundaryFaces_[faceLocation] = false;
+                globalOwners_.append(faceOwnerIndex);              // Keep the previous owner
+                globalNeighbours_.append(currentCell);             // Set neighbor for internal face
 
-                // Remove from boundaryFaces_
-                boundaryFaces_.remove(ownerFaceLocation);
-                boundaryPatches_.remove(ownerFaceLocation);
-
-                boundaryFaceMap_.erase(globalFaceCopy); // Remove from boundaryFaceMap_
-            }
-            else if (faceMap_.found(globalFace))
-            {
-                // If face is found in the global faces, it is a fully shared face (already internal)
-                // label faceIndex = faceMap_[globalFace];
-                // globalNeighbours_[faceIndex] = currentCell;
+                faceOwnerMap_.erase(globalFaceCopy); // Remove from faceOwnerMap_
             }
             else
             {
-                // New boundary face, add to boundaryFaces_ and boundaryFaceMap_
-                boundaryFaceMap_.insert(globalFaceCopy, currentCell);
-                boundaryFaces_.append(globalFace);
+                // New boundary face, add to allFaces_ and faceOwnerMap_
+                faceOwnerMap_.insert(globalFaceCopy, currentCell);
+                allFaces_.append(globalFace);
+                boolBoundaryFaces_.append(true);
+                facePositionMap_.insert(globalFaceCopy, allFaces_.size() - 1);
 
-                boundaryPatches_.append(blockPatches[count]);
+                facePatches_.append(blockPatches[count]);
                 // globalOwners_.append(currentCell); // Set owner for this boundary face
 
                 if (!(stringPtrs[count] == word::null))
@@ -145,11 +138,15 @@ namespace Bashyal
         globalFaces_.clear();
         globalOwners_.clear();
         globalNeighbours_.clear();
-        boundaryFaces_.clear();
-        boundaryPatches_.clear();
+
+        allFaces_.clear();
+        boolBoundaryFaces_.clear();
+        facePatches_.clear();
+
         pointMap_.clear();
-        faceMap_.clear();
-        boundaryFaceMap_.clear();
+        // faceMap_.clear();
+        faceOwnerMap_.clear();
+        facePositionMap_.clear();
         stringPtrMap_.clear();
     }
 

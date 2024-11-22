@@ -1,7 +1,7 @@
 
 
 // Bashyal::backgroundMesh bMesh(&runTime, point(0, 0, 0), point(2.5, 0.5, 0.5), 0.1);
-Bashyal::backgroundMesh bMesh(&runTime, point(0, 0, 0), point(0.5, 0.5, 0.5), 0.1);
+Bashyal::backgroundMesh bMesh(&runTime, point(0, 0, 0), point(0.005, 0.4, 0.005), 0.001);
 
 #include "createPatchTypes.H"
 

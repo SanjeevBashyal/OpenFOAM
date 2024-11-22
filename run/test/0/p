@@ -22,24 +22,24 @@ boundaryField
 {
     YZ-Xmin
     {
-        type            freestreamPressure;
-        freestreamValue $internalField;
+        type            zeroGradient;
     }
 
     YZ-Xmax
     {
-        type            freestreamPressure;
-        freestreamValue $internalField;
+        type            zeroGradient;
     }
 
     XZ-Ymin
     {
-        type            zeroGradient;
+        type            freestreamPressure;
+        freestreamValue $internalField;
     }
 
     XZ-Ymax
     {
-        type            zeroGradient;
+        type            freestreamPressure;
+        freestreamValue $internalField;
     }
 
     XY-Zmin

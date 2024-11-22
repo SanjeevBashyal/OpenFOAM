@@ -27,17 +27,19 @@ namespace Bashyal
 
         label cellCount_ = 0;
         Foam::pointField globalPoints_;
-        faceList globalFaces_;
+        faceList globalFaces_;      //all internal faces
         labelList globalOwners_;
         labelList globalNeighbours_;
         
-        DynamicList<Foam::face> boundaryFaces_; // Stores boundary faces temporarily
-        DynamicList<Foam::word> boundaryPatches_;
+        List<Foam::face> allFaces_; // Stores all faces
+        List<bool> boolBoundaryFaces_; // Stores all faces
+        List<Foam::word> facePatches_;
         Foam::dictionary boundaryDict_;
 
         Foam::HashTable<label, point> pointMap_;
-        Foam::HashTable<label, face> faceMap_;
-        Foam::HashTable<label, face> boundaryFaceMap_; // For tracking boundary faces
+        // Foam::HashTable<label, face> faceMap_;
+        Foam::HashTable<label, face> faceOwnerMap_; // For tracking boundary faces
+        Foam::HashTable<label, face> facePositionMap_; // For tracking face Indices
         Foam::HashTable<faceList, word> stringPtrMap_; // For tracking boundary faces
 
         double s_;

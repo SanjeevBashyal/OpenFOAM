@@ -16,30 +16,30 @@ FoamFile
 
 dimensions      [0 1 -1 0 0 0 0];
 
-internalField   uniform (25.75 3.62 0);
+internalField   uniform (2.75 1.62 0);
 
 boundaryField
 {
     YZ-Xmin
     {
-        type            freestreamVelocity;
-        freestreamValue $internalField;
+        type            noSlip;
     }
 
     YZ-Xmax
     {
-        type            freestreamVelocity;
-        freestreamValue $internalField;
+        type            noSlip;
     }
 
     XZ-Ymin
     {
-        type            noSlip;  
+        type            freestreamVelocity;
+        freestreamValue $internalField;
     }
 
     XZ-Ymax
     {
-        type            noSlip;
+        type            freestreamVelocity;
+        freestreamValue $internalField;
     }
 
     XY-Zmin
