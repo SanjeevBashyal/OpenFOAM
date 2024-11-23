@@ -1,0 +1,34 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2312                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+nParticles   100;
+
+PSD
+{
+    Clay(<0.002)            5;
+    Silt(0.002-0.075)       10;
+    Fine_Sand(0.075-0.425)  10;
+    Medium_Sand(0.425-2)    10;
+    Coarse_Sand(2-4.75)     15;
+    Fine_Gravel(4.75-9.5)   15;
+    Medium_Gravel(9.5-19)   10;
+    Coarse_Gravel(19-37.5)  10;
+    Large_Gravel(37.5-75)   10;
+    Cobbels(>75)            5;
+}
+
+
+// ************************************************************************* //

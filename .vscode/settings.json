@@ -276,6 +276,12 @@
         "UList.C": "cpp",
         "symGaussSeidelSmoother.C": "cpp",
         "smoothSolver.C": "cpp",
-        "scotchDecomp.C": "cpp"
+        "scotchDecomp.C": "cpp",
+        "createBaffles.C": "cpp",
+        "testFoam.C": "cpp",
+        "triSurfaceIO.C": "cpp",
+        "triSurfaceSTLformat.C": "cpp",
+        "PrimitivePatch.C": "cpp",
+        "PrimitivePatchMeshData.C": "cpp"
     }
 }

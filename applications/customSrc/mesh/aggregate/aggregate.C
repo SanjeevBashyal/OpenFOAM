@@ -11,101 +11,130 @@
 #include "triSurface.H"
 #include "triSurfaceMesh.H"
 
-
-Bashyal::aggregate::aggregate(float r1, float r2, int n)
+namespace Bashyal
 {
-
-    // Create an instance of the Random class with automatic seeding
-    Foam::Random randomGen(12);
-
-    Foam::pointField Nodes(n);
-    // Foam::faceList foamFaces;
-
-    this->r1 = r1;
-    Foam::scalar r = 0;
-    Foam::scalar phi = 0;
-    Foam::scalar theta = 0;
-    float addTheta = (2 * 3.141592) / n;
-    float addPhi = (3.141592) / n;
-
-
-    for (int i = 0; i < n; i++)
+    aggregate::aggregate()
     {
-        Foam::scalar randomPhi = randomGen.sample01<Foam::scalar>();
-        Foam::scalar randomTheta = randomGen.sample01<Foam::scalar>();
-        Foam::scalar randomR = randomGen.sample01<Foam::scalar>();
-
-        r = r1 + (r2 - r1) * randomR;
-
-        theta = theta + randomTheta * addTheta;
-        phi = phi + randomPhi * addPhi;
-
-        // Generate a random scalar between 0 and 1 using the scalar01() method
-
-        Foam::point xyz = this->sphericalToCartesian(r, theta, phi);
-
-        // points.push_back(Point_3(xyz[0], xyz[1], xyz[2]));
-
-        Nodes.append(xyz);
-
-        // Foam::faceList faces = this->createFacesFromPoints(Nodes);
-        // Foam::triSurface surface(faces, Nodes);
-        // Foam::fileName outputFile = argList::globalArgs()[1];  // Second argument is the output file name
-        // surface.write(outputFile);
     }
 
-}
-
-Foam::point Bashyal::aggregate::sphericalToCartesian(Foam::scalar r, Foam::scalar theta, Foam::scalar phi)
-{
-    // Using OpenFOAM's point structure for Cartesian coordinates
-    Foam::scalar x = r * sin(theta) * cos(phi);
-    Foam::scalar y = r * sin(theta) * sin(phi);
-    Foam::scalar z = r * cos(theta);
-
-    // Return the result as a point
-    return Foam::point(x, y, z);
-}
-
-Foam::scalar Bashyal::aggregate::distance(const Foam::point &p1, const Foam::point &p2)
-{
-    return mag(p2 - p1);
-}
-
-// Function to find the nearest points and form triangles
-Foam::faceList Bashyal::aggregate::createFacesFromPoints(const Foam::pointField &points)
-{
-    Foam::faceList faces;
-
-    // We will create a very simple triangulation by connecting each point with its two closest neighbors
-    for (Foam::label i = 0; i < points.size(); i++)
+    Foam::point aggregate::sphericalToCartesian(Foam::scalar r, Foam::scalar theta, Foam::scalar phi)
     {
-        std::vector<std::pair<Foam::scalar, Foam::label>> distances;
+        // Using OpenFOAM's point structure for Cartesian coordinates
+        Foam::scalar x = r * std::sin(theta) * std::cos(phi);
+        Foam::scalar y = r * std::sin(theta) * std::sin(phi);
+        Foam::scalar z = r * std::cos(theta);
 
-        // Calculate the distance of point 'i' from every other point
-        for (Foam::label j = 0; j < points.size(); j++)
+        // Return the result as a point
+        return Foam::point(x, y, z);
+    }
+
+    Foam::scalar aggregate::distance(const Foam::point &p1, const Foam::point &p2)
+    {
+        return mag(p2 - p1);
+    }
+
+    void aggregate::translate(Foam::vector translationVector)
+    {
+        this->centroid_ += translationVector;
+    }
+
+    pointField aggregate::translatePoints(pointField points, Foam::vector translationVector)
+    {
+        for (Foam::label i = 0; i < points.size(); i++)
         {
-            if (i != j)
-            {
-                distances.push_back(std::make_pair(distance(points[i], points[j]), j));
-            }
+            points[i] += translationVector;
         }
-
-        // Sort the distances to find the nearest two neighbors
-        std::sort(distances.begin(), distances.end());
-
-        // Form a face from the point and its two nearest neighbors
-        Foam::face newFace(3); // Triangular face
-        newFace[0] = i;
-        newFace[1] = distances[0].second; // First nearest neighbor
-        newFace[2] = distances[1].second; // Second nearest neighbor
-
-        // Add the face to the list
-        faces.append(newFace);
+        return points;
     }
 
-    return faces;
+    void aggregate::rotate(scalar alpha, scalar beta, scalar gamma)
+    {
+        this->xRotation_ += alpha;
+        this->yRotation_ += beta;
+        this->zRotation_ += gamma;
+    }
+
+    pointField aggregate::rotatePoints(Foam::tensor rotationMatrix)
+    {
+        return Foam::transform(rotationMatrix, this->localPoints_);
+    }
+
+    tensor aggregate::rotationMatrixFromAngles()
+    {
+        // Convert angles from degrees to radians (if necessary)
+        scalar xRad = this->xRotation_ * M_PI / 180.0;
+        scalar yRad = this->yRotation_ * M_PI / 180.0;
+        scalar zRad = this->zRotation_ * M_PI / 180.0;
+
+        // Rotation matrix for rotation around X-axis
+        tensor Rx(
+            1, 0, 0,
+            0, std::cos(xRad), -std::sin(xRad),
+            0, std::sin(xRad), std::cos(xRad));
+
+        // Rotation matrix for rotation around Y-axis
+        tensor Ry(
+            std::cos(yRad), 0, std::sin(yRad),
+            0, 1, 0,
+            -std::sin(yRad), 0, std::cos(yRad));
+
+        // Rotation matrix for rotation around Z-axis
+        tensor Rz(
+            std::cos(zRad), -std::sin(zRad), 0,
+            std::sin(zRad), std::cos(zRad), 0,
+            0, 0, 1);
+
+        // Combined rotation matrix: R = Rz * Ry * Rx
+        return Rz * Ry * Rx;
+    }
+
+    void aggregate::locate()
+    {
+        pointField rotatedPoints = this->rotatePoints(this->rotationMatrixFromAngles());
+        vector translationVector(this->centroid_[0], this->centroid_[1], this->centroid_[2]);
+        this->globalPoints_ = this->translatePoints(rotatedPoints, translationVector);
+    }
+
+    boundBox aggregate::getBoundBox()
+    {
+        this->boundBox_ = boundBox(this->globalPoints_);
+        point min = this->floorPoint(this->boundBox_.min());
+        point max = this->ceilPoint(this->boundBox_.max());
+        // this->roundedBoundBox_ = boundBox(min, max);
+        return boundBox(min, max);
+    }
+
+    scalar aggregate::roundToRequiredDecimal(scalar value)
+    {
+        return std::round(value * std::pow(10.0, this->backgroundFinenessIndex_)) / std::pow(10.0, this->backgroundFinenessIndex_);
+    }
+
+    scalar aggregate::floorToRequiredDecimal(scalar value)
+    {
+        return std::floor(value * std::pow(10.0, this->backgroundFinenessIndex_)) / std::pow(10.0, this->backgroundFinenessIndex_);
+    }
+
+    scalar aggregate::ceilToRequiredDecimal(scalar value)
+    {
+        return std::ceil(value * std::pow(10.0, this->backgroundFinenessIndex_)) / std::pow(10.0, this->backgroundFinenessIndex_);
+    }
+
+    point aggregate::roundPoint(point value)
+    {
+        return point(this->roundToRequiredDecimal(value[0]), this->roundToRequiredDecimal(value[1]), this->roundToRequiredDecimal(value[2]));
+    }
+
+    point aggregate::floorPoint(point value)
+    {
+        return point(this->floorToRequiredDecimal(value[0]), this->floorToRequiredDecimal(value[1]), this->floorToRequiredDecimal(value[2]));
+    }
+
+    point aggregate::ceilPoint(point value)
+    {
+        return point(this->ceilToRequiredDecimal(value[0]), this->ceilToRequiredDecimal(value[1]), this->ceilToRequiredDecimal(value[2]));
+    }
 }
+
 
 namespace Bashyal
 {

@@ -1,43 +1,78 @@
 #ifndef aggregate_H
 #define aggregate_H
 
-#include "aggregate.H"
-#include "point.H"
-#include "scalar.H"
-#include "pointField.H"
-#include "List.H"
+#include "quickInclude.H"
+#include "baseClass.H"
 
-#include "Time.H"
-#include "Random.H"
 #include "triSurface.H"
-#include "triSurfaceMesh.H"
+
+using namespace Foam;
 
 namespace Bashyal
 {
-    class aggregate
+    class aggregate : public baseClass
     {
-        public:
-            float r1;
-            float r2;
-            int nPoints;
+    public:
+        float backgroundFinenessIndex_ = 1; // 1 for 0.1, 2 for 0.01
 
-            // Foam::scalar size_;    // Size of the bounding box for the aggregate
-            // Foam::pointField points_;  // Collection of points to form the aggregate surface
-            // Foam::triSurface surface_; // Triangulated surface mesh
+        Foam::point centroid_;
+        Foam::scalar xRotation_ = 0;
+        Foam::scalar yRotation_ = 0;
+        Foam::scalar zRotation_ = 0;
 
+        Foam::pointField localPoints_;  // Collection of points to form the aggregate surface
+        Foam::pointField globalPoints_; // Collection of points to form the aggregate surface
+        Foam::boundBox boundBox_;
+        Foam::boundBox roundedBoundBox_;
 
-        private:
-            /* data */
-        public:
-            explicit aggregate(float r1, float r2, int nPoints);
-            Foam::point sphericalToCartesian(Foam::scalar r, Foam::scalar theta, Foam::scalar phi);
-            Foam::scalar distance(const Foam::point &p1, const Foam::point &p2);
-            Foam::faceList createFacesFromPoints(const Foam::pointField &points);
-            ~aggregate()=default;
+        Foam::faceList faces_;
+        Foam::triSurface surface_; // Triangulated surface mesh
+
+    private:
+        /* data */
+    public:
+        aggregate();
+        ~aggregate() = default;
+
+        void translate(Foam::vector translationVector);
+        pointField translatePoints(pointField points, Foam::vector translationVector);
+
+        void rotate(scalar alpha, scalar beta, scalar gamma);
+        pointField rotatePoints(Foam::tensor rotationMatrix);
+        tensor rotationMatrixFromAngles();
+        void locate();
+
+        point getCentroid() { return centroid_; }
+        boundBox getBoundBox();
+        point roundPoint(point value);
+        point floorPoint(point value);
+        point ceilPoint(point value);
+        scalar roundToRequiredDecimal(scalar value);
+        scalar ceilToRequiredDecimal(scalar value);
+        scalar floorToRequiredDecimal(scalar value);
+
+        Foam::point sphericalToCartesian(Foam::scalar r, Foam::scalar theta, Foam::scalar phi);
+        Foam::scalar distance(const Foam::point &p1, const Foam::point &p2);
     };
 
-}
+    inline tensor operator*(const tensor &A, const tensor &B)
+    {
+        tensor C = tensor::zero; // Initialize result tensor to zero
 
+        for (int i = 0; i < 3; ++i) // Loop over rows
+        {
+            for (int j = 0; j < 3; ++j) // Loop over columns
+            {
+                for (int k = 0; k < 3; ++k) // Summing over the inner dimension
+                {
+                    C(i, j) += A(i, k) * B(k, j);
+                }
+            }
+        }
+        return C;
+    }
+
+}
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
