@@ -1,0 +1,5 @@
+EXE_INC = \
+    -I$(WM_PROJECT_DIR)/applications/customUtilities/lnInclude
+
+LIB_LIBS = \
+    -lfileFormats

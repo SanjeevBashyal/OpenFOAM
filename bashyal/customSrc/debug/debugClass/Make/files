@@ -1,0 +1,3 @@
+debugClass.C
+
+LIB = $(FOAM_LIBBIN)/libdebugClass

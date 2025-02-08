@@ -282,6 +282,9 @@
         "triSurfaceIO.C": "cpp",
         "triSurfaceSTLformat.C": "cpp",
         "PrimitivePatch.C": "cpp",
-        "PrimitivePatchMeshData.C": "cpp"
+        "PrimitivePatchMeshData.C": "cpp",
+        "GAMGSolverScale.C": "cpp",
+        "debug.C": "cpp",
+        "debugClass.C": "cpp"
     }
 }

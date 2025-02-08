@@ -1,1 +1,0 @@
-/usr/lib/openfoam/openfoam2312/applications/customSolvers/sediFoam-master/interfaceToLammps/pair_gran_hertzFix_history.cpp

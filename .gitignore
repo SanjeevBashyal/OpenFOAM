@@ -86,4 +86,6 @@ doc/Doxygen/DTAGS
 /modules/sedFoam
 
 # Ignore the others directory
-/others
+/others/runOthers
+/others/sed
+/others/sediFoam-master
