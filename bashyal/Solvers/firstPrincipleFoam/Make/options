@@ -1,8 +1,9 @@
 EXE_INC = \
-    -I$(WM_PROJECT_DIR)/applications/customUtilities/lnInclude \
-    -I$(WM_PROJECT_DIR)/applications/customSrc/baseClass/lnInclude \
-    -I$(WM_PROJECT_DIR)/applications/customSrc/mesh/aggregate \
-    -I$(WM_PROJECT_DIR)/applications/customSrc/mesh/backgroundMesh \
+    -I$(WM_PROJECT_DIR)/bashyal/customUtilities/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/customUtilities/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/customSrc/baseClass/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/customSrc/mesh/aggregate \
+    -I$(WM_PROJECT_DIR)/bashyal/customSrc/mesh/backgroundMesh \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude \
     -I$(LIB_SRC)/mesh/blockMesh/lnInclude \
