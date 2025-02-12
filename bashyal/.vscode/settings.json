@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "firstPrincipleFoam.C": "cpp"
+        "firstPrincipleFoam.C": "cpp",
+        "debugClass.C": "cpp"
     }
 }

@@ -49,7 +49,7 @@ const Foam::IOdictionary &aggregateDict = *aggregateDictPtr;
 // aggregates.generateAggregates();
 
 Bashyal::cubeAggregate a(0.002, 0.002);
-a.translate(vector(0.0025, 0.3905, 0.0025));
+a.translate(vector(0.002, 0.002, 0.002));
 a.rotate(30, 0, 0);
 a.locate();
 a.createFaces();

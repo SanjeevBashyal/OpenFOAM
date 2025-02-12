@@ -1,5 +1,5 @@
 EXE_INC = \
-    -I$(WM_PROJECT_DIR)/applications/customUtilities/lnInclude
+    -I$(WM_PROJECT_DIR)/bashyal/Utilities/lnInclude
 
 LIB_LIBS = \
     -lfileFormats

@@ -1,20 +1,9 @@
 #include "introHeader.H"
 
 // OpenFOAM Default include
-#include "fvCFD.H"
-#include "singlePhaseTransportModel.H"
-#include "turbulentTransportModel.H"
-#include "simpleControl.H"
-#include "fvOptions.H"
-
-// Custom include
-#include "quickInclude.H"
-#include "backgroundMesh.H"
-#include "backgroundBlock.C"
-#include "cubeAggregate.H"
-#include "roundAggregate.H"
-#include "PSD.H"
-#include "cubeAggregates.H"
+#include "fvCFD_rest.H"
+// bashyal include
+#include "sediment_rest.H"
 
 using namespace Bashyal;
 
@@ -25,22 +14,10 @@ int main(int argc, char *argv[])
     argList::addNote(
         "Coupled solver for sediment mix turbulent flows.");
 
-    // #include "postProcess.H"
-    // #include "addCheckCaseOptions.H"
-    // #include "setRootCaseLists.H"
-    // #include "createTime.H"
-    // #include "createMesh.H"
-    // #include "createControl.H"
-    // #include "createFields.H"
-    // #include "initContinuityErrs.H"
+#include "openfoamObjectsCreate.H"
+#include "sedimentObjectsCreate.H"
 
-#include "addRegionOption.H"
-#include "setRootCase.H" //defines argList args
-#include "createTime.H"
-#include "createBackgroundMesh.H"
-#include "createAggregates.H"
-
-#include "createDebug.H"
+    Info << "Starting time loop" << endl;
 
     // bMesh.intersectCubes(aggregates);
 
@@ -51,102 +28,91 @@ int main(int argc, char *argv[])
     bMesh.writeBackgroundMesh(runDir / meshDir0);
     Foam::Info << "Run Successfully" << Foam::endl;
 
-#include "createInitMesh.H"
-#include "createControl.H"
-#include "createFields.H"
-#include "initContinuityErrs.H"
+    // #include "createInitMesh.H"
 
-    Info << "\nStarting time loop\n"
-         << endl;
+    turbulence->validate();
 
-    volVectorField constantVectorField(
-        IOobject(
-            "myVectorField",
-            runTime.timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::AUTO_WRITE),
-        mesh,
-        dimensionedVector("constantVectorField", dimVelocity, vector(1.0, 0.0, 0.0)));
-
-    const dimensionSet dimOne(0, 2, 0, 0, 0, 0, 0);
-    const dimensionSet dimPressure2(0, 2, -2, 0, 0, 0, 0);
-
-    volScalarField constantScalarField(
-        IOobject(
-            "constantScalarField",
-            runTime.timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::AUTO_WRITE),
-        mesh,
-        dimensionedScalar("constantScalarField", dimPressure2, scalar(-5.0)));
-
-    volScalarField one(
-        IOobject(
-            "one",
-            runTime.timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::AUTO_WRITE),
-        mesh,
-        dimensionedScalar("one", dimOne, scalar(1.0)));
-
-    while (runTime.loop())
+    if (!LTS)
     {
-        Info << "Time = " << runTime.timeName() << nl << endl;
+#include "CourantNo.H"
+#include "setInitialDeltaT.H"
+    }
 
-        fvScalarMatrix pEqn(
-            fvm::laplacian(one, p));
+    Info<< "\nStarting time loop\n" << endl;
 
-        // fvVectorMatrix pEqn
-        // (
-        //     fvm::ddt(p)
-        // );
+    while (runTime.run())
+    {
+        #include "readDyMControls.H"
 
-        // volVectorField gradP = fvc::grad(p);
-        // Solve the equation
-        solve(pEqn == constantScalarField);
+        if (LTS)
+        {
+            #include "setRDeltaT.H"
+        }
+        else
+        {
+            #include "CourantNo.H"
+            #include "setDeltaT.H"
+        }
+
+        ++runTime;
+
+        Info<< "Time = " << runTime.timeName() << nl << endl;
+
+        // --- Pressure-velocity PIMPLE corrector loop
+        while (pimple.loop())
+        {
+            if (pimple.firstIter() || moveMeshOuterCorrectors)
+            {
+                // Do any mesh changes
+                mesh.controlledUpdate();
+
+                if (mesh.changing())
+                {
+                    MRF.update();
+
+                    if (correctPhi)
+                    {
+                        // Calculate absolute flux
+                        // from the mapped surface velocity
+                        phi = mesh.Sf() & Uf();
+
+                        #include "correctPhi.H"
+
+                        // Make the flux relative to the mesh motion
+                        fvc::makeRelative(phi, U);
+                    }
+
+                    if (checkMeshCourantNo)
+                    {
+                        #include "meshCourantNo.H"
+                    }
+                }
+            }
+
+            #include "UEqn.H"
+
+            // --- Pressure corrector loop
+            while (pimple.correct())
+            {
+                #include "pEqn.H"
+            }
+
+            if (pimple.turbCorr())
+            {
+                laminarTransport.correct();
+                turbulence->correct();
+            }
+        }
 
         runTime.write();
 
         runTime.printExecutionTime(Info);
     }
 
-    Info << "End\n"
-         << endl;
+    Info<< "End\n" << endl;
 
     return 0;
 
-    //     turbulence->validate();
-
-    //     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-    //     Info << "\nStarting time loop\n"
-    //          << endl;
-
-    //     while (simple.loop())
-    //     {
-    //         Info << "Time = " << runTime.timeName() << nl << endl;
-
-    //         // --- Pressure-velocity SIMPLE corrector
-    //         {
-    // // #include "UEqn.H"
-    // // #include "pEqn.H"
-    //         }
-
-    //         laminarTransport.correct();
-    //         turbulence->correct();
-
-    //         runTime.write();
-
-    //         runTime.printExecutionTime(Info);
-    //     }
-
-    //     Info << "End\n"
-    //          << endl;
-
-    // return 0;
 }
 
 // ************************************************************************* //
