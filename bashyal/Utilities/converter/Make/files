@@ -1,0 +1,3 @@
+foamCGALConverter.C
+
+LIB = $(FOAM_LIBBIN)/libfoamCGALConverter

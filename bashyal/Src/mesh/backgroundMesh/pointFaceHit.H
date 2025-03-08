@@ -4,27 +4,24 @@
 #include "quickInclude.H"
 #include "quickMesh.H"
 
-using namespace Foam;
-
 namespace Bashyal
 {
-
     class pointFaceHit
     {
     private:
         /* data */
 
     public:
-        point pt_;
-        pointHit hit_;
-        point rayVertex1_;
-        point rayVertex2_;
-        point nextPoint_;
+        Foam::point pt_;
+        Foam::pointHit hit_;
+        Foam::point rayVertex1_;
+        Foam::point rayVertex2_;
+        Foam::point nextPoint_;
 
-        label blockFace1_ = -1;
-        label blockFace2_ = -1;
-        label cutFace1_ = -1;
-        label cutFace2_ = -1;
+        Foam::label blockFace1_ = -1;
+        Foam::label blockFace2_ = -1;
+        Foam::label cutFace1_ = -1;
+        Foam::label cutFace2_ = -1;
 
         bool isBlockFace_ = false;
         bool isBlockEdge_ = false;
@@ -36,9 +33,9 @@ namespace Bashyal
 
     public:
         pointFaceHit();
-        pointFaceHit(point pt);
-        pointFaceHit(pointHit hit);
-        pointFaceHit(pointHit hit, point startPoint);
+        pointFaceHit(Foam::point pt);
+        pointFaceHit(Foam::pointHit hit);
+        pointFaceHit(Foam::pointHit hit, Foam::point startPoint);
 
         void setBlockFaceFlag();
         void setBlockEdgeFlag();
@@ -50,7 +47,6 @@ namespace Bashyal
 
         ~pointFaceHit();
     };
-
 }
 
 #endif

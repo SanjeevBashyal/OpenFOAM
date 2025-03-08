@@ -20,33 +20,38 @@ internalField   uniform 0;
 
 boundaryField
 {
-    inlet
+    YZ-Xmin
     {
-        type            calculated;
+        type            fixedValue;  // Inlet boundary condition
+        value           uniform 1e-5;  // Small initial value for turbulent viscosity
+    }
+
+    YZ-Xmax
+    {
+        type            zeroGradient;  // Outlet boundary condition
+    }
+
+    XZ-Ymin
+    {
+        type            nutkWallFunction;  // Wall function for turbulent viscosity
         value           uniform 0;
     }
 
-    outlet
+    XZ-Ymax
     {
-        type            calculated;
+        type            zeroGradient;  // Free-slip or symmetry boundary condition
+    }
+
+    XY-Zmin
+    {
+        type            nutkWallFunction;  // Wall function for turbulent viscosity
         value           uniform 0;
     }
 
-    upperWall
+    XY-Zmax
     {
-        type            nutkWallFunction;
+        type            nutkWallFunction;  // Wall function for turbulent viscosity
         value           uniform 0;
-    }
-
-    lowerWall
-    {
-        type            nutkWallFunction;
-        value           uniform 0;
-    }
-
-    frontAndBack
-    {
-        type            empty;
     }
 }
 

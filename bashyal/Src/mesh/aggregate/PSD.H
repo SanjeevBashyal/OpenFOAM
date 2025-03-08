@@ -3,7 +3,6 @@
 
 #include "quickInclude.H"
 
-using namespace Foam;
 
 namespace Bashyal
 {
@@ -33,14 +32,14 @@ namespace Bashyal
         Foam::List<float> percentageCSD_;
 
         PSD(/* args */);
-        PSD(IOdictionary aggregateDict);
+        PSD(Foam::IOdictionary aggregateDict);
         PSD(Foam::List<float> percentages);
 
         void initialize();
         void initializeSizes();              // Function to initialize particle sizes
         void initializeDefaultProportions(); // Function to initialize particle sizes
         void calculateCSD();
-        List<label> calculateNumbers(int nParticles);
+        Foam::List<Foam::label> calculateNumbers(int nParticles);
 
         ~PSD();
     };

@@ -1,5 +1,6 @@
 #include "pointFaceHit.H"
 
+using namespace Foam;
 namespace Bashyal
 {
     // Default constructor

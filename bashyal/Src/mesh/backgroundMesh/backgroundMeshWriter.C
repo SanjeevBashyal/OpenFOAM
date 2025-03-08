@@ -1,5 +1,5 @@
 #include "backgroundMesh.H"
-
+using namespace Foam;
 namespace Bashyal
 {
     void backgroundMesh::createPolyMesh()

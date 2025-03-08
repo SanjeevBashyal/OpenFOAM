@@ -18,6 +18,7 @@ namespace Bashyal
                 {
                     // Dereference the autoPtr to get the actual backgroundBlock
                     backgroundBlock &block = *blockPtr;
+                    block.decomposeToConvex();
 
                     // Add points and update pointMap_ for unique point indices
                     addPoints(block.getPoints());

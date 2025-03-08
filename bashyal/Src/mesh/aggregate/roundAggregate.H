@@ -7,8 +7,6 @@
 #include "triSurface.H"
 #include "triSurfaceMesh.H"
 
-using namespace Foam;
-
 namespace Bashyal
 {
     class roundAggregate : public aggregate

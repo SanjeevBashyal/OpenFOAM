@@ -1,5 +1,6 @@
 #include "cubeAggregates.H"
 
+using namespace Foam;
 namespace Bashyal
 {
 

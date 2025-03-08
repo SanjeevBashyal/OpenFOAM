@@ -1,6 +1,7 @@
 #ifndef backgroundMesh_H
 #define backgroundMesh_H
 
+#include "debugClass.H"
 #include "quickInclude.H"
 #include "quickMesh.H"
 #include "quickWriter.H"
@@ -10,11 +11,9 @@
 #include "roundAggregate.H"
 #include "cubeAggregates.H"
 
-using namespace Foam;
-
 namespace Bashyal
 {
-    class backgroundMesh
+    class backgroundMesh : public debugClass
     {
     private:
         /* data */
@@ -23,25 +22,25 @@ namespace Bashyal
         Foam::point meshMax_;
         Foam::scalar resolution_;
 
-        Vector<int> dim_;
-        List<List<List<autoPtr<backgroundBlock>>>> backgroundBlocks_;
+        Foam::Vector<int> dim_;
+        Foam::List<Foam::List<Foam::List<Foam::autoPtr<backgroundBlock>>>> backgroundBlocks_;
 
-        label cellCount_ = 0;
+        Foam::label cellCount_ = 0;
         Foam::pointField globalPoints_;
-        faceList globalFaces_;      //all internal faces
-        labelList globalOwners_;
-        labelList globalNeighbours_;
-        
-        List<Foam::face> allFaces_; // Stores all faces
-        List<bool> boolBoundaryFaces_; // Stores all faces
-        List<Foam::word> facePatches_;
+        Foam::faceList globalFaces_; // all internal faces
+        Foam::labelList globalOwners_;
+        Foam::labelList globalNeighbours_;
+
+        Foam::List<Foam::face> allFaces_;    // Stores all faces
+        Foam::List<bool> boolBoundaryFaces_; // Stores all faces
+        Foam::List<Foam::word> facePatches_;
         Foam::dictionary boundaryDict_;
 
-        Foam::HashTable<label, point> pointMap_;
-        // Foam::HashTable<label, face> faceMap_;
-        Foam::HashTable<label, face> faceOwnerMap_; // For tracking boundary faces
-        Foam::HashTable<label, face> facePositionMap_; // For tracking face Indices
-        Foam::HashTable<faceList, word> stringPtrMap_; // For tracking boundary faces
+        Foam::HashTable<Foam::label, Foam::point> pointMap_;
+        // Foam::HashTable<Foam::label, Foam::face> faceMap_;
+        Foam::HashTable<Foam::label, Foam::face> faceOwnerMap_;    // For tracking boundary faces
+        Foam::HashTable<Foam::label, Foam::face> facePositionMap_; // For tracking face Indices
+        Foam::HashTable<Foam::faceList, Foam::word> stringPtrMap_; // For tracking boundary faces
 
         double s_;
         Foam::Time *runTime_;
@@ -53,27 +52,26 @@ namespace Bashyal
         // Foam::List<Foam::face> faceListPtr_;
         // Foam::List<Foam::cell> cellListPtr_;
 
-
     public:
-        explicit backgroundMesh(Foam::Time *runTime, point meshMin, point meshMax, float resolution);
+        explicit backgroundMesh(Foam::Time *runTime, Foam::point meshMin, Foam::point meshMax, float resolution);
         void setBoundaryPatchType(Foam::dictionary &boundaryDict);
         Foam::pointField createVertices();
-        Vector<int> countBlocksPerAxis() const;
-        List<List<List<autoPtr<backgroundBlock>>>> createListPointers();
-        Vector<int> getBlockIndexContainingPoint(point& pt);
-        bool contains(const point &pt);
-        
+        Foam::Vector<int> countBlocksPerAxis() const;
+        Foam::List<Foam::List<Foam::List<Foam::autoPtr<backgroundBlock>>>> createListPointers();
+        Foam::Vector<int> getBlockIndexContainingPoint(Foam::point &pt);
+        bool contains(const Foam::point &pt);
+
         ~backgroundMesh() = default;
 
         void developMesh();
-        void addPoints(const pointField &blockPoints);
-        void addFaces(const pointField &blockPoints, const faceList &blockFaces, const wordList &blockPatches, const wordList &stringPtrs);
+        void addPoints(const Foam::pointField &blockPoints);
+        void addFaces(const Foam::pointField &blockPoints, const Foam::faceList &blockFaces, const Foam::wordList &blockPatches, const Foam::wordList &stringPtrs);
 
         void reset();
         void resetBlocks();
-        
-        point roundPoint(point value);
-        scalar roundToSeven(scalar value);
+
+        Foam::point roundPoint(Foam::point value);
+        Foam::scalar roundToSeven(Foam::scalar value);
 
         void intersectCube(cubeAggregate &cubeAgg);
         void intersectRound(roundAggregate &roundAgg);
@@ -81,12 +79,11 @@ namespace Bashyal
 
         void createPolyMesh();
         void writeBackgroundMesh(const std::string &meshDir);
-        static void writePolyMeshPlain(const std::string &meshDir, const pointField &points, const faceList &faces, const labelList &owners, const labelList &neighbours, const Foam::labelList &boundaryFaceSizes, const Foam::wordList &patchNames, const Foam::wordList &patchTypes);
-        void writePolyMeshFromOwnerNeighbour(const std::string &meshDir, const pointField &points, const faceList &faces, const labelList &owners, const labelList &neighbours);
+        static void writePolyMeshPlain(const std::string &meshDir, const Foam::pointField &points, const Foam::faceList &faces, const Foam::labelList &owners, const Foam::labelList &neighbours, const Foam::labelList &boundaryFaceSizes, const Foam::wordList &patchNames, const Foam::wordList &patchTypes);
+        void writePolyMeshFromOwnerNeighbour(const std::string &meshDir, const Foam::pointField &points, const Foam::faceList &faces, const Foam::labelList &owners, const Foam::labelList &neighbours);
 
         void createBlockMesh();
     };
-
 }
 
 #endif

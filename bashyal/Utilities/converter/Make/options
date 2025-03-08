@@ -1,0 +1,17 @@
+EXE_INC = \
+    -I$(WM_PROJECT_DIR)/bashyal/Src/mesh/aggregate/lnInclude \
+    -I$(LIB_SRC)/OpenFOAM/lnInclude \
+    -I$(LIB_SRC)/fileFormats/lnInclude \
+    -I$(LIB_SRC)/surfMesh/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude \
+    -I$(LIB_SRC)/mesh/blockMesh/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/Utilities/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/Src/baseClass/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/Src/debug/debugClass/lnInclude
+
+LIB_LIBS = \
+    -lbaseClass \
+    -ldebugClass \
+    -lfileFormats \
+    -lsurfMesh \
+    -lmeshTools

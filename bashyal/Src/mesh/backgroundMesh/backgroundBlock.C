@@ -1,6 +1,7 @@
 // #include "backgroundBlock.H"
 #include "backgroundMesh.H"
 
+using namespace Foam;
 namespace Bashyal
 {
     backgroundBlock::backgroundBlock(backgroundMesh *ref, const Vector<int> identity, const boundBox &bounds, label blockID)
@@ -79,6 +80,40 @@ namespace Bashyal
         return (pt.x() >= minPt.x() && pt.x() <= maxPt.x()) &&
                (pt.y() >= minPt.y() && pt.y() <= maxPt.y()) &&
                (pt.z() >= minPt.z() && pt.z() <= maxPt.z());
+    }
+
+    void backgroundBlock::triangulateFaces()
+    {
+        // Step 1: Calculate total number of triangles
+        label totalTriangles = 0;
+        forAll(faces_, faceI)
+        {
+            const face& f = faces_[faceI];
+            if (f.size() >= 3) // Only process faces with 3 or more vertices
+            {
+                totalTriangles += f.size() - 2; // n-2 triangles per n-sided polygon
+            }
+        }
+
+        // Step 2: Preallocate triFaces_ with the total number of triangles
+        triFaces_.setSize(totalTriangles);
+
+        // Step 3: Triangulate each face and store in triFaces_
+        label triIndex = 0;
+        forAll(faces_, faceI)
+        {
+            const face& f = faces_[faceI];
+            if (f.size() < 3) continue; // Skip invalid faces
+            // Fan triangulation: connect vertex 0 to vertices i and i+1
+            for (label i = 1; i < f.size() - 1; ++i)
+            {
+                face tri(3); // Create a triangle (face with 3 vertices)
+                tri[0] = f[0];    // First vertex of the fan
+                tri[1] = f[i];    // Current vertex
+                tri[2] = f[i+1];  // Next vertex
+                triFaces_[triIndex++] = tri;
+            }
+        }
     }
 
     // void backgroundBlock::write(const std::string &meshDir) const

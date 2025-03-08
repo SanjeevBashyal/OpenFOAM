@@ -285,6 +285,15 @@
         "PrimitivePatchMeshData.C": "cpp",
         "GAMGSolverScale.C": "cpp",
         "debug.C": "cpp",
-        "debugClass.C": "cpp"
+        "debugClass.C": "cpp",
+        "GeometricBoundaryField.C": "cpp",
+        "eddyViscosity.C": "cpp",
+        "kEpsilon.C": "cpp",
+        "IncompressibleTurbulenceModel.C": "cpp",
+        "TurbulenceModel.C": "cpp",
+        "RASModel.C": "cpp",
+        "nutWallFunctionFvPatchScalarField.C": "cpp",
+        "backgroundBlockCellRefiner.C": "cpp",
+        "foamCGALConverter.C": "cpp"
     }
 }

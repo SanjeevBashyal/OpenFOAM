@@ -32,4 +32,7 @@ EXE_LIBS = \
     -lturbulenceModels \
     -lincompressibleTurbulenceModels \
     -lincompressibleTransportModels \
-    -latmosphericModels
+    -latmosphericModels \
+    -lfoamCGALConverter \
+    -lmpfr \
+    -lgmp

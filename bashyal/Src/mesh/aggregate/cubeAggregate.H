@@ -7,8 +7,6 @@
 #include "triSurface.H"
 #include "triSurfaceMesh.H"
 
-using namespace Foam;
-
 namespace Bashyal
 {
     class cubeAggregate : public aggregate
@@ -30,8 +28,8 @@ namespace Bashyal
         void createTriSurface();
         Foam::List<Foam::labelledTri> createTriangularFacesFromPoints(const Foam::pointField &points);
 
-        void hit(scalar index);
-        List<pointField> facePoints_;
+        void hit(Foam::scalar index);
+        Foam::List<Foam::pointField> facePoints_;
 
         ~cubeAggregate() = default;
     };

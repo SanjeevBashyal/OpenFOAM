@@ -1,12 +1,8 @@
 #ifndef BASECLASS_H
 #define BASECLASS_H
 
-#include "pointField.H"
-#include "OFstream.H"
 #include <string>
 #include <sstream>
-
-using namespace Foam;
 
 namespace Bashyal
 {

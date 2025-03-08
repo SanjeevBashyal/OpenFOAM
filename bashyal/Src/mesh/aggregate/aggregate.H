@@ -6,8 +6,6 @@
 
 #include "triSurface.H"
 
-using namespace Foam;
-
 namespace Bashyal
 {
     class aggregate : public baseClass
@@ -36,29 +34,29 @@ namespace Bashyal
 
         void translate(Foam::vector translationVector);
         void position(Foam::vector positionThis);
-        pointField translatePoints(pointField points, Foam::vector translationVector);
+        Foam::pointField translatePoints(Foam::pointField points, Foam::vector translationVector);
 
-        void rotate(scalar alpha, scalar beta, scalar gamma);
-        pointField rotatePoints(Foam::tensor rotationMatrix);
-        tensor rotationMatrixFromAngles();
+        void rotate(Foam::scalar alpha, Foam::scalar beta, Foam::scalar gamma);
+        Foam::pointField rotatePoints(Foam::tensor rotationMatrix);
+        Foam::tensor rotationMatrixFromAngles();
         void locate();
 
-        point getCentroid() { return centroid_; }
-        boundBox getBoundBox();
-        point roundPoint(point value);
-        point floorPoint(point value);
-        point ceilPoint(point value);
-        scalar roundToRequiredDecimal(scalar value);
-        scalar ceilToRequiredDecimal(scalar value);
-        scalar floorToRequiredDecimal(scalar value);
+        Foam::point getCentroid() { return centroid_; }
+        Foam::boundBox getBoundBox();
+        Foam::point roundPoint(Foam::point value);
+        Foam::point floorPoint(Foam::point value);
+        Foam::point ceilPoint(Foam::point value);
+        Foam::scalar roundToRequiredDecimal(Foam::scalar value);
+        Foam::scalar ceilToRequiredDecimal(Foam::scalar value);
+        Foam::scalar floorToRequiredDecimal(Foam::scalar value);
 
         Foam::point sphericalToCartesian(Foam::scalar r, Foam::scalar theta, Foam::scalar phi);
         Foam::scalar distance(const Foam::point &p1, const Foam::point &p2);
     };
 
-    inline tensor operator*(const tensor &A, const tensor &B)
+    inline Foam::tensor operator*(const Foam::tensor &A, const Foam::tensor &B)
     {
-        tensor C = tensor::zero; // Initialize result tensor to zero
+        Foam::tensor C = Foam::tensor::zero; // Initialize result tensor to zero
 
         for (int i = 0; i < 3; ++i) // Loop over rows
         {

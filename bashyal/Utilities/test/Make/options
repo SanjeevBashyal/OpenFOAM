@@ -1,14 +1,16 @@
 EXE_INC = \
-    -I$(WM_PROJECT_DIR)/applications/customSrc/mesh/aggregate \
+    -I$(WM_PROJECT_DIR)/bashyal/Src/mesh/aggregate \
     -I$(LIB_SRC)/mesh/blockMesh/lnInclude \
     -I$(LIB_SRC)/fileFormats/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude \
     -I$(LIB_SRC)/surfMesh/lnInclude \
     -I$(LIB_SRC)/dynamicMesh/lnInclude \
-    -I$(WM_PROJECT_DIR)/applications/customUtilities/lnInclude \
-    -I$(WM_PROJECT_DIR)/applications/customSrc/baseClass/lnInclude
+    -I$(WM_PROJECT_DIR)/bashyal/Utilities/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/Src/debug/debugClass/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/Src/baseClass/lnInclude
 
 EXE_LIBS = \
+    -ldebugClass \
     -lbaseClass \
     -laggregate \
     -lblockMesh \
@@ -16,4 +18,5 @@ EXE_LIBS = \
     -lmeshTools \
     -lsurfMesh \
     -ldynamicMesh \
+    -lmpfr \
     -lgmp

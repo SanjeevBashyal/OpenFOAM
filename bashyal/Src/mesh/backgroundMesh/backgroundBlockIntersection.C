@@ -1,5 +1,5 @@
 #include "backgroundMesh.H"
-
+using namespace Foam;
 namespace Bashyal
 {
     void backgroundBlock::intersectClosedSurface(const faceList &faces, const pointField &points, point insidePoint, word stringPtr)
@@ -116,7 +116,6 @@ namespace Bashyal
             if (initFlag)
             {
                 initFlag = false;
-
                 point pt = points_[faceI[vertexIndexer]];
                 if (!this->isPointInsideSurface(pt, faces, points))
                 {

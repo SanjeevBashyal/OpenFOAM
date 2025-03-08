@@ -11,6 +11,7 @@
 #include "triSurface.H"
 #include "triSurfaceMesh.H"
 
+using namespace Foam;
 namespace Bashyal
 {
     aggregate::aggregate()

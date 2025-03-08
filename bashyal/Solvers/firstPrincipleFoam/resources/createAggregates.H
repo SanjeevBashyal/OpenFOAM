@@ -48,9 +48,9 @@ const Foam::IOdictionary &aggregateDict = *aggregateDictPtr;
 // cubeAggregates aggregates(psd, nParticles);
 // aggregates.generateAggregates();
 
-Bashyal::cubeAggregate a(0.002, 0.002);
-a.translate(vector(0.002, 0.002, 0.002));
-a.rotate(30, 0, 0);
+Bashyal::cubeAggregate a(0.16, 0.16);
+a.translate(vector(0.15, 0.15, 0.15));
+a.rotate(30, 30, 30);
 a.locate();
 a.createFaces();
 a.getBoundBox();

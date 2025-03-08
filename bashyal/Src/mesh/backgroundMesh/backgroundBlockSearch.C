@@ -1,5 +1,5 @@
 #include "backgroundBlock.H"
-
+using namespace Foam;
 namespace Bashyal
 {
     void backgroundBlock::isInsideTriSurface(triSurface &surf)

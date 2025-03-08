@@ -1,5 +1,6 @@
 #include "PSD.H"
 
+using namespace Foam;
 namespace Bashyal
 {
     PSD::PSD(/* args */)

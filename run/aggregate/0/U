@@ -20,30 +20,35 @@ internalField   uniform (0 0 0);
 
 boundaryField
 {
-    inlet
+    YZ-Xmin
     {
-        type            fixedValue;
-        value           uniform (10 0 0);
+        type            fixedValue;  // Inlet boundary condition
+        value           uniform (1 0 0);  // Flow in x-direction with velocity 1 m/s
     }
 
-    outlet
+    YZ-Xmax
     {
-        type            zeroGradient;
+        type            zeroGradient;  // Outlet boundary condition
     }
 
-    upperWall
+    XZ-Ymin
     {
-        type            noSlip;
+        type            noSlip;  // Wall boundary condition
     }
 
-    lowerWall
+    XZ-Ymax
     {
-        type            noSlip;
+        type            slip;  // Free-slip boundary condition (or symmetryPlane)
     }
 
-    frontAndBack
+    XY-Zmin
     {
-        type            empty;
+        type            noSlip;  // Wall boundary condition
+    }
+
+    XY-Zmax
+    {
+        type            noSlip;  // Wall boundary condition
     }
 }
 

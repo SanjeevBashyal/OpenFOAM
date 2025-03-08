@@ -14,21 +14,10 @@ int main(int argc, char *argv[])
     argList::addNote(
         "Coupled solver for sediment mix turbulent flows.");
 
-#include "openfoamObjectsCreate.H"
 #include "sedimentObjectsCreate.H"
+#include "openfoamObjectsCreate.H"
 
     Info << "Starting time loop" << endl;
-
-    // bMesh.intersectCubes(aggregates);
-
-    bMesh.intersectCube(a);
-    // bMesh.intersectRound(a);
-
-    bMesh.developMesh();
-    bMesh.writeBackgroundMesh(runDir / meshDir0);
-    Foam::Info << "Run Successfully" << Foam::endl;
-
-    // #include "createInitMesh.H"
 
     turbulence->validate();
 

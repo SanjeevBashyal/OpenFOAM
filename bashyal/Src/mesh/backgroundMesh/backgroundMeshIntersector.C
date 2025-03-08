@@ -1,5 +1,6 @@
 #include "backgroundMesh.H"
 
+using namespace Foam;
 namespace Bashyal
 {
 
