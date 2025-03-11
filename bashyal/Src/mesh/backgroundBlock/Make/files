@@ -1,0 +1,7 @@
+backgroundBlock.C
+backgroundBlockIntersection.C
+backgroundBlockFaceRefiner.C
+backgroundBlockCellRefiner.C
+backgroundBlockCGALIntersection.C
+
+LIB = $(FOAM_LIBBIN)/libbackgroundBlock

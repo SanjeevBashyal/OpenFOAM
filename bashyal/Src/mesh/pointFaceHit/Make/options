@@ -1,7 +1,5 @@
 EXE_INC = \
     -I$(WM_PROJECT_DIR)/bashyal/Src/mesh/aggregate/lnInclude \
-    -I$(WM_PROJECT_DIR)/bashyal/Src/mesh/backgroundBlock/lnInclude \
-    -I$(WM_PROJECT_DIR)/bashyal/Src/mesh/pointFaceHit/lnInclude \
     -I$(LIB_SRC)/OpenFOAM/lnInclude \
     -I$(LIB_SRC)/fileFormats/lnInclude \
     -I$(LIB_SRC)/surfMesh/lnInclude \
@@ -10,14 +8,10 @@ EXE_INC = \
     -I$(WM_PROJECT_DIR)/bashyal/Utilities/lnInclude \
     -I$(WM_PROJECT_DIR)/bashyal/Src/baseClass/lnInclude \
     -I$(WM_PROJECT_DIR)/bashyal/Src/debug/debugClass/lnInclude \
-    -I$(WM_PROJECT_DIR)/bashyal/Utilities/converter/lnInclude \
-    -I$(WM_PROJECT_DIR)/bashyal/Utilities/boundary
 
 LIB_LIBS = \
     -lbaseClass \
     -ldebugClass \
-    -lpointFaceHit \
-    -lbackgroundBlock \
     -lfoamCGALConverter \
     -lfileFormats \
     -lsurfMesh \

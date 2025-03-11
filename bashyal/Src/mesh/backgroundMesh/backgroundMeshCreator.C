@@ -5,6 +5,35 @@ using namespace Foam;
 
 namespace Bashyal
 {
+
+    void backgroundMesh::auditMesh()
+    {
+        this->reset();
+        Foam::label cellsCount = 0;
+
+        // Loop through each level of the List structure
+        for (auto &blockListLevel1 : backgroundBlocks_)
+        {
+            for (auto &blockListLevel2 : blockListLevel1)
+            {
+                for (auto &blockPtr : blockListLevel2)
+                {
+                    // Dereference the autoPtr to get the actual backgroundBlock
+                    backgroundBlock &block = *blockPtr;
+                    block.globalNCells_ = cellsCount;
+                    block.decomposeToConvex();
+
+                    cellsCount = cellsCount + block.ncells_;
+
+                    // auditBlockInternalBoundaryFaces(block);
+                }
+            }
+        }
+
+        // Write polyMesh here using globalPoints_, globalFaces_, globalOwners_, globalNeighbours_, and allFaces_
+        // writePolyMesh();
+    }
+
     void backgroundMesh::developMesh()
     {
         this->reset();
@@ -24,7 +53,7 @@ namespace Bashyal
                     addPoints(block.getPoints());
 
                     // Add faces with updated point indices
-                    addFaces(block.getPoints(), block.getFaces(), block.getPatches(), block.getStringPtrs());
+                    addFaces(block.getPoints(), block.getFaces(), block.getOwners(), block.getNeighbours(), block.getPatches());
 
                     cellCount_ = cellCount_ + block.ncells_;
                 }
@@ -48,16 +77,15 @@ namespace Bashyal
         }
     }
 
-    void backgroundMesh::addFaces(const pointField &blockPoints, const faceList &blockFaces, const wordList &blockPatches, const wordList &stringPtrs)
+    void backgroundMesh::addFaces(const pointField &blockPoints, const faceList &blockFaces, const labelList &owners, const labelList &neighbours, const List<int> &blockPatches)
     {
         label currentCell = cellCount_;
-        int count = 0;
-
-        for (const auto &face : blockFaces)
+        int faceCount = 0;
+        for (const auto &faceI : blockFaces)
         {
             // Adjust face points according to the globalPoints_
             Foam::face globalFace;
-            for (const auto &pt : face)
+            for (const auto &pt : faceI)
             {
                 // Retrieve the point coordinates using pt as an index into blockPoints
                 Foam::point pointCoords = blockPoints[pt]; // Using blockPoints to get the actual coordinates
@@ -82,53 +110,51 @@ namespace Bashyal
                 globalFace.append(globalPointIdx);
             }
 
-            Foam::face globalFaceCopy = Foam::face(globalFace);
+            int patchType = blockPatches[faceCount];
 
-            // Sort the face points to ensure unique representation (important for shared faces)
-            std::sort(globalFaceCopy.begin(), globalFaceCopy.end());
-
-            // Check if the face exists in the faceOwnerMap_ (first encounter)
-            if (faceOwnerMap_.found(globalFaceCopy))
+            if (patchType == 0)
             {
-                // The face is a boundary face but now we encounter it again
-                // Pop the face from allFaces_ and add it to globalFaces_ (becomes internal face)
-                label faceOwnerIndex = faceOwnerMap_[globalFaceCopy];
-
-                label faceLocation = facePositionMap_[globalFaceCopy];
-
-                globalFaces_.append(allFaces_[faceLocation]); // Add to global faces
-                boolBoundaryFaces_[faceLocation] = false;
-                globalOwners_.append(faceOwnerIndex);              // Keep the previous owner
-                globalNeighbours_.append(currentCell);             // Set neighbor for internal face
-
-                faceOwnerMap_.erase(globalFaceCopy); // Remove from faceOwnerMap_
+                // Internal face: add to globalFaces_ with owner and neighbor
+                globalFaces_.append(globalFace);
+                globalOwners_.append(currentCell + owners[faceCount]);
+                globalNeighbours_.append(currentCell + neighbours[faceCount]);
+                // Add to allFaces_ for consistency, marked as non-boundary
+                allFaces_.append(globalFace);
+                boolBoundaryFaces_.append(false);
             }
             else
             {
-                // New boundary face, add to allFaces_ and faceOwnerMap_
-                faceOwnerMap_.insert(globalFaceCopy, currentCell);
+                // Boundary face handling
+                bool isDomainBoundary = false;
+                if (patchType == -1 && identity.x() == 0)
+                {
+                    // X-min boundary face at domain edge
+                    isDomainBoundary = true;
+                }
+                else if (patchType == -2 && identity.y() == 0)
+                {
+                    // Y-min boundary face at domain edge
+                    isDomainBoundary = true;
+                }
+                else if (patchType == -3 && identity.z() == 0)
+                {
+                    // Z-min boundary face at domain edge
+                    isDomainBoundary = true;
+                }
+
+                // Add the face as a boundary face
                 allFaces_.append(globalFace);
                 boolBoundaryFaces_.append(true);
-                facePositionMap_.insert(globalFaceCopy, allFaces_.size() - 1);
+                globalOwners_.append(currentCell + owners[faceCount]);
+                globalNeighbours_.append(-1); // Boundary faces have no neighbor
 
-                facePatches_.append(blockPatches[count]);
-                // globalOwners_.append(currentCell); // Set owner for this boundary face
-
-                if (!(stringPtrs[count] == word::null))
+                // Record the patch type
+                if (isDomainBoundary || patchType > 0)
                 {
-                    if (stringPtrMap_.found(stringPtrs[count]))
-                    {
-                        stringPtrMap_[stringPtrs[count]].append(globalFace);
-                    }
-                    else
-                    {
-                        faceList newFaceList;
-                        newFaceList.append(globalFace);
-                        stringPtrMap_.insert(stringPtrs[count], newFaceList);
-                    }
+                    facePatches_.append(patchType); // Store patch type for boundary face
                 }
             }
-            count++;
+            faceCount++;
         }
     }
 
@@ -147,8 +173,6 @@ namespace Bashyal
         pointMap_.clear();
         // faceMap_.clear();
         faceOwnerMap_.clear();
-        facePositionMap_.clear();
-        stringPtrMap_.clear();
     }
 
     point backgroundMesh::roundPoint(point value)

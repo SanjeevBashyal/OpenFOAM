@@ -1,12 +1,7 @@
-pointFaceHit.C
 backgroundMesh.C
 backgroundMeshCreator.C
 backgroundMeshWriter.C
 backgroundMeshIntersector.C
 backgroundMeshOld.C
-backgroundBlock.C
-backgroundBlockIntersection.C
-backgroundBlockFaceRefiner.C
-backgroundBlockCellRefiner.C
 
 LIB = $(FOAM_LIBBIN)/libbackgroundMesh

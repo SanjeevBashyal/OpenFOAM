@@ -294,6 +294,7 @@
         "RASModel.C": "cpp",
         "nutWallFunctionFvPatchScalarField.C": "cpp",
         "backgroundBlockCellRefiner.C": "cpp",
-        "foamCGALConverter.C": "cpp"
+        "foamCGALConverter.C": "cpp",
+        "backgroundBlockCGALIntersection.C": "cpp"
     }
 }

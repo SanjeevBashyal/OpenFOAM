@@ -34,7 +34,7 @@ namespace Bashyal
                 float maxSize = 0.1 + 2 * r * 0.15;
                 float orientation = 2 * 3.141592 * r2;
                 // Create a random cubeAggregate within the size range
-                Bashyal::cubeAggregate *newAggregate = new Bashyal::cubeAggregate(minSize, maxSize);
+                Bashyal::cubeAggregate *newAggregate = new Bashyal::cubeAggregate(minSize, maxSize, sedimentCount);
 
                 newAggregate->translate(vector(0.2 * (sedimentCount + 1), 0.3, 0.3));
                 newAggregate->rotate(r2 / 3.141592 * 180 * sedimentCount, 0, 0);

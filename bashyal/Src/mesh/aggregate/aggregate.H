@@ -2,13 +2,13 @@
 #define aggregate_H
 
 #include "quickInclude.H"
-#include "baseClass.H"
+#include "debugClass.H"
 
 #include "triSurface.H"
 
 namespace Bashyal
 {
-    class aggregate : public baseClass
+    class aggregate : public debugClass
     {
     public:
         float backgroundFinenessIndex_ = 1; // 1 for 0.1, 2 for 0.01

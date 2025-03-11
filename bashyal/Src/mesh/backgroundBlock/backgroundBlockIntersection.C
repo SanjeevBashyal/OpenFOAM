@@ -2,12 +2,11 @@
 using namespace Foam;
 namespace Bashyal
 {
-    void backgroundBlock::intersectClosedSurface(const faceList &faces, const pointField &points, point insidePoint, word stringPtr)
+    void backgroundBlock::intersectClosedSurface(const faceList &faces, const pointField &points, point insidePoint, unsigned int identifier)
     {
         pointField mergedPoints;
         faceList mergedFaces;
-        wordList mergePatches;
-        wordList mergeStringPtrs;
+        List<int> mergePatches;
 
         Foam::HashTable<label, point> pointMap;
         Foam::HashTable<label, face> faceMap;
@@ -41,8 +40,7 @@ namespace Bashyal
                 this->generateCutFace(cutFaceHitPointsI, hitMap, i, outputFace, outputPoints, insidePoint);
                 this->addPoints(outputPoints, pointMap, mergedPoints);
                 this->addFace(outputPoints, outputFace, pointMap, mergedFaces, mergedPoints);
-                mergePatches.append("aggregate");
-                mergeStringPtrs.append(stringPtr);
+                mergePatches.append(identifier);
             }
         }
 
@@ -61,13 +59,11 @@ namespace Bashyal
                 this->addPoints(outputPoints, pointMap, mergedPoints);
                 this->addFace(outputPoints, outputFace, pointMap, mergedFaces, mergedPoints);
                 mergePatches.append(patches_[i]);
-                mergeStringPtrs.append(word::null);
             }
         }
         this->points_ = mergedPoints;
         this->faces_ = mergedFaces;
         this->patches_ = mergePatches;
-        this->stringPtrs_ = mergeStringPtrs;
         this->edited_ = true;
 
         if (this->points_.size() == 0)

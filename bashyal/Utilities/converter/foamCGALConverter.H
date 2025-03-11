@@ -8,6 +8,7 @@
 
 // CGAL headers
 #include <CGAL/Surface_mesh.h>
+#include <CGAL/Polyhedron_3.h> // Added for Polyhedron_3 support
 
 template <typename Kernel>
 class FoamCGALConverter {
@@ -16,6 +17,7 @@ public:
     using CGALPoint = typename Kernel::Point_3;
     using CGALVector = typename Kernel::Vector_3;
     using CGALMesh = CGAL::Surface_mesh<CGALPoint>;
+    using CGALPolyhedron = CGAL::Polyhedron_3<Kernel>; // Alias for Polyhedron_3
 
     // --- Point Conversion ---
     /** Convert a Foam point to a CGAL Point_3 */
@@ -41,12 +43,41 @@ public:
                                              const Foam::pointField& points);
 
     /** 
+     * Convert a CGAL face (vector of CGAL points) to a Foam face 
+     * @param cgalFace The CGAL face as a vector of points
+     * @param points Reference to the Foam point field to add or match points
+     * @return Foam::face with indices into points
+     */
+    static Foam::face toFoamFace(const std::vector<CGALPoint>& cgalFace, 
+                                 Foam::pointField& points);
+
+    /** 
      * Convert a Foam faceList to a vector of CGAL faces 
      * @param faces The Foam list of faces
      * @param points The Foam point field referenced by the faces
      */
     static std::vector<std::vector<CGALPoint>> toCGALFaces(const Foam::faceList& faces, 
                                                            const Foam::pointField& points);
+
+    // --- Polyhedron Conversion ---
+    /** 
+     * Convert Foam pointField and faceList to a CGAL Polyhedron_3 
+     * @param points The Foam point field
+     * @param faces The Foam list of faces
+     * @return CGALPolyhedron representing the polyhedron
+     */
+    static CGALPolyhedron toCGALPolyhedron(const Foam::pointField& points, 
+                                           const Foam::faceList& faces);
+
+    /** 
+     * Convert a CGAL Polyhedron_3 to Foam pointField and faceList 
+     * @param polyhedron The CGAL polyhedron
+     * @param points Output Foam point field
+     * @param faces Output Foam list of faces
+     */
+    static void toFoamPolyhedron(const CGALPolyhedron& polyhedron, 
+                                 Foam::pointField& points, 
+                                 Foam::faceList& faces);
 
     // --- Mesh Conversion ---
     /** 

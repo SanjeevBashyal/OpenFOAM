@@ -15,12 +15,13 @@ namespace Bashyal
         float s1_;
         float s2_;
         float s_;
+        Foam::label identifier_;
 
     private:
         /* data */
     public:
         cubeAggregate();
-        explicit cubeAggregate(float s1, float s2);
+        explicit cubeAggregate(float s1, float s2, Foam::label identifier);
         // cubeAggregate *getPtr() { return this; }
 
         void createFaces();

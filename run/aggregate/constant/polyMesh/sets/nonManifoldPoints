@@ -10,12 +10,37 @@ FoamFile
     version     2.0;
     format      ascii;
     arch        "LSB;label=32;scalar=64";
-    class       cellSet;
+    class       pointSet;
     location    "constant/polyMesh/sets";
-    object      nonClosedCells;
+    object      nonManifoldPoints;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-6(2 3 4 5 6 7)
+
+21
+(
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+21
+22
+23
+24
+)
+
 
 // ************************************************************************* //

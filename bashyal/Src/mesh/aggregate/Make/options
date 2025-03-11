@@ -4,10 +4,12 @@ EXE_INC = \
     -I$(LIB_SRC)/surfMesh/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude \
     -I$(WM_PROJECT_DIR)/bashyal/Utilities/lnInclude \
-    -I$(WM_PROJECT_DIR)/bashyal/Src/baseClass/lnInclude
+    -I$(WM_PROJECT_DIR)/bashyal/Src/baseClass/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/Src/debug/debugClass/lnInclude
 
 LIB_LIBS = \
     -lbaseClass \
+    -ldebugClass \
     -lfileFormats \
     -lsurfMesh \
     -lmeshTools

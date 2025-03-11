@@ -1,0 +1,3 @@
+pointFaceHit.C
+
+LIB = $(FOAM_LIBBIN)/libpointFaceHit

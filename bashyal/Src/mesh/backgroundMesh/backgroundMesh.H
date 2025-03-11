@@ -33,14 +33,14 @@ namespace Bashyal
 
         Foam::List<Foam::face> allFaces_;    // Stores all faces
         Foam::List<bool> boolBoundaryFaces_; // Stores all faces
-        Foam::List<Foam::word> facePatches_;
+        Foam::List<int> facePatches_;
         Foam::dictionary boundaryDict_;
 
         Foam::HashTable<Foam::label, Foam::point> pointMap_;
         // Foam::HashTable<Foam::label, Foam::face> faceMap_;
         Foam::HashTable<Foam::label, Foam::face> faceOwnerMap_;    // For tracking boundary faces
-        Foam::HashTable<Foam::label, Foam::face> facePositionMap_; // For tracking face Indices
-        Foam::HashTable<Foam::faceList, Foam::word> stringPtrMap_; // For tracking boundary faces
+        // Foam::HashTable<Foam::label, Foam::face> facePositionMap_; // For tracking face Indices
+        // Foam::HashTable<Foam::faceList, Foam::word> stringPtrMap_; // For tracking boundary faces
 
         double s_;
         Foam::Time *runTime_;
@@ -63,9 +63,10 @@ namespace Bashyal
 
         ~backgroundMesh() = default;
 
+        void auditMesh();
         void developMesh();
         void addPoints(const Foam::pointField &blockPoints);
-        void addFaces(const Foam::pointField &blockPoints, const Foam::faceList &blockFaces, const Foam::wordList &blockPatches, const Foam::wordList &stringPtrs);
+        void addFaces(const Foam::pointField &blockPoints, const Foam::faceList &blockFaces, const Foam::labelList &owners, const Foam::List<int> &blockPatches);
 
         void reset();
         void resetBlocks();

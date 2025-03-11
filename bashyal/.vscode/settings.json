@@ -93,6 +93,10 @@
         "pointFaceHit.C": "cpp",
         "cubeAggregates.C": "cpp",
         "PSD.C": "cpp",
-        "roundAggregate.C": "cpp"
+        "roundAggregate.C": "cpp",
+        "test copy.C": "cpp",
+        "test-MeshConstructionCGAL-betweenTwoSurfaces.C": "cpp",
+        "backgroundBlockCGALIntersection.C": "cpp",
+        "backgroundMeshBoundary.C": "cpp"
     }
 }

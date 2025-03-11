@@ -29,40 +29,34 @@ namespace Bashyal
         // Define the 6 faces of the cube (each face with 4 vertices in counterclockwise order)
         faces_.setSize(6);
         patches_.setSize(6);
-        stringPtrs_.setSize(6);
 
         // Bottom face (zmin): counterclockwise when viewed from below
         faces_[0] = face({0, 1, 2, 3});
-        patches_[0] = "XY-Zmin";
-        stringPtrs_[0] = word::null;
+        patches_[0] = patchType::XY_Zmin;
 
         // Top face (zmax): counterclockwise when viewed from above
         faces_[1] = face({4, 7, 6, 5});
-        patches_[1] = "XY-Zmax";
-        stringPtrs_[1] = word::null;
+        patches_[1] = patchType::XY_Zmax;
 
         // Left face (xmin): counterclockwise when viewed from the left
         faces_[2] = face({0, 4, 5, 1});
-        patches_[2] = "YZ-Xmin";
-        stringPtrs_[2] = word::null;
+        patches_[2] = patchType::YZ_Xmin;
 
         // Right face (xmax): counterclockwise when viewed from the right
         faces_[3] = face({3, 2, 6, 7});
-        patches_[3] = "YZ-Xmax";
-        stringPtrs_[3] = word::null;
+        patches_[3] = patchType::YZ_Xmax;
 
         // Front face (ymin): counterclockwise when viewed from the front
         faces_[4] = face({0, 3, 7, 4});
-        patches_[4] = "XZ-Ymin";
-        stringPtrs_[4] = word::null;
+        patches_[4] = patchType::XZ_Ymin;
 
         // Back face (ymax): counterclockwise when viewed from the back
         faces_[5] = face({1, 5, 6, 2});
-        patches_[5] = "XZ-Ymax";
-        stringPtrs_[5] = word::null;
+        patches_[5] = patchType::XZ_Ymax;
 
         owners_ = labelList{0, 0, 0, 0, 0, 0};           // All faces owned by a single cell
         neighbours_ = labelList{-1, -1, -1, -1, -1, -1}; // No neighbor cells (external boundary)
+        nboundaries_ = 6;
     }
 
     void backgroundBlock::reset()
@@ -88,7 +82,7 @@ namespace Bashyal
         label totalTriangles = 0;
         forAll(faces_, faceI)
         {
-            const face& f = faces_[faceI];
+            const face &f = faces_[faceI];
             if (f.size() >= 3) // Only process faces with 3 or more vertices
             {
                 totalTriangles += f.size() - 2; // n-2 triangles per n-sided polygon
@@ -102,15 +96,16 @@ namespace Bashyal
         label triIndex = 0;
         forAll(faces_, faceI)
         {
-            const face& f = faces_[faceI];
-            if (f.size() < 3) continue; // Skip invalid faces
+            const face &f = faces_[faceI];
+            if (f.size() < 3)
+                continue; // Skip invalid faces
             // Fan triangulation: connect vertex 0 to vertices i and i+1
             for (label i = 1; i < f.size() - 1; ++i)
             {
-                face tri(3); // Create a triangle (face with 3 vertices)
-                tri[0] = f[0];    // First vertex of the fan
-                tri[1] = f[i];    // Current vertex
-                tri[2] = f[i+1];  // Next vertex
+                face tri(3);       // Create a triangle (face with 3 vertices)
+                tri[0] = f[0];     // First vertex of the fan
+                tri[1] = f[i];     // Current vertex
+                tri[2] = f[i + 1]; // Next vertex
                 triFaces_[triIndex++] = tri;
             }
         }

@@ -10,44 +10,12 @@ FoamFile
     version     2.0;
     format      ascii;
     arch        "LSB;label=32;scalar=64";
-    class       faceSet;
+    class       cellSet;
     location    "constant/polyMesh/sets";
-    object      wrongOrientedFaces;
+    object      region0;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-
-28
-(
-192
-194
-196
-198
-200
-145
-147
-149
-151
-153
-155
-158
-161
-163
-164
-168
-170
-171
-172
-173
-175
-176
-179
-180
-181
-183
-187
-191
-)
-
+1(0)
 
 // ************************************************************************* //

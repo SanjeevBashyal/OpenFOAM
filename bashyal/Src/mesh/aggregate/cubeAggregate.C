@@ -24,7 +24,8 @@ namespace Bashyal
     {
     }
 
-    cubeAggregate::cubeAggregate(float s1, float s2) // to produce size between s1 and s2
+    cubeAggregate::cubeAggregate(float s1, float s2, Foam::label identifier) // to produce size between s1 and s2
+        : identifier_(identifier)
     {
 
         // Create an instance of the Random class with automatic seeding
@@ -114,8 +115,6 @@ namespace Bashyal
 
         return triangles;
     }
-
-    
 
     void cubeAggregate::hit(scalar index)
     {
