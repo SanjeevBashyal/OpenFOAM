@@ -19,7 +19,7 @@ namespace Bashyal
                 for (int k = minIndex.z(); k <= maxIndex.z(); ++k)
                 {
                     backgroundBlock &block = *backgroundBlocks_[i][j][k];
-                    block.intersectClosedSurface(cubeAgg.faces_, cubeAgg.globalPoints_, cubeAgg.getCentroid(), cubeAgg.stringPtr());
+                    block.intersectClosedSurface(cubeAgg.faces_, cubeAgg.globalPoints_, cubeAgg.getCentroid(), cubeAgg.identifier_);
                 }
             }
         }
@@ -43,7 +43,7 @@ namespace Bashyal
                 for (int k = minIndex.z(); k <= maxIndex.z(); ++k)
                 {
                     backgroundBlock &block = *backgroundBlocks_[i][j][k];
-                    block.intersectClosedSurface(roundAgg.faces_, roundAgg.globalPoints_, roundAgg.getCentroid(), roundAgg.stringPtr());
+                    block.intersectClosedSurface(roundAgg.faces_, roundAgg.globalPoints_, roundAgg.getCentroid(), roundAgg.identifier_);
                 }
             }
         }

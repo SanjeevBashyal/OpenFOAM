@@ -33,7 +33,7 @@ namespace Bashyal
         Foam::labelList owners_;     // Stores owner cells
         Foam::labelList neighbours_; // Stores neighbor cells
 
-        Foam::faceList triFaces_; // New attribute to store triangulated faces
+        // Foam::faceList triFaces_; // New attribute to store triangulated faces
 
     private:
         /* data */
@@ -79,7 +79,7 @@ namespace Bashyal
         void decomposeToConvex();
         void mapNewFacesToBoundaries(const Foam::pointField &newPoints, const Foam::faceList &newFaces, const Foam::labelList &newNeighbours, const Foam::label newNboundaries, Foam::List<int> &newPatches);
         void mapNewFacesToBoundaries(const Foam::pointField &newPoints, const Foam::faceList &newFaces, const Foam::pointField &pointsA, const Foam::faceList &facesA, const Foam::List<int> &patchesA, const Foam::pointField &pointsB, const Foam::faceList &facesB, const Foam::List<int> &patchesB, const Foam::label indentifierB, Foam::List<int> &newPatches);
-        void triangulateFaces();
+        void triangulateFaces(const Foam::pointField &points, const Foam::faceList &faces, Foam::pointField &outPoints, Foam::faceList &outFaces);
 
         ~backgroundBlock();
     };

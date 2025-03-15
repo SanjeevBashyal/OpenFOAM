@@ -1,0 +1,16 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       vectorField;
+    location    "constant/polyMesh";
+    object      points;
+}
+
+4
+(
+(0.0573205 0.0626795 0.095359)
+(0.1 0.0626795 0.095359)
+(0.1 0.0709432 0.1)
+(0.1 0.0873205 0.066906)
+)

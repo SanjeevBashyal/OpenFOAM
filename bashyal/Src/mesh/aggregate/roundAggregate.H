@@ -14,10 +14,11 @@ namespace Bashyal
     public:
         float radius_;
         int resolution_;    // Number of divisions in the sphere
+        Foam::label identifier_;
 
     public:
         roundAggregate();
-        explicit roundAggregate(float radius, int resolution);
+        explicit roundAggregate(float radius, int resolution, Foam::label identifier);
         ~roundAggregate() = default;
 
         void createFaces();                       // Generate quadrilateral faces

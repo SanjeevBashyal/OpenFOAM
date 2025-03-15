@@ -4,9 +4,11 @@ namespace Bashyal
 {
     void backgroundBlock::intersectClosedSurface(const faceList &faces, const pointField &points, point insidePoint, unsigned int identifier)
     {
+        int boundaryCount = 0;
         pointField mergedPoints;
         faceList mergedFaces;
         List<int> mergePatches;
+        labelList mergedNeighbours;
 
         Foam::HashTable<label, point> pointMap;
         Foam::HashTable<label, face> faceMap;
@@ -41,6 +43,8 @@ namespace Bashyal
                 this->addPoints(outputPoints, pointMap, mergedPoints);
                 this->addFace(outputPoints, outputFace, pointMap, mergedFaces, mergedPoints);
                 mergePatches.append(identifier);
+                mergedNeighbours.append(-1);
+                boundaryCount++;
             }
         }
 
@@ -59,11 +63,15 @@ namespace Bashyal
                 this->addPoints(outputPoints, pointMap, mergedPoints);
                 this->addFace(outputPoints, outputFace, pointMap, mergedFaces, mergedPoints);
                 mergePatches.append(patches_[i]);
+                mergedNeighbours.append(-1);
+                boundaryCount++;
             }
         }
         this->points_ = mergedPoints;
         this->faces_ = mergedFaces;
         this->patches_ = mergePatches;
+        this->neighbours_ = mergedNeighbours;
+        this->nboundaries_ = boundaryCount;
         this->edited_ = true;
 
         if (this->points_.size() == 0)

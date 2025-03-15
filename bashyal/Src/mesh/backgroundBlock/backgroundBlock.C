@@ -76,27 +76,35 @@ namespace Bashyal
                (pt.z() >= minPt.z() && pt.z() <= maxPt.z());
     }
 
-    void backgroundBlock::triangulateFaces()
+    void backgroundBlock::triangulateFaces(
+        const pointField &points, // Input points (not modified)
+        const faceList &faces,    // Input faces to triangulate
+        pointField &outPoints,    // Output points (same as input)
+        faceList &outFaces        // Output triangulated faces
+    )
     {
+        // Assign input points to output (no modification occurs)
+        outPoints = points;
+
         // Step 1: Calculate total number of triangles
         label totalTriangles = 0;
-        forAll(faces_, faceI)
+        forAll(faces, faceI)
         {
-            const face &f = faces_[faceI];
+            const face &f = faces[faceI];
             if (f.size() >= 3) // Only process faces with 3 or more vertices
             {
                 totalTriangles += f.size() - 2; // n-2 triangles per n-sided polygon
             }
         }
 
-        // Step 2: Preallocate triFaces_ with the total number of triangles
-        triFaces_.setSize(totalTriangles);
+        // Step 2: Preallocate outFaces with the total number of triangles
+        outFaces.setSize(totalTriangles);
 
-        // Step 3: Triangulate each face and store in triFaces_
+        // Step 3: Triangulate each face and store in outFaces
         label triIndex = 0;
-        forAll(faces_, faceI)
+        forAll(faces, faceI)
         {
-            const face &f = faces_[faceI];
+            const face &f = faces[faceI];
             if (f.size() < 3)
                 continue; // Skip invalid faces
             // Fan triangulation: connect vertex 0 to vertices i and i+1
@@ -106,7 +114,7 @@ namespace Bashyal
                 tri[0] = f[0];     // First vertex of the fan
                 tri[1] = f[i];     // Current vertex
                 tri[2] = f[i + 1]; // Next vertex
-                triFaces_[triIndex++] = tri;
+                outFaces[triIndex++] = tri;
             }
         }
     }

@@ -295,6 +295,10 @@
         "nutWallFunctionFvPatchScalarField.C": "cpp",
         "backgroundBlockCellRefiner.C": "cpp",
         "foamCGALConverter.C": "cpp",
-        "backgroundBlockCGALIntersection.C": "cpp"
+        "backgroundBlockCGALIntersection.C": "cpp",
+        "globals.C": "cpp",
+        "backgroundMeshBoundary.C": "cpp",
+        "debugClassCGAL.C": "cpp",
+        "debugClassPolyMesh.C": "cpp"
     }
 }

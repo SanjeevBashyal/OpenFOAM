@@ -2,15 +2,14 @@
 #include "foamCGALConverter.H"
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Polyhedron_3.h>
+#include <CGAL/Polygon_mesh_processing/measure.h>
+#include <CGAL/Polygon_mesh_processing/triangulate_faces.h>
 #include <CGAL/Nef_polyhedron_3.h>
 #include <CGAL/Polyhedron_incremental_builder_3.h>
 #include <CGAL/Nef_3/SNC_indexed_items.h>
 #include <CGAL/convex_decomposition_3.h>
 #include <map>
 #include <vector>
-
-// Ensure labelList is available
-// #include <labelList.H>
 
 namespace Bashyal
 {
@@ -24,14 +23,16 @@ namespace Bashyal
 
     void backgroundBlock::decomposeToConvex()
     {
+        Foam::pointField triPoints;
+        Foam::faceList triFaces;
         // Ensure faces are triangulated for CGAL compatibility
-        this->triangulateFaces();
+        this->triangulateFaces(points_, faces_, triPoints, triFaces);
 
         // Convert OpenFOAM geometry to CGAL Polyhedron_3 using FoamCGALConverter
         Polyhedron originalPolyhedron;
         try
         {
-            originalPolyhedron = Converter::toCGALPolyhedron(points_, triFaces_);
+            originalPolyhedron = Converter::toCGALPolyhedron(triPoints, triFaces);
         }
         catch (const std::exception &e)
         {
@@ -49,6 +50,7 @@ namespace Bashyal
         CGAL::convex_decomposition_3(N);
 
         // Extract convex polyhedra from the decomposition
+        double volumeTolerance = 1e-8; // Minimum volume threshold
         std::vector<Polyhedron> convexPolyhedra;
         Nef_polyhedron::Volume_const_iterator ci = ++N.volumes_begin();
         for (; ci != N.volumes_end(); ++ci)
@@ -57,7 +59,22 @@ namespace Bashyal
             {
                 Polyhedron cp;
                 N.convert_inner_shell_to_polyhedron(ci->shells_begin(), cp);
-                convexPolyhedra.push_back(cp);
+                // Compute volume using a copy
+                Polyhedron tempPoly = cp;
+                if (!CGAL::is_triangle_mesh(tempPoly))
+                {
+                    CGAL::Polygon_mesh_processing::triangulate_faces(tempPoly);
+                }
+                auto volume = CGAL::Polygon_mesh_processing::volume(tempPoly);
+
+                // Convert the exact volume to a double for comparison
+                double volumeDouble = CGAL::to_double(volume);
+
+                // Compare the volume with the tolerance
+                if (std::abs(volumeDouble) > volumeTolerance)
+                {
+                    convexPolyhedra.push_back(cp); // cp is still original
+                }
             }
         }
 
@@ -83,13 +100,14 @@ namespace Bashyal
             }
         }
 
-        // Build face ownership map to distinguish internal and boundary faces
-        struct FaceKey : public std::vector<Foam::label>
-        {
-            FaceKey(const std::vector<Foam::label> &v) : std::vector<Foam::label>(v) { std::sort(begin(), end()); }
-            bool operator<(const FaceKey &other) const { return std::lexicographical_compare(begin(), end(), other.begin(), other.end()); }
-        };
-        std::map<FaceKey, std::vector<std::pair<Foam::label, Foam::face>>> faceMap;
+        Foam::faceList newFaces;
+        Foam::labelList newOwners;
+        Foam::labelList newNeighbours;
+        // Foam::faceList boundaryFaces;
+        // Foam::label newNboundaries = 0;
+
+        // Foam::HashTable<label, face> faceOwnerMap_; // For tracking boundary faces
+        Foam::HashTable<label, face> facePositionMap_; // For tracking face Indices
 
         for (Foam::label cellI = 0; cellI < nCells; ++cellI)
         {
@@ -110,8 +128,24 @@ namespace Bashyal
                 {
                     f[i] = pointIndices[i];
                 }
-                FaceKey key(pointIndices);
-                faceMap[key].push_back(std::make_pair(cellI, f));
+
+                Foam::face faceCopy = Foam::face(f);
+
+                // Sort the face points to ensure unique representation (important for shared faces)
+                std::sort(faceCopy.begin(), faceCopy.end());
+
+                if (faceMap.found(faceCopy))
+                {
+                    // Face with same orientation exists; add current cell and face to its list
+                    faceMap[faceCopy].push_back(std::make_pair(cellI, f));
+                }
+                else
+                {
+                    // Neither f nor its reverse exists; insert new entry with f as key
+                    faceMap.insert(f, {std::make_pair(cellI, f)});
+                }
+                // Note: The original line `FaceKey key(pointIndices); faceMap[key].push_back(...)`
+                // is replaced by the else clause above due to key type mismatch
             }
         }
 
@@ -122,10 +156,14 @@ namespace Bashyal
         Foam::faceList boundaryFaces;
         Foam::label newNboundaries = 0;
 
-        for (const auto &entry : faceMap)
+        // Define a typedef for the HashTable type
+        typedef Foam::HashTable<std::vector<std::pair<Foam::label, Foam::face>>, Foam::face> FaceMapType;
+
+        // Use the typedef in the forAllConstIter macro
+        forAllConstIter(FaceMapType, faceMap, iter)
         {
-            const FaceKey &key = entry.first;
-            const auto &instances = entry.second;
+            const Foam::face &key = iter.key(); // Access the key (face)
+            const auto &instances = iter();     // Access the value (vector of pairs)
             if (instances.size() == 1)
             {
                 // Boundary face
@@ -202,7 +240,7 @@ namespace Bashyal
         // Step 1: Compute planes for all faces of polyhedron A
         std::vector<CGAL::Plane_3<Kernel>> planes(nboundaries_);
         Foam::List<int> boundaryPatches(nboundaries_);
-        Foam::label loopCount;
+        Foam::label loopCount = 0;
         for (Foam::label i = 0; i < faces_.size(); ++i)
         {
             if (neighbours_[i] == -1)

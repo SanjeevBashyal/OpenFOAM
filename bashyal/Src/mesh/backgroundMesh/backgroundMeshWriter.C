@@ -1,4 +1,5 @@
 #include "backgroundMesh.H"
+#include <string>
 using namespace Foam;
 namespace Bashyal
 {
@@ -24,10 +25,12 @@ namespace Bashyal
         labelList meshNeighbours = globalNeighbours_;
 
         // Handle boundary faces separately: add them to the meshFaces but with no neighbour
-        for (const auto &boundaryFace : allFaces_)
+        Foam::label boundaryFaceCount = 0;
+        for (const auto &faceI : boundaryFaces_)
         {
-            meshFaces.append(boundaryFace); // Add the boundary face
-            meshOwners.append(-1);          // Boundary faces have no owner
+            meshFaces.append(faceI);                               // Add the boundary face
+            meshOwners.append(boundaryOwners_[boundaryFaceCount]); // Boundary faces have no owner
+            boundaryFaceCount++;
             // meshNeighbours.append(-1);      // Boundary faces have no neighbour
         }
 
@@ -59,31 +62,28 @@ namespace Bashyal
         faceList meshFaces = globalFaces_;
         labelList meshOwners = globalOwners_;
         labelList meshNeighbours = globalNeighbours_;
-        wordList meshPatches = facePatches_;
+        List<int> meshPatches = boundaryPatches_;
 
         // Step 2: Initialize containers for sorted boundary faces and patch information
-        wordList patchNames;
-        HashTable<faceList, word> boundaryFacesMap;
+        List<int> patchNames;
+        HashTable<Foam::List<std::pair<Foam::face, int>>, int> boundaryFacesMap;
 
         // Step 3: Sort boundary faces by patch name in globalPatches_
         int i = 0;
-        for (const auto &boundaryFace : allFaces_)
+        for (const auto &boundaryFace : boundaryFaces_)
         {
-            if (boolBoundaryFaces_[i])
-            {
-                word &facePatchName = meshPatches[i];
+            int facePatch = meshPatches[i];
 
-                if (boundaryFacesMap.found(facePatchName))
-                {
-                    boundaryFacesMap[facePatchName].append(boundaryFace);
-                }
-                else
-                {
-                    faceList newPatchFaces;
-                    newPatchFaces.append(boundaryFace);
-                    boundaryFacesMap.insert(facePatchName, newPatchFaces);
-                    patchNames.append(facePatchName);
-                }
+            if (boundaryFacesMap.found(facePatch))
+            {
+                boundaryFacesMap[facePatch].append(std::make_pair(boundaryFace, boundaryOwners_[i]));
+            }
+            else
+            {
+                Foam::List<std::pair<Foam::face, int>> newPatchFaces;
+                newPatchFaces.append(std::make_pair(boundaryFace, boundaryOwners_[i]));
+                boundaryFacesMap.insert(facePatch, newPatchFaces);
+                patchNames.append(facePatch);
             }
             i++;
         }
@@ -96,20 +96,17 @@ namespace Bashyal
 
         wordList patchTypes;
         patchTypes.setSize(patchNames.size());
-        for (const word &patchName : patchNames)
+        for (const int patchName : patchNames)
         {
-            faceList &boundaryFacesI = boundaryFacesMap[patchName];
+            Foam::List<std::pair<Foam::face, int>> &boundaryFacesI = boundaryFacesMap[patchName];
             patchBoundarySizes[i] = boundaryFacesI.size();
-            patchTypes[i] = boundaryDict_.getOrDefault<Foam::word>(patchName, "patch");
+            patchTypes[i] = boundaryDict_.getOrDefault<Foam::word>(std::to_string(patchName), "patch");
             i++;
 
-            for (const face &boundaryFace : boundaryFacesI)
+            for (const auto &p : boundaryFacesI)
             {
-                Foam::face boundaryFaceCopy = Foam::face(boundaryFace);
-                std::sort(boundaryFaceCopy.begin(), boundaryFaceCopy.end());
-
-                meshFaces.append(boundaryFace);
-                meshOwners.append(faceOwnerMap_[boundaryFaceCopy]); // Boundary face, no owner
+                meshFaces.append(p.first);
+                meshOwners.append(p.second); // Boundary face, no owner
                 // meshNeighbours.append(-1); // Boundary face, no neighbour
             }
         }
@@ -126,7 +123,7 @@ namespace Bashyal
         const labelList &owners,
         const labelList &neighbours,
         const Foam::labelList &boundaryFaceSizes,
-        const Foam::wordList &patchNames,
+        const Foam::List<int> &patchInts,
         const Foam::wordList &patchTypes)
     {
         mkDir(meshDir.c_str(), 0777); // Create the mesh directory if it doesn't exist
@@ -219,14 +216,23 @@ namespace Bashyal
                      << "    location    " << outputDir << ";\n"
                      << "    object      boundary;\n"
                      << "}\n\n";
-        boundaryFile << patchNames.size() << "\n(\n";
+        boundaryFile << patchInts.size() << "\n(\n";
 
         // Start face index for each patch
         label startFace = neighbours.size();
 
-        for (Foam::label i = 0; i < patchNames.size(); ++i)
+        std::map<int, Foam::word> patchNamesMap = {
+            {patchType::YZ_Xmin, "Xmin"},
+            {patchType::YZ_Xmax, "Xmax"},
+            {patchType::XZ_Ymin, "Ymin"},
+            {patchType::XZ_Ymax, "Ymax"},
+            {patchType::XY_Zmin, "Zmin"},
+            {patchType::XY_Zmax, "Zmax"},
+            {1000, "aggregate"}};
+
+        for (Foam::label i = 0; i < patchInts.size(); ++i)
         {
-            boundaryFile << patchNames[i] << "\n{\n";
+            boundaryFile << patchNamesMap[patchInts[i]] << "\n{\n";
             boundaryFile << "    type " << patchTypes[i] << ";\n";
             boundaryFile << "    nFaces " << boundaryFaceSizes[i] << ";\n";
             boundaryFile << "    startFace " << startFace << ";\n";

@@ -30,15 +30,18 @@ namespace Bashyal
         Foam::faceList globalFaces_; // all internal faces
         Foam::labelList globalOwners_;
         Foam::labelList globalNeighbours_;
+        // Foam::List<int> globalPatches_;
 
-        Foam::List<Foam::face> allFaces_;    // Stores all faces
-        Foam::List<bool> boolBoundaryFaces_; // Stores all faces
-        Foam::List<int> facePatches_;
+        Foam::List<Foam::face> boundaryFaces_;    // Stores all boundary faces
+        Foam::labelList boundaryOwners_;    // Stores all boundary faces
+        Foam::List<int> boundaryPatches_;
+        Foam::List<bool> boolBoundaryFaces_; // Stores boundaryFace flag
+        
         Foam::dictionary boundaryDict_;
 
         Foam::HashTable<Foam::label, Foam::point> pointMap_;
         // Foam::HashTable<Foam::label, Foam::face> faceMap_;
-        Foam::HashTable<Foam::label, Foam::face> faceOwnerMap_;    // For tracking boundary faces
+        // Foam::HashTable<Foam::label, Foam::face> faceOwnerMap_;    // For tracking boundary faces
         // Foam::HashTable<Foam::label, Foam::face> facePositionMap_; // For tracking face Indices
         // Foam::HashTable<Foam::faceList, Foam::word> stringPtrMap_; // For tracking boundary faces
 
@@ -66,7 +69,7 @@ namespace Bashyal
         void auditMesh();
         void developMesh();
         void addPoints(const Foam::pointField &blockPoints);
-        void addFaces(const Foam::pointField &blockPoints, const Foam::faceList &blockFaces, const Foam::labelList &owners, const Foam::List<int> &blockPatches);
+        void addFaces(Foam::label globalNcells, const Foam::Vector<int> &identity, const Foam::pointField &blockPoints, const Foam::faceList &blockFaces, const Foam::labelList &owners, const Foam::labelList &neighbours, const Foam::List<int> &blockPatches);
 
         void reset();
         void resetBlocks();
@@ -80,8 +83,10 @@ namespace Bashyal
 
         void createPolyMesh();
         void writeBackgroundMesh(const std::string &meshDir);
-        static void writePolyMeshPlain(const std::string &meshDir, const Foam::pointField &points, const Foam::faceList &faces, const Foam::labelList &owners, const Foam::labelList &neighbours, const Foam::labelList &boundaryFaceSizes, const Foam::wordList &patchNames, const Foam::wordList &patchTypes);
+        static void writePolyMeshPlain(const std::string &meshDir, const Foam::pointField &points, const Foam::faceList &faces, const Foam::labelList &owners, const Foam::labelList &neighbours, const Foam::labelList &boundaryFaceSizes, const Foam::List<int> &patchNames, const Foam::wordList &patchTypes);
         void writePolyMeshFromOwnerNeighbour(const std::string &meshDir, const Foam::pointField &points, const Foam::faceList &faces, const Foam::labelList &owners, const Foam::labelList &neighbours);
+
+        bool isFaceMeshBoundary(const Foam::Vector<int> &identity, int patchType);
 
         void createBlockMesh();
     };

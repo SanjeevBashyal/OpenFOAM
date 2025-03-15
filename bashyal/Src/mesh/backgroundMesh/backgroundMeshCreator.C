@@ -53,7 +53,7 @@ namespace Bashyal
                     addPoints(block.getPoints());
 
                     // Add faces with updated point indices
-                    addFaces(block.getPoints(), block.getFaces(), block.getOwners(), block.getNeighbours(), block.getPatches());
+                    addFaces(block.globalNCells_, block.identity_, block.getPoints(), block.getFaces(), block.getOwners(), block.getNeighbours(), block.getPatches());
 
                     cellCount_ = cellCount_ + block.ncells_;
                 }
@@ -77,7 +77,7 @@ namespace Bashyal
         }
     }
 
-    void backgroundMesh::addFaces(const pointField &blockPoints, const faceList &blockFaces, const labelList &owners, const labelList &neighbours, const List<int> &blockPatches)
+    void backgroundMesh::addFaces(Foam::label globalNCells, const Foam::Vector<int> &identity, const pointField &blockPoints, const faceList &blockFaces, const labelList &owners, const labelList &neighbours, const List<int> &blockPatches)
     {
         label currentCell = cellCount_;
         int faceCount = 0;
@@ -112,47 +112,21 @@ namespace Bashyal
 
             int patchType = blockPatches[faceCount];
 
-            if (patchType == 0)
+            if (isFaceMeshBoundary(identity, patchType))
             {
                 // Internal face: add to globalFaces_ with owner and neighbor
-                globalFaces_.append(globalFace);
-                globalOwners_.append(currentCell + owners[faceCount]);
-                globalNeighbours_.append(currentCell + neighbours[faceCount]);
-                // Add to allFaces_ for consistency, marked as non-boundary
-                allFaces_.append(globalFace);
-                boolBoundaryFaces_.append(false);
+                boundaryFaces_.append(globalFace);
+                boundaryOwners_.append(globalNCells + owners[faceCount]);
+                boolBoundaryFaces_.append(true);
+                boundaryPatches_.append(patchType); // Store patch type for boundary face
             }
             else
             {
-                // Boundary face handling
-                bool isDomainBoundary = false;
-                if (patchType == -1 && identity.x() == 0)
-                {
-                    // X-min boundary face at domain edge
-                    isDomainBoundary = true;
-                }
-                else if (patchType == -2 && identity.y() == 0)
-                {
-                    // Y-min boundary face at domain edge
-                    isDomainBoundary = true;
-                }
-                else if (patchType == -3 && identity.z() == 0)
-                {
-                    // Z-min boundary face at domain edge
-                    isDomainBoundary = true;
-                }
-
-                // Add the face as a boundary face
-                allFaces_.append(globalFace);
-                boolBoundaryFaces_.append(true);
-                globalOwners_.append(currentCell + owners[faceCount]);
-                globalNeighbours_.append(-1); // Boundary faces have no neighbor
-
-                // Record the patch type
-                if (isDomainBoundary || patchType > 0)
-                {
-                    facePatches_.append(patchType); // Store patch type for boundary face
-                }
+                // Internal face: add to globalFaces_ with owner and neighbor
+                globalFaces_.append(globalFace);
+                globalOwners_.append(globalNCells + owners[faceCount]);
+                globalNeighbours_.append(neighbours[faceCount]);
+                boolBoundaryFaces_.append(false);
             }
             faceCount++;
         }
@@ -166,13 +140,13 @@ namespace Bashyal
         globalOwners_.clear();
         globalNeighbours_.clear();
 
-        allFaces_.clear();
+        boundaryFaces_.clear();
         boolBoundaryFaces_.clear();
-        facePatches_.clear();
+        boundaryPatches_.clear();
 
         pointMap_.clear();
         // faceMap_.clear();
-        faceOwnerMap_.clear();
+        // faceOwnerMap_.clear();
     }
 
     point backgroundMesh::roundPoint(point value)

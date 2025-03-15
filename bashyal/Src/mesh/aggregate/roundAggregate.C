@@ -18,9 +18,9 @@ namespace Bashyal
     {
     }
 
-    roundAggregate::roundAggregate(float radius, int resolution)
+    roundAggregate::roundAggregate(float radius, int resolution, Foam::label identifier)
         : radius_(radius),
-          resolution_(resolution)
+          resolution_(resolution), identifier_(identifier)
     {
         this->localPoints_ = createSpherePoints(radius, resolution); // Generate sphere points with default resolution
         this->centroid_ = Foam::point(0, 0, 0);                      // Initialize centroid

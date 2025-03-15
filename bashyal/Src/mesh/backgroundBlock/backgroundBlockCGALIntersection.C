@@ -18,11 +18,16 @@ namespace Bashyal
         Foam::point insidePoint,
         unsigned int identifier)
     {
+        Foam::pointField triPointsA;
+        Foam::faceList triFacesA;
+        // Ensure faces are triangulated for CGAL compatibility
+        this->triangulateFaces(points_, faces_, triPointsA, triFacesA);
+
         // Step 1: Convert block's geometry (A) to CGAL Polyhedron
         Polyhedron A;
         try
         {
-            A = Converter::toCGALPolyhedron(points_, faces_);
+            A = Converter::toCGALPolyhedron(triPointsA, triFacesA);
             if (!A.is_valid())
             {
                 Foam::Warning << "Block polyhedron A is invalid." << Foam::endl;

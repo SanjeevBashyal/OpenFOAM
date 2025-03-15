@@ -1,0 +1,16 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       faceList;
+    location    "constant/polyMesh";
+    object      faces;
+}
+
+4
+(
+3(1 2 0 )
+3(1 0 3 )
+3(3 0 2 )
+3(2 1 3 )
+)

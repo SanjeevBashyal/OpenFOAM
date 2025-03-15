@@ -97,6 +97,9 @@
         "test copy.C": "cpp",
         "test-MeshConstructionCGAL-betweenTwoSurfaces.C": "cpp",
         "backgroundBlockCGALIntersection.C": "cpp",
-        "backgroundMeshBoundary.C": "cpp"
+        "backgroundMeshBoundary.C": "cpp",
+        "debugClassCGAL.C": "cpp",
+        "debugClassPolyMesh.C": "cpp",
+        "bFace.C": "cpp"
     }
 }
