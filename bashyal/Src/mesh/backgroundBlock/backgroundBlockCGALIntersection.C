@@ -221,12 +221,21 @@ namespace Bashyal
             newPatches                          // Output patches
         );
 
+        Foam::faceList outFaces;
+        Foam::labelList outOwners;
+        Foam::labelList outNeighbours;
+        Foam::List<int> outPatches;
+
+        reorderToUpperTriangularNeighboursOnly(
+            newFaces, newOwners, newNeighbours, newPatches,
+            outFaces, outOwners, outNeighbours, outPatches);
+
         // Update class attributes with new topology
         points_ = allPoints;
-        faces_ = newFaces;
-        owners_ = newOwners;
-        neighbours_ = newNeighbours;
-        patches_ = newPatches;
+        faces_ = outFaces;
+        owners_ = outOwners;
+        neighbours_ = outNeighbours;
+        patches_ = outPatches;
         ncells_ = nCells;
         edited_ = true;
         if (nCells > 1)
@@ -344,4 +353,165 @@ namespace Bashyal
             // Internal faces remain 0
         }
     }
+
+    void backgroundBlock::reorderToUpperTriangularNeighboursOnly(
+        const Foam::faceList &faces,
+        const Foam::labelList &owners,
+        const Foam::labelList &neighbours,
+        const Foam::List<int> &patches,
+        Foam::faceList &outFaces,
+        Foam::labelList &outOwners,
+        Foam::labelList &outNeighbours,
+        Foam::List<int> &outPatches)
+    {
+        // Set the size of output lists to match input
+        outFaces.setSize(faces.size());
+        outOwners.setSize(owners.size());
+        outNeighbours.setSize(neighbours.size());
+        outPatches.setSize(patches.size());
+
+        // Initialize position tracker for output lists
+        // Foam::label outPos = 0;
+
+        // Variable to store the current owner handle
+        Foam::label currentOwner = -1;
+
+        Foam::label newOwnerStartIndex = 0;
+
+        // Start looping through all faces
+        for (Foam::label faceI = 0; faceI < faces.size(); ++faceI)
+        {
+            Foam::label faceOwner = owners[faceI];
+
+            // Check if we’ve encountered a new owner
+            if (faceOwner != currentOwner)
+            {
+                // Update the current owner
+                currentOwner = faceOwner;
+
+                // Place the first face of this owner directly
+                outFaces[faceI] = faces[faceI];
+                outOwners[faceI] = owners[faceI];
+                outNeighbours[faceI] = neighbours[faceI];
+                outPatches[faceI] = patches[faceI];
+                newOwnerStartIndex = faceI;
+            }
+            else
+            {
+                // Compare with previous neighbours for the same owner
+                Foam::label currentNeighbour = neighbours[faceI];
+                Foam::label insertPos = faceI;
+
+                // Find the correct insertion position to maintain ascending order
+                for (Foam::label j = newOwnerStartIndex; j <= faceI; j++)
+                {
+                    if (currentNeighbour < outNeighbours[j])
+                    {
+                        insertPos = j;
+                        break;
+                    }
+                    else
+                    {
+                        continue; // Stop when we find a smaller or equal neighbour
+                    }
+                }
+
+                // Shift elements to the right to make space for insertion
+                for (Foam::label k = faceI; k > insertPos; --k)
+                {
+                    outFaces[k] = outFaces[k - 1];
+                    outOwners[k] = outOwners[k - 1];
+                    outNeighbours[k] = outNeighbours[k - 1];
+                    outPatches[k] = outPatches[k - 1];
+                }
+
+                // Insert the current face at the correct position
+                outFaces[insertPos] = faces[faceI];
+                outOwners[insertPos] = owners[faceI];
+                outNeighbours[insertPos] = currentNeighbour;
+                outPatches[insertPos] = patches[faceI];
+            }
+        }
+    }
+
+    //     void backgroundBlock::reorderToUpperTriangular(
+    //         const Foam::faceList& faces,
+    //         const Foam::labelList& owners,
+    //         const Foam::labelList& neighbours,
+    //         const Foam::List<int>& patches,
+    //         Foam::faceList& outFaces,
+    //         Foam::labelList& outOwners,
+    //         Foam::labelList& outNeighbours,
+    //         Foam::List<int>& outPatches
+    //     )
+    //     {
+    //         // Step 1: Ensure owner < neighbour for internal faces and reverse face if needed
+    //         Foam::faceList modFaces = faces;
+    //         Foam::labelList modOwners = owners;
+    //         Foam::labelList modNeighbours = neighbours;
+    //         Foam::List<int> modPatches = patches;
+
+    //         for (Foam::label faceI = 0; faceI < faces.size(); ++faceI)
+    //         {
+    //             if (modNeighbours[faceI] != -1)  // Internal face
+    //             {
+    //                 if (modOwners[faceI] > modNeighbours[faceI])
+    //                 {
+    //                     // Swap owner and neighbour
+    //                     std::swap(modOwners[faceI], modNeighbours[faceI]);
+    //                     // Reverse face orientation
+    //                     std::reverse(modFaces[faceI].begin(), modFaces[faceI].end());
+    //                 }
+    //             }
+    //         }
+
+    //         // Step 2: Create a list of indices to sort
+    //         std::vector<Foam::label> indices(faces.size());
+    //         for (Foam::label i = 0; i < faces.size(); ++i)
+    //         {
+    //             indices[i] = i;
+    //         }
+
+    //         // Step 3: Sort indices based on neighbour for each owner group
+    //         Foam::label currentOwner = -1;
+    //         Foam::label groupStart = 0;
+
+    //         for (Foam::label i = 0; i <= indices.size(); ++i)
+    //         {
+    //             if (i == indices.size() || modOwners[indices[i]] != currentOwner)
+    //             {
+    //                 // Sort the previous group by neighbour
+    //                 if (i > groupStart)
+    //                 {
+    //                     std::sort(indices.begin() + groupStart, indices.begin() + i,
+    //                         [&](Foam::label a, Foam::label b)
+    //                         {
+    //                             return modNeighbours[a] < modNeighbours[b];
+    //                         });
+    //                 }
+    //                 // Start a new group
+    //                 if (i < indices.size())
+    //                 {
+    //                     currentOwner = modOwners[indices[i]];
+    //                     groupStart = i;
+    //                 }
+    //             }
+    //         }
+
+    //         // Step 4: Reorder all lists based on sorted indices
+    //         outFaces.setSize(faces.size());
+    //         outOwners.setSize(faces.size());
+    //         outNeighbours.setSize(faces.size());
+    //         outPatches.setSize(faces.size());
+
+    //         for (Foam::label i = 0; i < indices.size(); ++i)
+    //         {
+    //             Foam::label originalIndex = indices[i];
+    //             outFaces[i] = modFaces[originalIndex];
+    //             outOwners[i] = modOwners[originalIndex];
+    //             outNeighbours[i] = modNeighbours[originalIndex];
+    //             outPatches[i] = modPatches[originalIndex];
+    //         }
+    //     }
+    // }
 }

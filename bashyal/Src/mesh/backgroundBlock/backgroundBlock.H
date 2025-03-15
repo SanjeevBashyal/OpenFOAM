@@ -55,6 +55,8 @@ namespace Bashyal
 
         // In backgroundBlock.H, within the Bashyal namespace, under public:
         void intersectClosedSurfaceCGAL(const Foam::faceList &faces, const Foam::pointField &points, unsigned int identifier);
+        void reorderToUpperTriangularNeighboursOnly(const Foam::faceList &faces, const Foam::labelList &owners, const Foam::labelList &neighbours, const Foam::List<int> &patches, Foam::faceList &outFaces, Foam::labelList &outOwners, Foam::labelList &outNeighbours, Foam::List<int> &outPatches);
+        // void reorderToUpperTriangular(const Foam::faceList &faces, const Foam::labelList &owners, const Foam::labelList &neighbours, const Foam::List<int> &patches, Foam::faceList &outFaces, Foam::labelList &outOwners, Foam::labelList &outNeighbours, Foam::List<int> &outPatches);
 
         void intersectClosedSurface(const Foam::faceList &faces, const Foam::pointField &points, Foam::point insidePoint, unsigned int identifier);
         void generateBlockFace(Foam::List<Foam::point> &pts, Foam::HashTable<pointFaceHit, Foam::point> &hitMap, int faceIndex, const Foam::faceList &faces, const Foam::pointField &points, Foam::face &outputFace, Foam::pointField &outputPoints);
