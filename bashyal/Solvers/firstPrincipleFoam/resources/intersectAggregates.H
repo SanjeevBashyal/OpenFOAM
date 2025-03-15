@@ -1,5 +1,5 @@
 bMesh.resetBlocks();
-bMesh.intersectCube(a);
-bMesh.developMesh();
+bMesh.intersectCubeCGAL(a);
+bMesh.developMeshPlain();
 
 bMesh.writeBackgroundMesh(runDir / meshDir0);

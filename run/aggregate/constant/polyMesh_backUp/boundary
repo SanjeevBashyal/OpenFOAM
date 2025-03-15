@@ -13,42 +13,42 @@ Ymin
 {
     type patch;
     nFaces 1;
-    startFace 9;
+    startFace 8;
 }
 Zmin
 {
     type patch;
     nFaces 2;
-    startFace 10;
+    startFace 9;
 }
 Xmin
 {
     type patch;
     nFaces 5;
-    startFace 12;
+    startFace 11;
 }
 Zmax
 {
     type patch;
     nFaces 5;
-    startFace 17;
+    startFace 16;
 }
 Xmax
 {
     type patch;
     nFaces 5;
-    startFace 22;
+    startFace 21;
 }
 Ymax
 {
     type patch;
     nFaces 3;
-    startFace 27;
+    startFace 26;
 }
 aggregate
 {
     type patch;
     nFaces 6;
-    startFace 30;
+    startFace 29;
 }
 )

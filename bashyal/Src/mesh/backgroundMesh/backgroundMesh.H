@@ -67,7 +67,8 @@ namespace Bashyal
         ~backgroundMesh() = default;
 
         void auditMesh();
-        void developMesh();
+        void developMeshPlain();
+        void developMeshConvex();
         void addPoints(const Foam::pointField &blockPoints);
         void addFaces(Foam::label globalNcells, const Foam::Vector<int> &identity, const Foam::pointField &blockPoints, const Foam::faceList &blockFaces, const Foam::labelList &owners, const Foam::labelList &neighbours, const Foam::List<int> &blockPatches);
 
@@ -78,6 +79,7 @@ namespace Bashyal
         Foam::scalar roundToSeven(Foam::scalar value);
 
         void intersectCube(cubeAggregate &cubeAgg);
+        void intersectCubeCGAL(cubeAggregate &cubeAgg);
         void intersectRound(roundAggregate &roundAgg);
         void intersectCubes(cubeAggregates &cubeAggs);
 

@@ -23,9 +23,27 @@ namespace Bashyal
                 }
             }
         }
+    }
 
-        // Process intersections (store, visualize, etc.)
-        // ...
+    void backgroundMesh::intersectCubeCGAL(cubeAggregate &cubeAgg)
+    {
+        boundBox bounds = cubeAgg.getBoundBox();
+        Vector<int> minIndex = this->getBlockIndexContainingPoint(bounds.min());
+        Vector<int> maxIndex = this->getBlockIndexContainingPoint(bounds.max());
+        // const faceList &cubeFaces = cubeAgg.faces_;
+
+        // Iterate only over the relevant blocks within minIndex and maxIndex bounds
+        for (int i = minIndex.x(); i <= maxIndex.x(); ++i)
+        {
+            for (int j = minIndex.y(); j <= maxIndex.y(); ++j)
+            {
+                for (int k = minIndex.z(); k <= maxIndex.z(); ++k)
+                {
+                    backgroundBlock &block = *backgroundBlocks_[i][j][k];
+                    block.intersectClosedSurfaceCGAL(cubeAgg.faces_, cubeAgg.globalPoints_, cubeAgg.identifier_);
+                }
+            }
+        }
     }
 
     void backgroundMesh::intersectRound(roundAggregate &roundAgg)

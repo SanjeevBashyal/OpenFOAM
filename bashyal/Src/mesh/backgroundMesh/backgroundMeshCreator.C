@@ -29,12 +29,35 @@ namespace Bashyal
                 }
             }
         }
-
-        // Write polyMesh here using globalPoints_, globalFaces_, globalOwners_, globalNeighbours_, and allFaces_
-        // writePolyMesh();
     }
 
-    void backgroundMesh::developMesh()
+    void backgroundMesh::developMeshPlain()
+    {
+        this->reset();
+
+        // Loop through each level of the List structure
+        for (auto &blockListLevel1 : backgroundBlocks_)
+        {
+            for (auto &blockListLevel2 : blockListLevel1)
+            {
+                for (auto &blockPtr : blockListLevel2)
+                {
+                    // Dereference the autoPtr to get the actual backgroundBlock
+                    backgroundBlock &block = *blockPtr;
+
+                    // Add points and update pointMap_ for unique point indices
+                    addPoints(block.getPoints());
+
+                    // Add faces with updated point indices
+                    addFaces(block.globalNCells_, block.identity_, block.getPoints(), block.getFaces(), block.getOwners(), block.getNeighbours(), block.getPatches());
+
+                    cellCount_ = cellCount_ + block.ncells_;
+                }
+            }
+        }
+    }
+
+    void backgroundMesh::developMeshConvex()
     {
         this->reset();
 

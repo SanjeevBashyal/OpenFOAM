@@ -54,7 +54,7 @@ namespace Bashyal
         Foam::labelList getNeighbours() { return neighbours_; }
 
         // In backgroundBlock.H, within the Bashyal namespace, under public:
-        void intersectClosedSurfaceCGAL(const Foam::faceList &faces, const Foam::pointField &points, Foam::point insidePoint, unsigned int identifier);
+        void intersectClosedSurfaceCGAL(const Foam::faceList &faces, const Foam::pointField &points, unsigned int identifier);
 
         void intersectClosedSurface(const Foam::faceList &faces, const Foam::pointField &points, Foam::point insidePoint, unsigned int identifier);
         void generateBlockFace(Foam::List<Foam::point> &pts, Foam::HashTable<pointFaceHit, Foam::point> &hitMap, int faceIndex, const Foam::faceList &faces, const Foam::pointField &points, Foam::face &outputFace, Foam::pointField &outputPoints);
@@ -77,8 +77,8 @@ namespace Bashyal
 
         void discretizeFaceToQuads(const Foam::face &inputFace, const Foam::pointField &inputPoints, Foam::pointField &outputPoints, Foam::faceList &outputFaces);
         void decomposeToConvex();
-        void mapNewFacesToBoundaries(const Foam::pointField &newPoints, const Foam::faceList &newFaces, const Foam::labelList &newNeighbours, const Foam::label newNboundaries, Foam::List<int> &newPatches);
-        void mapNewFacesToBoundaries(const Foam::pointField &newPoints, const Foam::faceList &newFaces, const Foam::pointField &pointsA, const Foam::faceList &facesA, const Foam::List<int> &patchesA, const Foam::pointField &pointsB, const Foam::faceList &facesB, const Foam::List<int> &patchesB, const Foam::label indentifierB, Foam::List<int> &newPatches);
+        void mapNewFacesToBoundaries(const Foam::pointField &newPoints, const Foam::faceList &newFaces, const Foam::labelList &newNeighbours, Foam::List<int> &newPatches);
+        void mapNewFacesToBoundaries(const Foam::pointField &newPoints, const Foam::faceList &newFaces, const Foam::labelList &newNeighbours, const Foam::pointField &pointsA, const Foam::faceList &facesA, const Foam::List<int> &patchesA, const Foam::pointField &pointsB, const Foam::faceList &facesB, const Foam::List<int> &patchesB, Foam::List<int> &newPatches);
         void triangulateFaces(const Foam::pointField &points, const Foam::faceList &faces, Foam::pointField &outPoints, Foam::faceList &outFaces);
 
         ~backgroundBlock();

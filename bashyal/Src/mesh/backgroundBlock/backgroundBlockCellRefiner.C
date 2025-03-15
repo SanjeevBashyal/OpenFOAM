@@ -125,7 +125,7 @@ namespace Bashyal
                 } while (circ != fi->facet_begin());
 
                 Foam::face f(pointIndices.size());
-                for (Foam::label i = 0; i < pointIndices.size(); ++i)
+                for (unsigned int i = 0; i < pointIndices.size(); ++i)
                 {
                     f[i] = pointIndices[i];
                 }
@@ -161,7 +161,7 @@ namespace Bashyal
         }
 
         mapNewFacesToBoundaries(
-            allPoints, newFaces, newNeighbours, newNboundaries, // New polyhedron data
+            allPoints, newFaces, newNeighbours,
             newPatches                                          // Output patches
         );
 
@@ -183,7 +183,6 @@ namespace Bashyal
         const Foam::pointField &newPoints,
         const Foam::faceList &newFaces,
         const Foam::labelList &newNeighbours,
-        const Foam::label newNboundaries,
         Foam::List<int> &newPatches)
     {
         // Define CGAL kernel
@@ -230,7 +229,7 @@ namespace Bashyal
                 // Helper lambda to find a matching plane and return its index
                 auto findMatchingPlane = [&](const std::vector<CGAL::Plane_3<Kernel>> &planes) -> Foam::label
                 {
-                    for (Foam::label j = 0; j < planes.size(); ++j)
+                    for (unsigned int j = 0; j < planes.size(); ++j)
                     {
                         const CGAL::Plane_3<Kernel> &plane = planes[j];
                         // Check if planes are parallel (cross product of normal vectors near zero)

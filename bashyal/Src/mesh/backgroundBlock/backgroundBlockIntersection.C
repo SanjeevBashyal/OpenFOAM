@@ -9,6 +9,7 @@ namespace Bashyal
         faceList mergedFaces;
         List<int> mergePatches;
         labelList mergedNeighbours;
+        labelList mergedOwners;
 
         Foam::HashTable<label, point> pointMap;
         Foam::HashTable<label, face> faceMap;
@@ -43,6 +44,7 @@ namespace Bashyal
                 this->addPoints(outputPoints, pointMap, mergedPoints);
                 this->addFace(outputPoints, outputFace, pointMap, mergedFaces, mergedPoints);
                 mergePatches.append(identifier);
+                mergedOwners.append(0);
                 mergedNeighbours.append(-1);
                 boundaryCount++;
             }
@@ -63,6 +65,7 @@ namespace Bashyal
                 this->addPoints(outputPoints, pointMap, mergedPoints);
                 this->addFace(outputPoints, outputFace, pointMap, mergedFaces, mergedPoints);
                 mergePatches.append(patches_[i]);
+                mergedOwners.append(0);
                 mergedNeighbours.append(-1);
                 boundaryCount++;
             }
@@ -70,6 +73,7 @@ namespace Bashyal
         this->points_ = mergedPoints;
         this->faces_ = mergedFaces;
         this->patches_ = mergePatches;
+        this->owners_ = mergedOwners;
         this->neighbours_ = mergedNeighbours;
         this->nboundaries_ = boundaryCount;
         this->edited_ = true;
