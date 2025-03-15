@@ -12,10 +12,10 @@ FoamFile
     arch        "LSB;label=32;scalar=64";
     class       faceSet;
     location    "constant/polyMesh/sets";
-    object      outOfRangeFaces;
+    object      upperTriangularFace;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-2(14 24)
+2(0 2)
 
 // ************************************************************************* //

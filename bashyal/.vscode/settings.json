@@ -100,6 +100,7 @@
         "backgroundMeshBoundary.C": "cpp",
         "debugClassCGAL.C": "cpp",
         "debugClassPolyMesh.C": "cpp",
-        "bFace.C": "cpp"
+        "bFace.C": "cpp",
+        "*.ipp": "cpp"
     }
 }

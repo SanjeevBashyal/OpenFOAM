@@ -79,7 +79,6 @@ namespace Bashyal
 
     void backgroundMesh::addFaces(Foam::label globalNCells, const Foam::Vector<int> &identity, const pointField &blockPoints, const faceList &blockFaces, const labelList &owners, const labelList &neighbours, const List<int> &blockPatches)
     {
-        label currentCell = cellCount_;
         int faceCount = 0;
         for (const auto &faceI : blockFaces)
         {
@@ -125,7 +124,7 @@ namespace Bashyal
                 // Internal face: add to globalFaces_ with owner and neighbor
                 globalFaces_.append(globalFace);
                 globalOwners_.append(globalNCells + owners[faceCount]);
-                globalNeighbours_.append(neighbours[faceCount]);
+                globalNeighbours_.append(globalNCells + neighbours[faceCount]);
                 boolBoundaryFaces_.append(false);
             }
             faceCount++;
@@ -141,6 +140,7 @@ namespace Bashyal
         globalNeighbours_.clear();
 
         boundaryFaces_.clear();
+        boundaryOwners_.clear();
         boolBoundaryFaces_.clear();
         boundaryPatches_.clear();
 

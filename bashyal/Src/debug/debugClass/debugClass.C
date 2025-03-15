@@ -62,6 +62,22 @@ namespace Bashyal
         Foam::Info << "Done" << Foam::endl;
     }
 
+    void debugClass::writeLabelList(const Foam::labelList &labels)
+    {
+        // Base directory path
+        const Foam::fileName basePath("/usr/lib/openfoam/openfoam2312/run/debug/List<int>.txt");
+
+        // Create an OpenFOAM OFstream object
+        Foam::OFstream outFile(basePath);
+
+        // Write each label in the labelList to the file, one per line
+        for (Foam::label label : labels)
+        {
+            outFile << label << Foam::nl;
+        }
+        Foam::Info << "Label list written to " << basePath << Foam::endl;
+    }
+
     void debugClass::testDisplay()
     {
         Foam::Info << "Here in the debugClass" << Foam::endl;

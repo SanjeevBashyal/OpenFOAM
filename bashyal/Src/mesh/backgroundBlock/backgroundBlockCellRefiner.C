@@ -103,11 +103,12 @@ namespace Bashyal
         Foam::faceList newFaces;
         Foam::labelList newOwners;
         Foam::labelList newNeighbours;
+        Foam::List<int> newPatches;
+        Foam::label newNboundaries = 0;
         // Foam::faceList boundaryFaces;
-        // Foam::label newNboundaries = 0;
 
         // Foam::HashTable<label, face> faceOwnerMap_; // For tracking boundary faces
-        Foam::HashTable<label, face> facePositionMap_; // For tracking face Indices
+        Foam::HashTable<Foam::label, Foam::face> facePositionMap; // For tracking face Indices
 
         for (Foam::label cellI = 0; cellI < nCells; ++cellI)
         {
@@ -134,64 +135,31 @@ namespace Bashyal
                 // Sort the face points to ensure unique representation (important for shared faces)
                 std::sort(faceCopy.begin(), faceCopy.end());
 
-                if (faceMap.found(faceCopy))
+                if (facePositionMap.found(faceCopy))
                 {
+                    Foam::label faceLocation = facePositionMap[faceCopy];
+                    newNeighbours[faceLocation] = cellI;
+                    newPatches[faceLocation] = 0;
+                    newNboundaries--;
                     // Face with same orientation exists; add current cell and face to its list
-                    faceMap[faceCopy].push_back(std::make_pair(cellI, f));
+                    // faceMap[faceCopy].push_back(std::make_pair(cellI, f));
                 }
                 else
                 {
                     // Neither f nor its reverse exists; insert new entry with f as key
-                    faceMap.insert(f, {std::make_pair(cellI, f)});
+                    newFaces.append(f);
+                    newOwners.append(cellI);
+                    newNeighbours.append(-1);
+                    facePositionMap.insert(faceCopy, newFaces.size() - 1);
+                    newPatches.append(-99);
+                    newNboundaries++;
+                    // faceMap.insert(f, {std::make_pair(cellI, f)});
                 }
                 // Note: The original line `FaceKey key(pointIndices); faceMap[key].push_back(...)`
                 // is replaced by the else clause above due to key type mismatch
             }
         }
 
-        // Separate boundary faces and construct topology
-        Foam::faceList newFaces;
-        Foam::labelList newOwners;
-        Foam::labelList newNeighbours;
-        Foam::faceList boundaryFaces;
-        Foam::label newNboundaries = 0;
-
-        // Define a typedef for the HashTable type
-        typedef Foam::HashTable<std::vector<std::pair<Foam::label, Foam::face>>, Foam::face> FaceMapType;
-
-        // Use the typedef in the forAllConstIter macro
-        forAllConstIter(FaceMapType, faceMap, iter)
-        {
-            const Foam::face &key = iter.key(); // Access the key (face)
-            const auto &instances = iter();     // Access the value (vector of pairs)
-            if (instances.size() == 1)
-            {
-                // Boundary face
-                Foam::label faceI = newFaces.size();
-                newFaces.append(instances[0].second);
-                newOwners.append(instances[0].first);
-                newNeighbours.append(-1);
-                boundaryFaces.append(instances[0].second);
-                newNboundaries++;
-            }
-            else if (instances.size() == 2)
-            {
-                // Internal face
-                Foam::label owner = instances[0].first;
-                Foam::label neighbour = instances[1].first;
-                Foam::label faceI = newFaces.size();
-                newFaces.append(instances[0].second);
-                newOwners.append(std::min(owner, neighbour));
-                newNeighbours.append(std::max(owner, neighbour));
-            }
-            else
-            {
-                FatalErrorInFunction << "Face shared by >2 cells" << exit(Foam::FatalError);
-            }
-        }
-
-        // Generate new patches
-        Foam::List<int> newPatches;
         mapNewFacesToBoundaries(
             allPoints, newFaces, newNeighbours, newNboundaries, // New polyhedron data
             newPatches                                          // Output patches
@@ -251,17 +219,10 @@ namespace Bashyal
             }
         }
 
-        // Step 3: Resize newPatches to match the number of new faces and initialize with a default value
-        newPatches.setSize(newFaces.size());
-        forAll(newPatches, i)
-        {
-            newPatches[i] = 0; // Default value for unmatched faces
-        }
-
         // Step 4: Map each new face to a boundary and assign patch names
         for (Foam::label i = 0; i < newFaces.size(); ++i)
         {
-            if (newNeighbours[i] == -1)
+            if (newPatches[i] == -99)
             {
                 const Foam::face &newFace = newFaces[i];
                 CGAL::Plane_3<Kernel> newPlane = computePlane(newFace, newPoints);
@@ -275,13 +236,24 @@ namespace Bashyal
                         // Check if planes are parallel (cross product of normal vectors near zero)
                         if (CGAL::cross_product(plane.orthogonal_vector(), newPlane.orthogonal_vector()).squared_length() < tolerance)
                         {
-                            // Check if a point from the new face lies on the plane
-                            CGAL::Point_3<Kernel> p = Converter::toCGALPoint(newPoints[newFace[0]]);
-                            // Compute the plane equation value at point p
-                            auto plane_eq_value = plane.a() * p.x() + plane.b() * p.y() + plane.c() * p.z() + plane.d();
-                            if (std::abs(CGAL::to_double(plane_eq_value)) < tolerance)
+                            bool allPointsOnPlane = true;
+                            // Loop through all points in newFace
+                            for (Foam::label pointIndex : newFace)
                             {
-                                return j; // Return index of matching plane
+                                CGAL::Point_3<Kernel> p = Converter::toCGALPoint(newPoints[pointIndex]);
+                                // Compute the plane equation value at point p
+                                auto plane_eq_value = plane.a() * p.x() + plane.b() * p.y() + plane.c() * p.z() + plane.d();
+                                // Check if the point lies on the plane (within tolerance)
+                                if (std::abs(CGAL::to_double(plane_eq_value)) >= tolerance)
+                                {
+                                    allPointsOnPlane = false;
+                                    break; // Exit early if any point does not lie on the plane
+                                }
+                            }
+                            // If all points lie on the plane, return the plane index
+                            if (allPointsOnPlane)
+                            {
+                                return j;
                             }
                         }
                     }

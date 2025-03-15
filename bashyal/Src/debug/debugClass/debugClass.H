@@ -32,6 +32,7 @@ namespace Bashyal
         virtual void writePoints(const Foam::pointField &points);
         virtual void writePoints(const Foam::List<Foam::point>& points);
         virtual void writeFaces(const Foam::faceList &faces);
+        void writeLabelList(const Foam::labelList &labels);
 
         virtual void writePolyhedron(const Polyhedron& polyhedron);
         virtual void writePolyhedrons(const std::vector<Polyhedron>& polyhedrons);
