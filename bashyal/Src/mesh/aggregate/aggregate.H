@@ -21,7 +21,6 @@ namespace Bashyal
         Foam::pointField localPoints_;  // Collection of points to form the aggregate surface
         Foam::pointField globalPoints_; // Collection of points to form the aggregate surface
         Foam::boundBox boundBox_;
-        Foam::boundBox roundedBoundBox_;
 
         Foam::faceList faces_;
         Foam::triSurface surface_; // Triangulated surface mesh

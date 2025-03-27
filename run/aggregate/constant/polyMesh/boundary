@@ -7,48 +7,42 @@ FoamFile
     object      boundary;
 }
 
-7
+6
 (
 Ymin
 {
     type patch;
-    nFaces 1;
-    startFace 9;
+    nFaces 2;
+    startFace 2;
 }
 Zmin
 {
     type patch;
     nFaces 2;
-    startFace 10;
+    startFace 4;
 }
 Xmin
 {
     type patch;
-    nFaces 5;
-    startFace 12;
+    nFaces 1;
+    startFace 6;
 }
 Zmax
 {
     type patch;
-    nFaces 5;
-    startFace 17;
-}
-Xmax
-{
-    type patch;
-    nFaces 5;
-    startFace 22;
+    nFaces 2;
+    startFace 7;
 }
 Ymax
 {
     type patch;
-    nFaces 3;
-    startFace 27;
+    nFaces 2;
+    startFace 9;
 }
-aggregate
+Xmax
 {
     type patch;
-    nFaces 6;
-    startFace 30;
+    nFaces 1;
+    startFace 11;
 }
 )

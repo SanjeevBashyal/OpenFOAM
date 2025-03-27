@@ -21,7 +21,7 @@ namespace Bashyal
                     // Dereference the autoPtr to get the actual backgroundBlock
                     backgroundBlock &block = *blockPtr;
                     block.globalNCells_ = cellsCount;
-                    block.decomposeToConvex();
+                    // block.decomposeToConvex();
 
                     cellsCount = cellsCount + block.ncells_;
 
@@ -34,6 +34,7 @@ namespace Bashyal
     void backgroundMesh::developMeshPlain()
     {
         this->reset();
+        this->auditMesh();
 
         // Loop through each level of the List structure
         for (auto &blockListLevel1 : backgroundBlocks_)
@@ -144,11 +145,14 @@ namespace Bashyal
             }
             else
             {
-                // Internal face: add to globalFaces_ with owner and neighbor
-                globalFaces_.append(globalFace);
-                globalOwners_.append(globalNCells + owners[faceCount]);
-                globalNeighbours_.append(globalNCells + neighbours[faceCount]);
-                boolBoundaryFaces_.append(false);
+                if (patchType >= 0)
+                {
+                    // Internal face: add to globalFaces_ with owner and neighbor
+                    globalFaces_.append(globalFace);
+                    globalOwners_.append(globalNCells + owners[faceCount]);
+                    globalNeighbours_.append(globalNCells + neighbours[faceCount]);
+                    boolBoundaryFaces_.append(false);
+                }
             }
             faceCount++;
         }

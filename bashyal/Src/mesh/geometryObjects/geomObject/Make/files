@@ -1,0 +1,3 @@
+geomObject.C
+
+LIB = $(FOAM_LIBBIN)/libgeomObject

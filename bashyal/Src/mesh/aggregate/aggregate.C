@@ -140,12 +140,3 @@ namespace Bashyal
         return point(this->ceilToRequiredDecimal(value[0]), this->ceilToRequiredDecimal(value[1]), this->ceilToRequiredDecimal(value[2]));
     }
 }
-
-
-namespace Bashyal
-{
-    int hello(int a)
-    {
-        return a + 1;
-    }
-}

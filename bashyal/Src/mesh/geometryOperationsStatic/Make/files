@@ -1,0 +1,3 @@
+faceOperations.C
+
+LIB = $(FOAM_LIBBIN)/libgeometryBashyal

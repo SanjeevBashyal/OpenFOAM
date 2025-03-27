@@ -101,6 +101,15 @@
         "debugClassCGAL.C": "cpp",
         "debugClassPolyMesh.C": "cpp",
         "bFace.C": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "backgroundMeshFaceAudit.C": "cpp",
+        "wellRoundedAggregate.C": "cpp",
+        "aggregateTriFaces.C": "cpp",
+        "boundary.C": "cpp",
+        "faceManipulations.C": "cpp",
+        "2dOperations.C": "cpp",
+        "faceOperations.C": "cpp",
+        "geomObject.C": "cpp",
+        "trapezoidalChannel.C": "cpp"
     }
 }

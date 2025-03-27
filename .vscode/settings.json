@@ -299,6 +299,8 @@
         "globals.C": "cpp",
         "backgroundMeshBoundary.C": "cpp",
         "debugClassCGAL.C": "cpp",
-        "debugClassPolyMesh.C": "cpp"
+        "debugClassPolyMesh.C": "cpp",
+        "wellRoundedAggregate.C": "cpp",
+        "aggregateTriFaces.C": "cpp"
     }
 }
