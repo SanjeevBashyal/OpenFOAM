@@ -6,7 +6,7 @@ using namespace Foam;
 namespace Bashyal
 {
 
-    void backgroundMesh::auditMesh()
+    void backgroundMesh::auditCells()
     {
         this->reset();
         Foam::label cellsCount = 0;
@@ -21,71 +21,46 @@ namespace Bashyal
                     // Dereference the autoPtr to get the actual backgroundBlock
                     backgroundBlock &block = *blockPtr;
                     block.globalNCells_ = cellsCount;
-                    // block.decomposeToConvex();
 
                     cellsCount = cellsCount + block.ncells_;
-
-                    // auditBlockInternalBoundaryFaces(block);
                 }
             }
         }
     }
 
-    void backgroundMesh::developMeshPlain()
+    void backgroundMesh::developMesh()
     {
         this->reset();
-        this->auditMesh();
+        this->auditCells();
 
-        // Loop through each level of the List structure
-        for (auto &blockListLevel1 : backgroundBlocks_)
+        // Loop through each block
+        for (Foam::label i = 0; i < dim_[0]; i++)
         {
-            for (auto &blockListLevel2 : blockListLevel1)
+            for (Foam::label j = 0; j < dim_[1]; j++)
             {
-                for (auto &blockPtr : blockListLevel2)
+                for (Foam::label k = 0; k < dim_[2]; k++)
                 {
-                    // Dereference the autoPtr to get the actual backgroundBlock
-                    backgroundBlock &block = *blockPtr;
+                    backgroundBlock &block = *backgroundBlocks_[i][j][k];
+
+                    // Get audited data for this block
+                    Foam::pointField updatedPoints;
+                    Foam::faceList updatedFaces;
+                    Foam::labelList updatedOwners;
+                    Foam::labelList updatedNeighbours;
+                    Foam::List<int> updatedPatches;
+
+                    getAuditedBlockData(i, j, k, updatedPoints, updatedFaces, updatedOwners, updatedNeighbours, updatedPatches);
 
                     // Add points and update pointMap_ for unique point indices
-                    addPoints(block.getPoints());
+                    addPoints(updatedPoints);
 
                     // Add faces with updated point indices
-                    addFaces(block.globalNCells_, block.identity_, block.getPoints(), block.getFaces(), block.getOwners(), block.getNeighbours(), block.getPatches());
+                    addFaces(block.identity_, updatedPoints, updatedFaces, updatedOwners, updatedNeighbours, updatedPatches);
 
                     cellCount_ = cellCount_ + block.ncells_;
                 }
             }
         }
-    }
-
-    void backgroundMesh::developMeshConvex()
-    {
-        this->reset();
-
-        // Loop through each level of the List structure
-        for (auto &blockListLevel1 : backgroundBlocks_)
-        {
-            for (auto &blockListLevel2 : blockListLevel1)
-            {
-                for (auto &blockPtr : blockListLevel2)
-                {
-                    // Dereference the autoPtr to get the actual backgroundBlock
-                    backgroundBlock &block = *blockPtr;
-                    block.decomposeToConvex();
-
-                    // Add points and update pointMap_ for unique point indices
-                    addPoints(block.getPoints());
-
-                    // Add faces with updated point indices
-                    addFaces(block.globalNCells_, block.identity_, block.getPoints(), block.getFaces(), block.getOwners(), block.getNeighbours(), block.getPatches());
-
-                    cellCount_ = cellCount_ + block.ncells_;
-                }
-            }
-        }
-
-        // Write polyMesh here using globalPoints_, globalFaces_, globalOwners_, globalNeighbours_, and allFaces_
-        // writePolyMesh();
     }
 
     void backgroundMesh::addPoints(const pointField &blockPoints)
@@ -101,7 +76,7 @@ namespace Bashyal
         }
     }
 
-    void backgroundMesh::addFaces(Foam::label globalNCells, const Foam::Vector<int> &identity, const pointField &blockPoints, const faceList &blockFaces, const labelList &owners, const labelList &neighbours, const List<int> &blockPatches)
+    void backgroundMesh::addFaces(const Foam::Vector<int> &identity, const pointField &blockPoints, const faceList &blockFaces, const labelList &owners, const labelList &neighbours, const List<int> &blockPatches)
     {
         int faceCount = 0;
         for (const auto &faceI : blockFaces)
@@ -139,20 +114,17 @@ namespace Bashyal
             {
                 // Internal face: add to globalFaces_ with owner and neighbor
                 boundaryFaces_.append(globalFace);
-                boundaryOwners_.append(globalNCells + owners[faceCount]);
+                boundaryOwners_.append(owners[faceCount]);
                 boolBoundaryFaces_.append(true);
                 boundaryPatches_.append(patchType); // Store patch type for boundary face
             }
             else
             {
-                if (patchType >= 0)
-                {
-                    // Internal face: add to globalFaces_ with owner and neighbor
-                    globalFaces_.append(globalFace);
-                    globalOwners_.append(globalNCells + owners[faceCount]);
-                    globalNeighbours_.append(globalNCells + neighbours[faceCount]);
-                    boolBoundaryFaces_.append(false);
-                }
+                // Internal face: add to globalFaces_ with owner and neighbor
+                globalFaces_.append(globalFace);
+                globalOwners_.append(owners[faceCount]);
+                boolBoundaryFaces_.append(false);
+                globalNeighbours_.append(neighbours[faceCount]);
             }
             faceCount++;
         }

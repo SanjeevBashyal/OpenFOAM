@@ -110,6 +110,7 @@
         "2dOperations.C": "cpp",
         "faceOperations.C": "cpp",
         "geomObject.C": "cpp",
-        "trapezoidalChannel.C": "cpp"
+        "trapezoidalChannel.C": "cpp",
+        "backgroundBlockWriter.C": "cpp"
     }
 }

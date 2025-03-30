@@ -55,9 +55,6 @@ namespace Bashyal
                 }
             }
         }
-
-        // Write polyMesh here using globalPoints_, globalFaces_, globalOwners_, globalNeighbours_, and allFaces_
-        // writePolyMesh();
     }
 
     void backgroundMesh::setBoundaryPatchType(Foam::dictionary &boundaryDict)

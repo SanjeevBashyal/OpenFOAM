@@ -301,6 +301,7 @@
         "debugClassCGAL.C": "cpp",
         "debugClassPolyMesh.C": "cpp",
         "wellRoundedAggregate.C": "cpp",
-        "aggregateTriFaces.C": "cpp"
+        "aggregateTriFaces.C": "cpp",
+        "backgroundMeshFaceAudit.C": "cpp"
     }
 }

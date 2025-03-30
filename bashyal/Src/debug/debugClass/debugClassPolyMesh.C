@@ -5,7 +5,7 @@
 
 namespace Bashyal
 {
-    void debugClass::writePolyhedronAsPolyMesh(const Polyhedron& polyhedron, const std::string& folderName)
+    void debugClass::writePolyhedronAsPolyMesh(Polyhedron& polyhedron, const std::string& folderName)
     {
         // Define the base path
         const std::string basePath = "/usr/lib/openfoam/openfoam2312/run/debug/";
@@ -171,7 +171,7 @@ namespace Bashyal
         Foam::Info << "PolyMesh written for polyhedron at " << outputDir << Foam::endl;
     }
 
-    void debugClass::writePolyhedronsAsPolyMesh(const std::vector<Polyhedron>& polyhedrons)
+    void debugClass::writePoly(std::vector<Polyhedron>& polyhedrons)
     {
         std::string baseName = "polyhedron";
         // Iterate over each polyhedron in the vector

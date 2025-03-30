@@ -9,40 +9,40 @@ FoamFile
 
 6
 (
-Ymin
-{
-    type patch;
-    nFaces 2;
-    startFace 2;
-}
 Zmin
 {
     type patch;
-    nFaces 2;
+    nFaces 4;
     startFace 4;
-}
-Xmin
-{
-    type patch;
-    nFaces 1;
-    startFace 6;
 }
 Zmax
 {
     type patch;
+    nFaces 4;
+    startFace 8;
+}
+Xmin
+{
+    type patch;
     nFaces 2;
-    startFace 7;
+    startFace 12;
+}
+Ymin
+{
+    type patch;
+    nFaces 2;
+    startFace 14;
 }
 Ymax
 {
     type patch;
     nFaces 2;
-    startFace 9;
+    startFace 16;
 }
 Xmax
 {
     type patch;
-    nFaces 1;
-    startFace 11;
+    nFaces 2;
+    startFace 18;
 }
 )

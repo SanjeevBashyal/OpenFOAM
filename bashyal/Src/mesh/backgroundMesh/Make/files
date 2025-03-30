@@ -2,7 +2,7 @@ backgroundMesh.C
 backgroundMeshCreator.C
 backgroundMeshWriter.C
 backgroundMeshIntersector.C
+backgroundMeshFaceAudit.C
 backgroundMeshBoundary.C
-backgroundMeshOld.C
 
 LIB = $(FOAM_LIBBIN)/libbackgroundMesh

@@ -33,6 +33,8 @@ namespace Bashyal
         Foam::List<Foam::pointField> facePoints_;
 
         ~cubeAggregate() = default;
+
+        void intersectWithBlock(backgroundBlock& block) const override;
     };
 
 }

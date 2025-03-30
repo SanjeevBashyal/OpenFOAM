@@ -116,4 +116,9 @@ namespace Bashyal
         return triangles;
     }
 
+    void cubeAggregate::intersectWithBlock(backgroundBlock &block) const
+    {
+        block.intersectClosedSurfaceCGAL(faces_, globalPoints_, identifier_);
+    }
+
 }

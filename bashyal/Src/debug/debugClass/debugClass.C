@@ -5,7 +5,7 @@
 using namespace Foam;
 namespace Bashyal
 {
-    void debugClass::writePoints(const Foam::pointField &points)
+    void debugClass::write(Foam::pointField &points)
     {
         // Base directory path
         const Foam::fileName basePath("/usr/lib/openfoam/openfoam2312/run/debug/points.txt");
@@ -21,7 +21,7 @@ namespace Bashyal
         Foam::Info << "Done" << Foam::endl;
     }
 
-    void debugClass::writePoints(const Foam::List<Foam::point> &points)
+    void debugClass::write(Foam::List<Foam::point> &points)
     {
         // Base directory path
         const Foam::fileName basePath("/usr/lib/openfoam/openfoam2312/run/debug/points.txt");
@@ -39,7 +39,7 @@ namespace Bashyal
     }
 
     // Method to write faces to a file
-    void debugClass::writeFaces(const Foam::faceList &faces)
+    void debugClass::write(Foam::faceList &faces)
     {
         // Base directory path
         const Foam::fileName basePath("/usr/lib/openfoam/openfoam2312/run/debug/faces.txt");
@@ -62,7 +62,7 @@ namespace Bashyal
         Foam::Info << "Done" << Foam::endl;
     }
 
-    void debugClass::writeLabelList(const Foam::labelList &labels)
+    void debugClass::write(Foam::labelList &labels)
     {
         // Base directory path
         const Foam::fileName basePath("/usr/lib/openfoam/openfoam2312/run/debug/List<int>.txt");

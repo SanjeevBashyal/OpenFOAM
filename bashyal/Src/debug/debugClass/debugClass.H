@@ -29,16 +29,16 @@ namespace Bashyal
         virtual ~debugClass() {}
 
         // Methods for writing geometry data
-        virtual void writePoints(const Foam::pointField &points);
-        virtual void writePoints(const Foam::List<Foam::point>& points);
-        virtual void writeFaces(const Foam::faceList &faces);
-        void writeLabelList(const Foam::labelList &labels);
+        virtual void write(Foam::pointField &points);
+        virtual void write(Foam::List<Foam::point>& points);
+        virtual void write(Foam::faceList &faces);
+        void write(Foam::labelList &labels);
 
-        virtual void writePolyhedron(const Polyhedron& polyhedron);
-        virtual void writePolyhedrons(const std::vector<Polyhedron>& polyhedrons);
+        virtual void write(Polyhedron& polyhedron);
+        virtual void write(std::vector<Polyhedron>& polyhedrons);
 
-        void writePolyhedronAsPolyMesh(const Polyhedron& polyhedron, const std::string& folderName);
-        virtual void writePolyhedronsAsPolyMesh(const std::vector<Polyhedron>& polyhedrons);
+        void writePolyhedronAsPolyMesh(Polyhedron& polyhedron, const std::string& folderName);
+        virtual void writePoly(std::vector<Polyhedron>& polyhedrons);
 
         void testDisplay();
 

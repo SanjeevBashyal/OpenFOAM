@@ -7,8 +7,10 @@ FoamFile
     object      neighbour;
 }
 
-2
+4
 (
--1
-0
+1
+2
+3
+3
 )

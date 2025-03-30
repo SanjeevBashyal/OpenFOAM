@@ -2,7 +2,7 @@
 
 namespace Bashyal
 {
-    void debugClass::writePolyhedron(const Polyhedron &polyhedron)
+    void debugClass::write(Polyhedron &polyhedron)
     {
         const Foam::fileName basePath("/usr/lib/openfoam/openfoam2312/run/debug/CGALpolyhedron.txt");
         Foam::OFstream outFile(basePath);
@@ -37,7 +37,7 @@ namespace Bashyal
         }
     }
 
-    void debugClass::writePolyhedrons(const std::vector<Polyhedron> &polyhedrons)
+    void debugClass::write(std::vector<Polyhedron> &polyhedrons)
     {
         const Foam::fileName basePath("/usr/lib/openfoam/openfoam2312/run/debug/CGALpolyhedrons.txt");
         Foam::OFstream outFile(basePath);

@@ -3,11 +3,13 @@
 
 #include "quickInclude.H"
 #include "debugClass.H"
+#include "backgroundBlock.H"
 
 #include "triSurface.H"
 
 namespace Bashyal
 {
+    class backgroundBlock;
     class aggregate : public debugClass
     {
     public:
@@ -51,6 +53,10 @@ namespace Bashyal
 
         Foam::point sphericalToCartesian(Foam::scalar r, Foam::scalar theta, Foam::scalar phi);
         Foam::scalar distance(const Foam::point &p1, const Foam::point &p2);
+
+        void createTriSurface();
+
+        virtual void intersectWithBlock(backgroundBlock& block) const = 0;
     };
 
     inline Foam::tensor operator*(const Foam::tensor &A, const Foam::tensor &B)
