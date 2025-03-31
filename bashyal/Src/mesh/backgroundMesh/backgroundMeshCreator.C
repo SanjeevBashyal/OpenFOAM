@@ -54,8 +54,17 @@ namespace Bashyal
                     // Add points and update pointMap_ for unique point indices
                     addPoints(updatedPoints);
 
+                    Foam::faceList outFaces;
+                    Foam::labelList outOwners;
+                    Foam::labelList outNeighbours;
+                    Foam::List<int> outPatches;
+
+                    block.reorderToUpperTriangularNeighboursOnly(
+                        updatedFaces, updatedOwners, updatedNeighbours, updatedPatches,
+                        outFaces, outOwners, outNeighbours, outPatches);
+
                     // Add faces with updated point indices
-                    addFaces(block.identity_, updatedPoints, updatedFaces, updatedOwners, updatedNeighbours, updatedPatches);
+                    addFaces(block.identity_, updatedPoints, outFaces, outOwners, outNeighbours, outPatches);
 
                     cellCount_ = cellCount_ + block.ncells_;
                 }

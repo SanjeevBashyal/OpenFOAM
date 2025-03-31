@@ -140,7 +140,7 @@ namespace Bashyal
     }
 
     void backgroundMesh::auditSinglePatchFaces(
-        Foam::pointField &blockPoints, // Changed to non-const
+        Foam::pointField &blockPoints,
         const Foam::faceList &blockFaces,
         const Foam::labelList &blockFaceOwners,
         const Foam::pointField &neighborPoints,
@@ -152,6 +152,9 @@ namespace Bashyal
         Foam::labelList &intersectedNeighbours,
         Foam::List<int> &intersectedPatches)
     {
+        // Define area tolerance
+        const double areaTolerance = 1e-12;
+    
         // Lambda to project 3D points to 2D based on patchType
         auto projectTo2D = [&](const Foam::point &p) -> Point_2
         {
@@ -161,8 +164,8 @@ namespace Bashyal
                 return Point_2(p.x(), p.z()); // XZ-plane
             return Point_2(p.x(), p.y());     // XY-plane (default)
         };
-
-        // Convert block faces to Polygon_with_holes_2
+    
+        // Convert block faces to Polygon_2
         std::vector<Polygon_2> blockPwhs;
         std::vector<std::vector<Foam::label>> blockPointIndices;
         for (size_t i = 0; i < blockFaces.size(); ++i)
@@ -175,13 +178,11 @@ namespace Bashyal
                 poly.push_back(projectTo2D(blockPoints[idx]));
                 indices.push_back(idx);
             }
-            // Convert Polygon_2 to Polygon_with_holes_2 (no holes)
-            // Polygon_with_holes_2 pwh(poly);
             blockPwhs.push_back(poly);
             blockPointIndices.push_back(indices);
         }
-
-        // Convert neighbor faces to Polygon_with_holes_2
+    
+        // Convert neighbor faces to Polygon_2
         std::vector<Polygon_2> neighborPwhs;
         std::vector<std::vector<Foam::label>> neighborPointIndices;
         for (size_t i = 0; i < neighborFaces.size(); ++i)
@@ -194,27 +195,25 @@ namespace Bashyal
                 polyN.push_back(projectTo2D(neighborPoints[idx]));
                 indices.push_back(idx);
             }
-            // Polygon_with_holes_2 pwh(poly);
             neighborPwhs.push_back(polyN);
             neighborPointIndices.push_back(indices);
         }
-
+    
         // Compute intersections
         for (size_t i = 0; i < blockPwhs.size(); ++i)
         {
             auto &blockPwh = blockPwhs[i];
             Foam::label blockOwner = blockFaceOwners[i];
             const auto &blockIndices = blockPointIndices[i];
-
+    
             for (size_t j = 0; j < neighborPwhs.size(); ++j)
             {
                 auto &neighborPwh = neighborPwhs[j];
                 Foam::label neighborOwner = neighborFaceOwners[j];
-
+    
                 bool originalReverseFlag = false;
-
-                // Perform intersection
-                std::list<Polygon_with_holes_2> intersection_result;
+    
+                // Ensure polygons are counter-clockwise for intersection
                 if (blockPwh.orientation() != CGAL::COUNTERCLOCKWISE)
                 {
                     blockPwh.reverse_orientation();
@@ -224,8 +223,11 @@ namespace Bashyal
                 {
                     neighborPwh.reverse_orientation();
                 }
+    
+                // Perform intersection
+                std::list<Polygon_with_holes_2> intersection_result;
                 CGAL::intersection(blockPwh, neighborPwh, std::back_inserter(intersection_result));
-
+    
                 // Process each intersection result
                 for (auto &pwh : intersection_result)
                 {
@@ -234,41 +236,49 @@ namespace Bashyal
                     {
                         outer.reverse_orientation();
                     }
-                    Foam::face intersectedFace;
-                    for (const auto &pt : outer)
+    
+                    // Compute the area of the outer boundary
+                    double area = std::abs(CGAL::to_double(outer.area()));
+    
+                    // Proceed only if area exceeds tolerance
+                    if (area > areaTolerance)
                     {
-                        // Convert exact coordinates to double
-                        double x_val = CGAL::to_double(pt.x());
-                        double y_val = CGAL::to_double(pt.y());
-                        double x, y, z;
-                        if (patchType == 1)
-                        {                                         // YZ-plane
-                            x = blockPoints[blockIndices[0]].x(); // Fixed x
-                            y = x_val;
-                            z = y_val;
+                        Foam::face intersectedFace;
+                        for (const auto &pt : outer)
+                        {
+                            // Convert exact coordinates to double
+                            double x_val = CGAL::to_double(pt.x());
+                            double y_val = CGAL::to_double(pt.y());
+                            double x, y, z;
+                            if (patchType == 1)
+                            {                                         // YZ-plane
+                                x = blockPoints[blockIndices[0]].x(); // Fixed x
+                                y = x_val;
+                                z = y_val;
+                            }
+                            else if (patchType == 2)
+                            {                                         // XZ-plane
+                                y = blockPoints[blockIndices[0]].y(); // Fixed y
+                                x = x_val;
+                                z = y_val;
+                            }
+                            else
+                            {                                         // XY-plane
+                                z = blockPoints[blockIndices[0]].z(); // Fixed z
+                                x = x_val;
+                                y = y_val;
+                            }
+                            Foam::point p3d(x, y, z);
+                            Foam::label ptIdx = findOrAddPoint(blockPoints, p3d);
+                            intersectedFace.push_back(ptIdx);
                         }
-                        else if (patchType == 2)
-                        {                                         // XZ-plane
-                            y = blockPoints[blockIndices[0]].y(); // Fixed y
-                            x = x_val;
-                            z = y_val;
+                        if (intersectedFace.size() >= 3)
+                        {
+                            intersectedFaces.push_back(intersectedFace);
+                            intersectedOwners.push_back(blockOwner);
+                            intersectedNeighbours.push_back(neighborOwner);
+                            intersectedPatches.push_back(patchType);
                         }
-                        else
-                        {                                         // XY-plane
-                            z = blockPoints[blockIndices[0]].z(); // Fixed z
-                            x = x_val;
-                            y = y_val;
-                        }
-                        Foam::point p3d(x, y, z);
-                        Foam::label ptIdx = findOrAddPoint(blockPoints, p3d);
-                        intersectedFace.push_back(ptIdx);
-                    }
-                    if (intersectedFace.size() >= 3)
-                    {
-                        intersectedFaces.push_back(intersectedFace);
-                        intersectedOwners.push_back(blockOwner);
-                        intersectedNeighbours.push_back(neighborOwner);
-                        intersectedPatches.push_back(patchType);
                     }
                     // Note: Holes in pwh are not processed, matching original behavior
                 }
