@@ -46,12 +46,10 @@ namespace Bashyal
                     // Dereference the autoPtr to get the actual backgroundBlock
                     backgroundBlock &block = *blockPtr;
 
-                    if(block.edited_)
+                    if (block.edited_)
                     {
                         block.reset();
                     }
-
-
                 }
             }
         }
@@ -108,21 +106,26 @@ namespace Bashyal
         return nestedList;
     }
 
-    Vector<int> backgroundMesh::getBlockIndexContainingPoint(point &pt)
+    void backgroundMesh::getBlockIndexRange(const boundBox &bounds, Vector<int> &minIndex, Vector<int> &maxIndex)
     {
-        // Ensure the point is within the bounds of the mesh
-        if (!this->contains(pt))
-        {
-            return Vector<int>(dim_[0] - 1, dim_[1] - 1, dim_[2] - 1);
-        }
+        // Calculate raw minimum indices
+        int i_min = std::floor((bounds.min().x() - meshMin_.x()) / resolution_);
+        int j_min = std::floor((bounds.min().y() - meshMin_.y()) / resolution_);
+        int k_min = std::floor((bounds.min().z() - meshMin_.z()) / resolution_);
 
-        // Determine the index in each dimension by scaling the point's position
-        int i = floor((pt.x() - meshMin_.x()) / resolution_);
-        int j = floor((pt.y() - meshMin_.y()) / resolution_);
-        int k = floor((pt.z() - meshMin_.z()) / resolution_);
+        // Calculate raw maximum indices
+        int i_max = std::floor((bounds.max().x() - meshMin_.x()) / resolution_);
+        int j_max = std::floor((bounds.max().y() - meshMin_.y()) / resolution_);
+        int k_max = std::floor((bounds.max().z() - meshMin_.z()) / resolution_);
 
-        // Return the index vector (i, j, k)
-        return Vector<int>(i, j, k);
+        // Clamp indices to valid range
+        minIndex.x() = std::max(0, i_min);
+        minIndex.y() = std::max(0, j_min);
+        minIndex.z() = std::max(0, k_min);
+
+        maxIndex.x() = std::min(dim_[0] - 1, i_max);
+        maxIndex.y() = std::min(dim_[1] - 1, j_max);
+        maxIndex.z() = std::min(dim_[2] - 1, k_max);
     }
 
     bool backgroundMesh::contains(const point &pt)

@@ -1,5 +1,8 @@
 #include "backgroundMesh.H"
 #include "quickMesh.H"
+#include <algorithm>
+#include <vector>
+#include <set>
 
 using namespace Foam;
 
@@ -54,22 +57,26 @@ namespace Bashyal
                     // Add points and update pointMap_ for unique point indices
                     addPoints(updatedPoints);
 
-                    Foam::faceList outFaces;
-                    Foam::labelList outOwners;
-                    Foam::labelList outNeighbours;
-                    Foam::List<int> outPatches;
-
-                    block.reorderToUpperTriangularNeighboursOnly(
-                        updatedFaces, updatedOwners, updatedNeighbours, updatedPatches,
-                        outFaces, outOwners, outNeighbours, outPatches);
-
                     // Add faces with updated point indices
-                    addFaces(block.identity_, updatedPoints, outFaces, outOwners, outNeighbours, outPatches);
+                    addFaces(block.identity_, updatedPoints, updatedFaces, updatedOwners, updatedNeighbours, updatedPatches);
 
                     cellCount_ = cellCount_ + block.ncells_;
                 }
             }
         }
+
+        Foam::faceList outFaces;
+        Foam::labelList outOwners;
+        Foam::labelList outNeighbours;
+        Foam::List<int> outPatches;
+
+        reorderToUpperTriangularInternal(
+            globalFaces_, globalOwners_, globalNeighbours_,
+            outFaces, outOwners, outNeighbours);
+
+        globalFaces_ = outFaces;
+        globalOwners_ = outOwners;
+        globalNeighbours_ = outNeighbours;
     }
 
     void backgroundMesh::addPoints(const pointField &blockPoints)
@@ -139,6 +146,115 @@ namespace Bashyal
         }
     }
 
+    // Find the common edge between two faces
+    std::pair<Foam::label, Foam::label> findCommonEdge(const Foam::face &face1, const Foam::face &face2)
+    {
+        for (Foam::label i = 0; i < face1.size(); ++i)
+        {
+            Foam::label p1 = face1[i];
+            Foam::label p2 = face1[(i + 1) % face1.size()];
+            for (Foam::label j = 0; j < face2.size(); ++j)
+            {
+                Foam::label q1 = face2[j];
+                Foam::label q2 = face2[(j + 1) % face2.size()];
+                if ((p1 == q2 && p2 == q1) || (p1 == q1 && p2 == q2))
+                {
+                    return {p1, p2};
+                }
+            }
+        }
+        return {-1, -1}; // No common edge
+    }
+
+    // Merge two faces around their common edge
+    Foam::face mergeFacesAroundEdge(const Foam::face &face1, const Foam::face &face2,
+                                    const std::pair<Foam::label, Foam::label> &commonEdge)
+    {
+        Foam::label startIdx1 = face1.find(commonEdge.first);
+        Foam::label startIdx2 = face2.find(commonEdge.second);
+        Foam::face mergedFace;
+
+        // Traverse face1 after the common edge
+        for (Foam::label i = (startIdx1 + 1) % face1.size(); i != startIdx1; i = (i + 1) % face1.size())
+        {
+            mergedFace.append(face1[i]);
+        }
+
+        // Traverse face2 after the common edge
+        for (Foam::label i = (startIdx2 + 1) % face2.size(); i != startIdx2; i = (i + 1) % face2.size())
+        {
+            mergedFace.append(face2[i]);
+        }
+
+        // Close the face with common edge points
+        // mergedFace.append(commonEdge.first);
+        // mergedFace.append(commonEdge.second);
+
+        return mergedFace;
+    }
+
+    void backgroundMesh::reorderToUpperTriangularInternal(
+        const Foam::faceList &faces,
+        const Foam::labelList &owners,
+        const Foam::labelList &neighbours,
+        Foam::faceList &outFaces,
+        Foam::labelList &outOwners,
+        Foam::labelList &outNeighbours)
+    {
+        // Create and sort indices by owner, then neighbor
+        Foam::labelList indices(faces.size());
+        forAll(indices, i) { indices[i] = i; }
+        auto compare = [&owners, &neighbours](Foam::label a, Foam::label b) {
+            return (owners[a] < owners[b]) || 
+                   (owners[a] == owners[b] && neighbours[a] < neighbours[b]);
+        };
+        std::sort(indices.begin(), indices.end(), compare);
+    
+        // Temporary storage for merged data
+        std::vector<Foam::face> mergedFaces;
+        std::vector<Foam::label> mergedOwners;
+        std::vector<Foam::label> mergedNeighbours;
+    
+        // Process faces and merge duplicates
+        for (Foam::label idx = 0; idx < indices.size(); ++idx) {
+            Foam::label i = indices[idx];
+            Foam::label owner = owners[i];
+            Foam::label neighbour = neighbours[i];
+            Foam::face currentFace = faces[i];
+    
+            if (idx == 0 || 
+                owners[indices[idx - 1]] != owner || 
+                neighbours[indices[idx - 1]] != neighbour) {
+                // New owner-neighbor pair
+                mergedFaces.push_back(currentFace);
+                mergedOwners.push_back(owner);
+                mergedNeighbours.push_back(neighbour);
+            } else {
+                // Duplicate pair, merge with the last face
+                Foam::face &lastFace = mergedFaces.back();
+    
+                // Find the common edge
+                std::pair<Foam::label, Foam::label> commonEdge = findCommonEdge(lastFace, currentFace);
+                if (commonEdge.first != -1 && commonEdge.second != -1) {
+                    // Merge faces around the common edge
+                    lastFace = mergeFacesAroundEdge(lastFace, currentFace, commonEdge);
+                } else {
+                    Foam::Warning << "No common edge found between faces with same owner and neighbor." << Foam::endl;
+                }
+            }
+        }
+    
+        // Assign to output
+        outFaces.setSize(mergedFaces.size());
+        outOwners.setSize(mergedOwners.size());
+        outNeighbours.setSize(mergedNeighbours.size());
+        for (unsigned int i = 0; i < mergedFaces.size(); ++i) {
+            outFaces[i] = mergedFaces[i];
+            outOwners[i] = mergedOwners[i];
+            outNeighbours[i] = mergedNeighbours[i];
+        }
+    }
+
     void backgroundMesh::reset()
     {
         cellCount_ = 0;
@@ -164,7 +280,7 @@ namespace Bashyal
 
     scalar backgroundMesh::roundToSeven(scalar value)
     {
-        return std::round(value * std::pow(10.0, 7)) / std::pow(10.0, 7);
+        return std::round(value * std::pow(10.0, 9)) / std::pow(10.0, 9);
     }
 
 }

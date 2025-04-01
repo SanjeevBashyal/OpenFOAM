@@ -97,7 +97,7 @@ namespace Bashyal
         CGAL::convex_decomposition_3(N);
 
         // Extract convex polyhedra from the decomposition
-        double volumeTolerance = 1e-8; // Minimum volume threshold
+        double volumeTolerance = 1e-12; // Minimum volume threshold
         std::vector<Polyhedron> convexPolyhedra;
         Nef_polyhedron::Volume_const_iterator ci = ++N.volumes_begin();
         for (; ci != N.volumes_end(); ++ci)
@@ -221,21 +221,21 @@ namespace Bashyal
             newPatches                          // Output patches
         );
 
-        Foam::faceList outFaces;
-        Foam::labelList outOwners;
-        Foam::labelList outNeighbours;
-        Foam::List<int> outPatches;
+        // Foam::faceList outFaces;
+        // Foam::labelList outOwners;
+        // Foam::labelList outNeighbours;
+        // Foam::List<int> outPatches;
 
-        reorderToUpperTriangularNeighboursOnly(
-            newFaces, newOwners, newNeighbours, newPatches,
-            outFaces, outOwners, outNeighbours, outPatches);
+        // reorderToUpperTriangularNeighboursOnly(
+        //     newFaces, newOwners, newNeighbours, newPatches,
+        //     outFaces, outOwners, outNeighbours, outPatches);
 
         // Update class attributes with new topology
         points_ = allPoints;
-        faces_ = outFaces;
-        owners_ = outOwners;
-        neighbours_ = outNeighbours;
-        patches_ = outPatches;
+        faces_ = newFaces;
+        owners_ = newOwners;
+        neighbours_ = newNeighbours;
+        patches_ = newPatches;
         ncells_ = nCells;
         edited_ = true;
         if (nCells > 1)

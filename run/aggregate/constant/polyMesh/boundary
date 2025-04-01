@@ -12,43 +12,43 @@ FoamFile
 Ymin
 {
     type patch;
-    nFaces 2;
-    startFace 18;
+    nFaces 10;
+    startFace 234;
 }
 Zmin
 {
     type patch;
-    nFaces 3;
-    startFace 20;
+    nFaces 12;
+    startFace 244;
 }
 Xmin
 {
     type patch;
-    nFaces 5;
-    startFace 23;
-}
-Zmax
-{
-    type patch;
-    nFaces 7;
-    startFace 28;
-}
-Ymax
-{
-    type patch;
-    nFaces 6;
-    startFace 35;
+    nFaces 21;
+    startFace 256;
 }
 aggregate
 {
     type patch;
-    nFaces 8;
-    startFace 41;
+    nFaces 80;
+    startFace 277;
+}
+Zmax
+{
+    type patch;
+    nFaces 12;
+    startFace 357;
+}
+Ymax
+{
+    type patch;
+    nFaces 10;
+    startFace 369;
 }
 Xmax
 {
     type patch;
-    nFaces 2;
-    startFace 49;
+    nFaces 26;
+    startFace 379;
 }
 )

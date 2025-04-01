@@ -302,6 +302,7 @@
         "debugClassPolyMesh.C": "cpp",
         "wellRoundedAggregate.C": "cpp",
         "aggregateTriFaces.C": "cpp",
-        "backgroundMeshFaceAudit.C": "cpp"
+        "backgroundMeshFaceAudit.C": "cpp",
+        "dynamicFvMesh.C": "cpp"
     }
 }

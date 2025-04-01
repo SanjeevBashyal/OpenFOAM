@@ -10,12 +10,12 @@ FoamFile
     version     2.0;
     format      ascii;
     arch        "LSB;label=32;scalar=64";
-    class       labelList;
-    location    "0";
-    object      cellToRegion;
+    class       cellSet;
+    location    "constant/polyMesh/sets";
+    object      region2;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-9(0 1 2 3 4 5 6 7 8)
+1(2)
 
 // ************************************************************************* //

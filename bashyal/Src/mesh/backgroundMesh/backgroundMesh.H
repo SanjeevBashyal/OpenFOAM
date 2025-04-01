@@ -62,7 +62,7 @@ namespace Bashyal
         Foam::pointField createVertices();
         Foam::Vector<int> countBlocksPerAxis() const;
         Foam::List<Foam::List<Foam::List<Foam::autoPtr<backgroundBlock>>>> createListPointers();
-        Foam::Vector<int> getBlockIndexContainingPoint(Foam::point &pt);
+        void getBlockIndexRange(const Foam::boundBox &bounds, Foam::Vector<int> &minIndex, Foam::Vector<int> &maxIndex);
         bool contains(const Foam::point &pt);
         ~backgroundMesh() = default;
 
@@ -71,6 +71,13 @@ namespace Bashyal
         void developMesh();
         void addPoints(const Foam::pointField &blockPoints);
         void addFaces(const Foam::Vector<int> &identity, const Foam::pointField &blockPoints, const Foam::faceList &blockFaces, const Foam::labelList &owners, const Foam::labelList &neighbours, const Foam::List<int> &blockPatches);
+        void reorderToUpperTriangularInternal(
+            const Foam::faceList &faces,
+            const Foam::labelList &owners,
+            const Foam::labelList &neighbours,
+            Foam::faceList &outFaces,
+            Foam::labelList &outOwners,
+            Foam::labelList &outNeighbours);
 
         void reset();
 

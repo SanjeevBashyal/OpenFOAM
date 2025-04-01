@@ -7,8 +7,8 @@ namespace Bashyal
     void backgroundMesh::intersect(aggregate &agg)
     {
         boundBox bounds = agg.getBoundBox();
-        Vector<int> minIndex = this->getBlockIndexContainingPoint(bounds.min());
-        Vector<int> maxIndex = this->getBlockIndexContainingPoint(bounds.max());
+        Vector<int> minIndex, maxIndex;
+        this->getBlockIndexRange(bounds, minIndex, maxIndex);
 
         for (int i = minIndex.x(); i <= maxIndex.x(); ++i)
         {

@@ -105,8 +105,8 @@ namespace Bashyal
                 forAll(intersectedFaces, idx)
                 {
                     newFaces.append(intersectedFaces[idx]);
-                    newOwners.append(block.globalNCells_ + intersectedOwners[idx]);         // Local owner
-                    newNeighbours.append(intersectedNeighbours[idx]); // Global neighbour
+                    newOwners.append(block.globalNCells_ + intersectedOwners[idx]); // Local owner
+                    newNeighbours.append(intersectedNeighbours[idx]);               // Global neighbour
                     newPatches.append(intersectedPatches[idx]);
                 }
             }
@@ -154,7 +154,7 @@ namespace Bashyal
     {
         // Define area tolerance
         const double areaTolerance = 1e-12;
-    
+
         // Lambda to project 3D points to 2D based on patchType
         auto projectTo2D = [&](const Foam::point &p) -> Point_2
         {
@@ -164,11 +164,11 @@ namespace Bashyal
                 return Point_2(p.x(), p.z()); // XZ-plane
             return Point_2(p.x(), p.y());     // XY-plane (default)
         };
-    
+
         // Convert block faces to Polygon_2
         std::vector<Polygon_2> blockPwhs;
         std::vector<std::vector<Foam::label>> blockPointIndices;
-        for (size_t i = 0; i < blockFaces.size(); ++i)
+        for (Foam::label i = 0; i < blockFaces.size(); ++i)
         {
             const auto &face = blockFaces[i];
             Polygon_2 poly;
@@ -181,11 +181,11 @@ namespace Bashyal
             blockPwhs.push_back(poly);
             blockPointIndices.push_back(indices);
         }
-    
+
         // Convert neighbor faces to Polygon_2
         std::vector<Polygon_2> neighborPwhs;
         std::vector<std::vector<Foam::label>> neighborPointIndices;
-        for (size_t i = 0; i < neighborFaces.size(); ++i)
+        for (Foam::label i = 0; i < neighborFaces.size(); ++i)
         {
             const auto &face = neighborFaces[i];
             Polygon_2 polyN;
@@ -198,36 +198,37 @@ namespace Bashyal
             neighborPwhs.push_back(polyN);
             neighborPointIndices.push_back(indices);
         }
-    
+
         // Compute intersections
         for (size_t i = 0; i < blockPwhs.size(); ++i)
         {
             auto &blockPwh = blockPwhs[i];
             Foam::label blockOwner = blockFaceOwners[i];
             const auto &blockIndices = blockPointIndices[i];
-    
+
+            bool originalReverseFlag = false;
+
+            // Ensure polygons are counter-clockwise for intersection
+            if (blockPwh.orientation() != CGAL::COUNTERCLOCKWISE)
+            {
+                blockPwh.reverse_orientation();
+                originalReverseFlag = true;
+            }
+
             for (size_t j = 0; j < neighborPwhs.size(); ++j)
             {
                 auto &neighborPwh = neighborPwhs[j];
                 Foam::label neighborOwner = neighborFaceOwners[j];
-    
-                bool originalReverseFlag = false;
-    
-                // Ensure polygons are counter-clockwise for intersection
-                if (blockPwh.orientation() != CGAL::COUNTERCLOCKWISE)
-                {
-                    blockPwh.reverse_orientation();
-                    originalReverseFlag = true;
-                }
+
                 if (neighborPwh.orientation() != CGAL::COUNTERCLOCKWISE)
                 {
                     neighborPwh.reverse_orientation();
                 }
-    
+
                 // Perform intersection
                 std::list<Polygon_with_holes_2> intersection_result;
                 CGAL::intersection(blockPwh, neighborPwh, std::back_inserter(intersection_result));
-    
+
                 // Process each intersection result
                 for (auto &pwh : intersection_result)
                 {
@@ -236,10 +237,10 @@ namespace Bashyal
                     {
                         outer.reverse_orientation();
                     }
-    
+
                     // Compute the area of the outer boundary
                     double area = std::abs(CGAL::to_double(outer.area()));
-    
+
                     // Proceed only if area exceeds tolerance
                     if (area > areaTolerance)
                     {

@@ -47,9 +47,10 @@ const Foam::IOdictionary &aggregateDict = *aggregateDictPtr;
 // cubeAggregates aggregates(psd, nParticles);
 // aggregates.generateAggregates();
 
-Bashyal::cubeAggregate a(0.16, 0.16, 1000);
+Bashyal::cubeAggregate a(0.16, 0.16, 1000); // size_1, size_2, identifier
 a.translate(vector(0.15, 0.15, 0.15));
 a.rotate(30, 30, 30);
 a.locate();
 a.createFaces();
 a.getBoundBox();
+a.createTriSurface();
