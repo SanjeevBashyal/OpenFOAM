@@ -5,31 +5,69 @@ using namespace Foam;
 
 namespace Bashyal
 {
-    backgroundMesh::backgroundMesh(Foam::Time *runTime, point meshMin, point meshMax, float resolution)
-        : meshMin_(meshMin),
-          meshMax_(meshMax),
-          resolution_(resolution),
-          dim_(countBlocksPerAxis()),
-          backgroundBlocks_(createListPointers()),
-          runTime_(runTime),
-          vertices_(createVertices())
+    backgroundMesh::backgroundMesh(Foam::Time *runTime)
+        : runTime_(runTime)
     {
-        label count = 0;
-        for (scalar i = 0; i < dim_[0]; i++)
+        // Read the backgroundMeshDict from the constant directory
+        IOdictionary bgMeshDict(
+            IOobject(
+                "backgroundMeshDict",
+                runTime_->system(),
+                *runTime_, // Fixed: Dereference Time* to objectRegistry&
+                IOobject::MUST_READ_IF_MODIFIED,
+                IOobject::NO_WRITE));
+
+        // Determine the method for setting mesh bounds
+        word method = bgMeshDict.getOrDefault<word>("method", "manual");
+
+        if (method == "manual")
         {
-            for (scalar j = 0; j < dim_[1]; j++)
+            // Read minPoint and maxPoint directly from the dictionary
+            meshMin_ = bgMeshDict.get<Foam::point>("minPoint"); // Fixed: Use get<T>
+            meshMax_ = bgMeshDict.get<Foam::point>("maxPoint"); // Fixed: Use get<T>
+        }
+        else
+        {
+            FatalErrorInFunction
+                << "Invalid method '" << method << "' in backgroundMeshDict. "
+                << "Valid options are 'manual' or 'fromSTL'."
+                << exit(FatalError);
+        }
+
+        // Read the resolution (required for both methods)
+        resolution_ = bgMeshDict.get<Foam::scalar>("resolution"); // Fixed: Use get<T>
+
+        // Initialize the remaining members
+        dim_ = countBlocksPerAxis();
+        backgroundBlocks_ = createListPointers();
+        vertices_ = createVertices();
+
+        // Populate the backgroundBlocks_ array
+        label count = 0;
+        for (label i = 0; i < dim_[0]; i++) // Fixed: Use label instead of scalar
+        {
+            for (label j = 0; j < dim_[1]; j++)
             {
-                for (scalar k = 0; k < dim_[2]; k++)
+                for (label k = 0; k < dim_[2]; k++)
                 {
-                    point min = point(meshMin_.x() + i * resolution_, meshMin_.y() + j * resolution_, meshMin_.z() + k * resolution_);
-                    point max = point(min.x() + resolution_, min.y() + resolution_, min.z() + resolution_);
-                    backgroundBlocks_[i][j][k] = autoPtr<backgroundBlock>(new backgroundBlock(this, Foam::Vector<int>(i, j, k), Foam::boundBox(min, max), count));
-                    count = count + 1;
+                    point min = point(
+                        meshMin_.x() + i * resolution_,
+                        meshMin_.y() + j * resolution_,
+                        meshMin_.z() + k * resolution_);
+                    point max = point(
+                        min.x() + resolution_,
+                        min.y() + resolution_,
+                        min.z() + resolution_);
+                    backgroundBlocks_[i][j][k] = autoPtr<backgroundBlock>(
+                        new backgroundBlock(
+                            this,
+                            Foam::Vector<int>(i, j, k),
+                            Foam::boundBox(min, max),
+                            count));
+                    count++;
                 }
             }
         }
-
-        Foam::Info << "Here" << Foam::endl;
     }
 
     void backgroundMesh::resetBlocks()

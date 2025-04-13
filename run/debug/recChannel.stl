@@ -1,0 +1,93 @@
+solid rectangular_channel_L5_W0.3_H0.3_bottomSlope-0.01
+
+  facet normal -1.000000 0.000000 0.000000
+    outer loop
+      vertex 0.000000 -0.150000 0.000000
+      vertex 0.000000 0.150000 0.000000
+      vertex 0.000000 0.150000 0.300000
+    endloop
+  endfacet
+  facet normal -1.000000 0.000000 0.000000
+    outer loop
+      vertex 0.000000 -0.150000 0.000000
+      vertex 0.000000 0.150000 0.300000
+      vertex 0.000000 -0.150000 0.300000
+    endloop
+  endfacet
+
+  facet normal 1.000000 0.000000 0.000000
+    outer loop
+      vertex 5.000000 -0.150000 -0.050000
+      vertex 5.000000 0.150000 -0.050000
+      vertex 5.000000 0.150000 0.300000
+    endloop
+  endfacet
+  facet normal 1.000000 0.000000 0.000000
+    outer loop
+      vertex 5.000000 -0.150000 -0.050000
+      vertex 5.000000 0.150000 0.300000
+      vertex 5.000000 -0.150000 0.300000
+    endloop
+  endfacet
+
+  facet normal -0.009999 0.000000 -0.999950
+    outer loop
+      vertex 0.000000 -0.150000 0.000000
+      vertex 5.000000 -0.150000 -0.050000
+      vertex 5.000000 0.150000 -0.050000
+    endloop
+  endfacet
+  facet normal -0.000000 0.000000 -1.000000
+    outer loop
+      vertex 0.000000 -0.150000 0.000000
+      vertex 5.000000 0.150000 -0.050000
+      vertex 0.000000 0.150000 0.000000
+    endloop
+  endfacet
+
+  facet normal 0.000000 0.000000 1.000000
+    outer loop
+      vertex 0.000000 -0.150000 0.300000
+      vertex 0.000000 0.150000 0.300000
+      vertex 5.000000 0.150000 0.300000
+    endloop
+  endfacet
+  facet normal 0.000000 0.000000 1.000000
+    outer loop
+      vertex 0.000000 -0.150000 0.300000
+      vertex 5.000000 0.150000 0.300000
+      vertex 5.000000 -0.150000 0.300000
+    endloop
+  endfacet
+
+  facet normal 0.000000 -1.000000 0.000000
+    outer loop
+      vertex 0.000000 -0.150000 0.000000
+      vertex 0.000000 -0.150000 0.300000
+      vertex 5.000000 -0.150000 0.300000
+    endloop
+  endfacet
+  facet normal 0.000000 -1.000000 0.000000
+    outer loop
+      vertex 0.000000 -0.150000 0.000000
+      vertex 5.000000 -0.150000 0.300000
+      vertex 5.000000 -0.150000 -0.050000
+    endloop
+  endfacet
+
+  facet normal 0.000000 1.000000 0.000000
+    outer loop
+      vertex 0.000000 0.150000 0.000000
+      vertex 5.000000 0.150000 -0.050000
+      vertex 5.000000 0.150000 0.300000
+    endloop
+  endfacet
+  facet normal 0.000000 1.000000 0.000000
+    outer loop
+      vertex 0.000000 0.150000 0.000000
+      vertex 5.000000 0.150000 0.300000
+      vertex 0.000000 0.150000 0.300000
+    endloop
+  endfacet
+
+endsolid rectangular_channel_L5_W0.3_H0.3_bottomSlope-0.01

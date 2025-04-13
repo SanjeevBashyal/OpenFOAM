@@ -1,0 +1,20 @@
+Method I
+
+backgroundMesh
+{
+    method      manual;
+    minPoint    (0 0 0);
+    maxPoint    (0.3 0.3 0.3);
+    resolution  0.1;
+}
+
+
+
+Method II
+
+backgroundMesh
+{
+    method      fromSTL;
+    stlFile     "boundary.stl";
+    resolution  0.1;
+}

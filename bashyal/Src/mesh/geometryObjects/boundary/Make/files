@@ -1,3 +1,0 @@
-boundary.C
-
-LIB = $(FOAM_LIBBIN)/libboundary

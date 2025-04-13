@@ -1,3 +1,0 @@
-baseClass.C
-
-LIB = $(FOAM_LIBBIN)/libbaseClass

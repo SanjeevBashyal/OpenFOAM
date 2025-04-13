@@ -17,6 +17,76 @@ namespace Bashyal
     typedef CGAL::Nef_polyhedron_3<Kernel> Nef_polyhedron;
     typedef FoamCGALConverter<Kernel> Converter; // Adjust namespace as needed
 
+    // Subtracts a single aggregate from the current nef_
+    void backgroundBlock::subtractAggregate(
+        const aggregate &agg, // Pass aggregate object by const reference
+        int aggregateIdentifier)
+    {
+        if (dead_)
+            return;
+
+        // Access the Nef polyhedron from the aggregate object
+        const CGAL::Nef_polyhedron_3<Kernel_t> &aggNef = agg.nef_;
+
+        if (aggNef.is_empty())
+        {
+            // Optional Warning:
+            // Foam::WarningInFunc() << "Skipping subtraction of aggregate with empty Nef from block " << blockID_ << Foam::endl;
+            return;
+        }
+
+        try
+        {
+            // Perform subtraction: nef_ = nef_ - aggNef
+            nef_ = nef_.difference(aggNef);
+
+            // Check result
+            if (nef_.is_empty())
+            {
+                // Foam::Info << "Block " << blockID_ << " became empty after subtracting aggregate ID " << aggregateIdentifier << "." << Foam::endl;
+                dead_ = true;
+                points_.clear();
+                faces_.clear();
+                patches_.clear();
+                owners_.clear();
+                neighbours_.clear();
+                ncells_ = 0;
+                edited_ = true; // Mark as edited even if now dead
+                return;
+            }
+            // Don't check for non-simple here, difference can create them
+
+            // Convert the result back to Foam geometry
+            // Pass the aggregateIdentifier for patch mapping
+            bool success = updateFoamGeometryFromNef("Aggregate Subtraction", aggregateIdentifier);
+            if (!success)
+            {
+                Foam::WarningInFunc() << "Failed to update Foam geometry after subtracting aggregate "
+                                      << aggregateIdentifier << " from block " << blockID_ << ". Marking as dead." << Foam::endl;
+                dead_ = true;
+                points_.clear();
+                faces_.clear();
+                patches_.clear();
+                owners_.clear();
+                neighbours_.clear();
+                ncells_ = 0;
+            }
+            edited_ = true; // Mark as edited because an aggregate interaction occurred
+        }
+        catch (const std::exception &e)
+        {
+            Foam::WarningInFunc() << "Error subtracting aggregate " << aggregateIdentifier
+                                  << " for block " << blockID_ << ": " << e.what() << ". Keeping previous block state." << Foam::endl;
+            // Don't change nef_ or Foam geometry on error
+        }
+        catch (...)
+        {
+            Foam::WarningInFunc() << "Unknown error subtracting aggregate " << aggregateIdentifier
+                                  << " for block " << blockID_ << ". Keeping previous block state." << Foam::endl;
+            // Don't change nef_ or Foam geometry on error
+        }
+    }
+
     void backgroundBlock::intersectClosedSurfaceCGAL(
         const Foam::faceList &faces,
         const Foam::pointField &points,

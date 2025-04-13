@@ -2,11 +2,14 @@
 #define geomObject_H
 
 #include "quickInclude.H"
+#include "triSurface.H"
+#include "boundBox.H"
+#include "debugClass.H"
 #include "faceOperations.H"
 
 namespace Bashyal
 {
-    class geomObject
+    class geomObject : public debugClass
     {
     public:
         // Private data members
@@ -27,6 +30,7 @@ namespace Bashyal
         const Foam::faceList &faces() const { return faces_; }
 
         void writeToSTL(const Foam::fileName &stlFile) const;
+        Foam::boundBox createBoundBox();
     };
 }
 

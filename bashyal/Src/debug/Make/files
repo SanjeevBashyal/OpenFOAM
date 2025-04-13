@@ -1,0 +1,6 @@
+baseClass/baseClass.C
+debugClass/debugClass.C
+debugClass/debugClassCGAL.C
+debugClass/debugClassPolyMesh.C
+
+LIB = $(FOAM_LIBBIN)/libdebugClass

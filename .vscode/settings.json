@@ -303,6 +303,8 @@
         "wellRoundedAggregate.C": "cpp",
         "aggregateTriFaces.C": "cpp",
         "backgroundMeshFaceAudit.C": "cpp",
-        "dynamicFvMesh.C": "cpp"
+        "dynamicFvMesh.C": "cpp",
+        "shellSurfaces.C": "cpp",
+        "boundBoxTemplates.C": "cpp"
     }
 }

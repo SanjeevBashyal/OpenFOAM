@@ -1,4 +1,5 @@
 aggregate.C
+aggregateCGAL.C
 cubeAggregate.C
 roundAggregate.C
 PSD.C

@@ -1,5 +1,6 @@
 // #include "backgroundBlock.H"
 #include "backgroundMesh.H"
+#include "patchTypes.H"
 
 using namespace Foam;
 namespace Bashyal
@@ -57,6 +58,8 @@ namespace Bashyal
         owners_ = labelList{0, 0, 0, 0, 0, 0};           // All faces owned by a single cell
         neighbours_ = labelList{-1, -1, -1, -1, -1, -1}; // No neighbor cells (external boundary)
         nboundaries_ = 6;
+
+        generateNefPolyhedron(); // Generate Nef polyhedron for the cube
     }
 
     void backgroundBlock::reset()

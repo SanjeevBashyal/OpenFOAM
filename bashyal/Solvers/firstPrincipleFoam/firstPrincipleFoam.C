@@ -27,25 +27,26 @@ int main(int argc, char *argv[])
 #include "setInitialDeltaT.H"
     }
 
-    Info<< "\nStarting time loop\n" << endl;
+    Info << "\nStarting time loop\n"
+         << endl;
 
     while (runTime.run())
     {
-        #include "readDyMControls.H"
+#include "readDyMControls.H"
 
         if (LTS)
         {
-            #include "setRDeltaT.H"
+#include "setRDeltaT.H"
         }
         else
         {
-            #include "CourantNo.H"
-            #include "setDeltaT.H"
+#include "CourantNo.H"
+#include "setDeltaT.H"
         }
 
         ++runTime;
 
-        Info<< "Time = " << runTime.timeName() << nl << endl;
+        Info << "Time = " << runTime.timeName() << nl << endl;
 
         // --- Pressure-velocity PIMPLE corrector loop
         while (pimple.loop())
@@ -65,7 +66,7 @@ int main(int argc, char *argv[])
                         // from the mapped surface velocity
                         phi = mesh.Sf() & Uf();
 
-                        #include "correctPhi.H"
+#include "correctPhi.H"
 
                         // Make the flux relative to the mesh motion
                         fvc::makeRelative(phi, U);
@@ -73,17 +74,17 @@ int main(int argc, char *argv[])
 
                     if (checkMeshCourantNo)
                     {
-                        #include "meshCourantNo.H"
+#include "meshCourantNo.H"
                     }
                 }
             }
 
-            #include "UEqn.H"
+#include "UEqn.H"
 
             // --- Pressure corrector loop
             while (pimple.correct())
             {
-                #include "pEqn.H"
+#include "pEqn.H"
             }
 
             if (pimple.turbCorr())
@@ -98,10 +99,10 @@ int main(int argc, char *argv[])
         runTime.printExecutionTime(Info);
     }
 
-    Info<< "End\n" << endl;
+    Info << "End\n"
+         << endl;
 
     return 0;
-
 }
 
 // ************************************************************************* //

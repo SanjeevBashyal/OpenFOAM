@@ -4,8 +4,10 @@
 #include "quickInclude.H"
 #include "debugClass.H"
 #include "backgroundBlock.H"
-
 #include "triSurface.H"
+
+#include <CGAL/Nef_polyhedron_3.h>
+// Note: <CGAL/Exact_predicates_exact_constructions_kernel.h> is included via "foamCGALConverter.H"
 
 namespace Bashyal
 {
@@ -26,6 +28,9 @@ namespace Bashyal
 
         Foam::faceList faces_;
         Foam::triSurface surface_; // Triangulated surface mesh
+
+        // Add Nef_polyhedron_3 member with Epeck kernel
+        CGAL::Nef_polyhedron_3<CGAL::Epeck> nef_;
 
     private:
         /* data */
@@ -56,6 +61,9 @@ namespace Bashyal
 
         void createTriSurface();
 
+        // Add method declaration
+        void generateNefPolyhedron();
+
         virtual void intersectWithBlock(backgroundBlock& block) const = 0;
     };
 
@@ -81,5 +89,3 @@ namespace Bashyal
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 #endif
-
-// ************************************************************************* //

@@ -1,0 +1,13 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+method      manual;
+minPoint    (0 0 0);
+maxPoint    (0.3 0.3 0.3);
+resolution  0.1;

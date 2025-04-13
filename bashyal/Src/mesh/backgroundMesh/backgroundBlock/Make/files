@@ -1,4 +1,6 @@
 backgroundBlock.C
+backgroundBlockCGAL.C
+backgroundBlockDomainIntersection.C
 backgroundBlockCGALIntersection.C
 
 LIB = $(FOAM_LIBBIN)/libbackgroundBlock

@@ -1,8 +1,13 @@
-backgroundMesh.C
-backgroundMeshCreator.C
-backgroundMeshWriter.C
-backgroundMeshIntersector.C
-backgroundMeshFaceAudit.C
-backgroundMeshBoundary.C
+backgroundBlock/backgroundBlock.C
+backgroundBlock/backgroundBlockCGAL.C
+backgroundBlock/backgroundBlockDomainIntersection.C
+backgroundBlock/backgroundBlockCGALIntersection.C
+
+backgroundMesh/backgroundMesh.C
+backgroundMesh/backgroundMeshCreator.C
+backgroundMesh/backgroundMeshWriter.C
+backgroundMesh/backgroundMeshIntersector.C
+backgroundMesh/backgroundMeshFaceAudit.C
+backgroundMesh/backgroundMeshBoundary.C
 
 LIB = $(FOAM_LIBBIN)/libbackgroundMesh

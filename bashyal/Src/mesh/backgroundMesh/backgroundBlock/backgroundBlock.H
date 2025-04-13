@@ -3,9 +3,8 @@
 
 #include "debugClass.H"
 #include "quickMesh.H"
-#include "pointFaceHit.H"
-#include "baseClass.H"
-#include "patchTypes.H"
+#include "boundary.H"
+#include <CGAL/Nef_polyhedron_3.h>
 
 namespace Bashyal
 {
@@ -33,6 +32,8 @@ namespace Bashyal
         Foam::labelList owners_;     // Stores owner cells
         Foam::labelList neighbours_; // Stores neighbor cells
 
+        CGAL::Nef_polyhedron_3<CGAL::Epeck> nef_;
+        CGAL::Nef_polyhedron_3<CGAL::Epeck> nefBase_;
         // Foam::faceList triFaces_; // New attribute to store triangulated faces
 
     private:
@@ -54,6 +55,8 @@ namespace Bashyal
         Foam::labelList getOwners() { return owners_; }
         Foam::labelList getNeighbours() { return neighbours_; }
 
+        void intersectBoundary(const boundary &domainBoundary, bool keepInside);
+
         //backgroundBlockCGALIntersection.C
         void intersectClosedSurfaceCGAL(const Foam::faceList &faces, const Foam::pointField &points, unsigned int identifier);
         void mapNewFacesToBoundaries(const Foam::pointField &newPoints, const Foam::faceList &newFaces, const Foam::labelList &newNeighbours, const Foam::pointField &pointsA, const Foam::faceList &facesA, const Foam::List<int> &patchesA, const Foam::pointField &pointsB, const Foam::faceList &facesB, const Foam::List<int> &patchesB, Foam::List<int> &newPatches);
@@ -64,6 +67,7 @@ namespace Bashyal
         bool pointOnList(const Foam::List<Foam::point> &pointList, const Foam::point &checkPoint, Foam::point &outputPoint, const double tolerance);
         bool arePointsSame(const Foam::point &point1, const Foam::point &point2, const double tolerance);
 
+        void generateNefPolyhedron();
 
         void write() const;       // To add later in backgroundBlockWriter
         

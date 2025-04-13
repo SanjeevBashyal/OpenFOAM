@@ -1,0 +1,6 @@
+geomObject/geomObject.C
+boundary/boundary.C
+boundaryObjects/rectangularChannel.C
+boundaryObjects/cylindricalBoundary.C
+
+LIB = $(FOAM_LIBBIN)/libgeometryObjects

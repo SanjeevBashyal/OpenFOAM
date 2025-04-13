@@ -111,6 +111,12 @@
         "faceOperations.C": "cpp",
         "geomObject.C": "cpp",
         "trapezoidalChannel.C": "cpp",
-        "backgroundBlockWriter.C": "cpp"
+        "backgroundBlockWriter.C": "cpp",
+        "aggregateCGAL.C": "cpp",
+        "rectangularChannel.C": "cpp",
+        "cylindricalBoundary.C": "cpp",
+        "backgroundBlockDomainIntersection.C": "cpp",
+        "backgroundBlockCGAL.C": "cpp",
+        "backgroundBlockAggIntersection.C": "cpp"
     }
 }

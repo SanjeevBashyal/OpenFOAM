@@ -7,6 +7,7 @@
 #include "quickWriter.H"
 #include "block.H"
 #include "backgroundBlock.H"
+#include "boundary.H"
 #include "cubeAggregate.H"
 #include "roundAggregate.H"
 #include "cubeAggregates.H"
@@ -56,7 +57,7 @@ namespace Bashyal
         // Foam::List<Foam::cell> cellListPtr_;
 
     public:
-        explicit backgroundMesh(Foam::Time *runTime, Foam::point meshMin, Foam::point meshMax, float resolution);
+        explicit backgroundMesh(Foam::Time *runTime);
         void resetBlocks();
         void setBoundaryPatchType(Foam::dictionary &boundaryDict);
         Foam::pointField createVertices();
@@ -106,6 +107,7 @@ namespace Bashyal
         Foam::point roundPoint(Foam::point value);
         Foam::scalar roundToSeven(Foam::scalar value);
 
+        void intersectDomainBoundary(const boundary& domainBoundary, bool keepInside = true); // Default to keep inside
         void intersect(aggregate &agg);
         void intersectCubes(cubeAggregates &cubeAggs);
 
