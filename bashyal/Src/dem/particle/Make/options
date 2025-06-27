@@ -1,0 +1,17 @@
+# --- START OF FILE Make/options ---
+
+# EXE_INC specifies the include paths for the compiler
+EXE_INC = \
+    -I$(LIB_SRC)/lnInclude \
+    -I$(CGAL_INC_DIR)
+
+# LIB_LIBS specifies the libraries and their paths for the linker
+LIB_LIBS = \
+    -ltriSurface \
+    -L$(CGAL_LIB_DIR) \
+    -lCGAL \
+    -lgeomObject \
+    -lgmp \
+    -lmpfr
+
+# --- END OF FILE Make/options ---

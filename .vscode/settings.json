@@ -305,6 +305,20 @@
         "backgroundMeshFaceAudit.C": "cpp",
         "dynamicFvMesh.C": "cpp",
         "shellSurfaces.C": "cpp",
-        "boundBoxTemplates.C": "cpp"
+        "boundBoxTemplates.C": "cpp",
+        "trackedParticleCloud.C": "cpp",
+        "trackedParticle.C": "cpp",
+        "snappyVoxelMeshDriver.C": "cpp",
+        "snappySnapDriverFeature.C": "cpp",
+        "fieldSmoother.C": "cpp",
+        "meshRefinementBaffles.C": "cpp",
+        "meshRefinementBlock.C": "cpp",
+        "meshRefinementMerge.C": "cpp",
+        "meshRefinementProblemCells.C": "cpp",
+        "meshRefinementRefine.C": "cpp",
+        "patchFaceOrientation.C": "cpp",
+        "meshRefinementTemplates.C": "cpp",
+        "snappyLayerDriver.C": "cpp",
+        "snappyRefineDriver.C": "cpp"
     }
 }

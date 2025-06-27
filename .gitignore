@@ -84,9 +84,12 @@ doc/Doxygen/DTAGS
 # Ignore the module directory
 /modules/swak4Foam
 /modules/sedFoam
+/modules/myYade
+/modules/trunk-2025.2.0.zip
 
 # Ignore the others directory
 /others/runOthers
 /others/sed
 /others/CGAL
 /others/sediFoam-master
+

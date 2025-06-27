@@ -1,7 +1,7 @@
 backgroundBlock/backgroundBlock.C
 backgroundBlock/backgroundBlockCGAL.C
 backgroundBlock/backgroundBlockDomainIntersection.C
-backgroundBlock/backgroundBlockCGALIntersection.C
+backgroundBlock/backgroundBlockAggIntersection.C
 
 backgroundMesh/backgroundMesh.C
 backgroundMesh/backgroundMeshCreator.C

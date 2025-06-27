@@ -67,6 +67,7 @@ namespace Bashyal
         bool contains(const Foam::point &pt);
         ~backgroundMesh() = default;
 
+        void developBlocks();
         void auditCells();
 
         void developMesh();

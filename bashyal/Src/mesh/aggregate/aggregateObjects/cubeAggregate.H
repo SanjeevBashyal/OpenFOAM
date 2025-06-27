@@ -34,7 +34,6 @@ namespace Bashyal
 
         ~cubeAggregate() = default;
 
-        void intersectWithBlock(backgroundBlock& block) const override;
     };
 
 }

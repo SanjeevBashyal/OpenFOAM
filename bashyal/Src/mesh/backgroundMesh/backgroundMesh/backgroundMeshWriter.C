@@ -1,4 +1,5 @@
 #include "backgroundMesh.H"
+#include "patchTypes.H"
 #include <string>
 using namespace Foam;
 namespace Bashyal

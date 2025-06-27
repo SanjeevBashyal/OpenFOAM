@@ -3,7 +3,7 @@
 
 #include "quickInclude.H"
 #include "debugClass.H"
-#include "backgroundBlock.H"
+#include "boundary.H"
 #include "triSurface.H"
 
 #include <CGAL/Nef_polyhedron_3.h>
@@ -11,11 +11,10 @@
 
 namespace Bashyal
 {
-    class backgroundBlock;
-    class aggregate : public debugClass
+    class aggregate : public boundary
     {
     public:
-        float backgroundFinenessIndex_ = 1; // 1 for 0.1, 2 for 0.01
+        Foam::label identifier_;
 
         Foam::point centroid_;
         Foam::scalar xRotation_ = 0;
@@ -23,14 +22,10 @@ namespace Bashyal
         Foam::scalar zRotation_ = 0;
 
         Foam::pointField localPoints_;  // Collection of points to form the aggregate surface
-        Foam::pointField globalPoints_; // Collection of points to form the aggregate surface
         Foam::boundBox boundBox_;
 
         Foam::faceList faces_;
         Foam::triSurface surface_; // Triangulated surface mesh
-
-        // Add Nef_polyhedron_3 member with Epeck kernel
-        CGAL::Nef_polyhedron_3<CGAL::Epeck> nef_;
 
     private:
         /* data */
@@ -61,10 +56,6 @@ namespace Bashyal
 
         void createTriSurface();
 
-        // Add method declaration
-        void generateNefPolyhedron();
-
-        virtual void intersectWithBlock(backgroundBlock& block) const = 0;
     };
 
     inline Foam::tensor operator*(const Foam::tensor &A, const Foam::tensor &B)

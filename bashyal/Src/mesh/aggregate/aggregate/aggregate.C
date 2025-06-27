@@ -98,45 +98,16 @@ namespace Bashyal
     {
         pointField rotatedPoints = this->rotatePoints(this->rotationMatrixFromAngles());
         vector translationVector(this->centroid_[0], this->centroid_[1], this->centroid_[2]);
-        this->globalPoints_ = this->translatePoints(rotatedPoints, translationVector);
+        this->points_ = this->translatePoints(rotatedPoints, translationVector);
     }
 
     boundBox aggregate::getBoundBox()
     {
-        this->boundBox_ = boundBox(this->globalPoints_);
+        this->boundBox_ = boundBox(this->points_);
         point min = this->floorPoint(this->boundBox_.min());
         point max = this->ceilPoint(this->boundBox_.max());
         // this->roundedBoundBox_ = boundBox(min, max);
         return boundBox(min, max);
     }
 
-    scalar aggregate::roundToRequiredDecimal(scalar value)
-    {
-        return std::round(value * std::pow(10.0, this->backgroundFinenessIndex_)) / std::pow(10.0, this->backgroundFinenessIndex_);
-    }
-
-    scalar aggregate::floorToRequiredDecimal(scalar value)
-    {
-        return std::floor(value * std::pow(10.0, this->backgroundFinenessIndex_)) / std::pow(10.0, this->backgroundFinenessIndex_);
-    }
-
-    scalar aggregate::ceilToRequiredDecimal(scalar value)
-    {
-        return std::ceil(value * std::pow(10.0, this->backgroundFinenessIndex_)) / std::pow(10.0, this->backgroundFinenessIndex_);
-    }
-
-    point aggregate::roundPoint(point value)
-    {
-        return point(this->roundToRequiredDecimal(value[0]), this->roundToRequiredDecimal(value[1]), this->roundToRequiredDecimal(value[2]));
-    }
-
-    point aggregate::floorPoint(point value)
-    {
-        return point(this->floorToRequiredDecimal(value[0]), this->floorToRequiredDecimal(value[1]), this->floorToRequiredDecimal(value[2]));
-    }
-
-    point aggregate::ceilPoint(point value)
-    {
-        return point(this->ceilToRequiredDecimal(value[0]), this->ceilToRequiredDecimal(value[1]), this->ceilToRequiredDecimal(value[2]));
-    }
 }

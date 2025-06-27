@@ -21,7 +21,7 @@ namespace Bashyal
             }
         }
 
-        Foam::triSurface surface(triangles, this->globalPoints_);
+        Foam::triSurface surface(triangles, this->points_);
         Foam::fileName outputFile("/usr/lib/openfoam/openfoam2312/run/debug/aggregate.stl"); // Second argument is the output file name
         surface.write(outputFile);
         this->surface_ = surface;

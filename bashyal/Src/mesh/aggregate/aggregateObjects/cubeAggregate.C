@@ -61,8 +61,8 @@ namespace Bashyal
 
     void cubeAggregate::createTriSurface()
     {
-        Foam::List<Foam::labelledTri> triangles = this->createTriangularFacesFromPoints(this->globalPoints_);
-        Foam::triSurface surface(triangles, this->globalPoints_);
+        Foam::List<Foam::labelledTri> triangles = this->createTriangularFacesFromPoints(this->points_);
+        Foam::triSurface surface(triangles, this->points_);
 
         Foam::fileName outputFile("/usr/lib/openfoam/openfoam2312/run/debug/cube.stl"); // Second argument is the output file name
 
@@ -114,11 +114,6 @@ namespace Bashyal
         triangles[11] = Foam::labelledTri(1, 6, 2); // Triangle 2 of the right face
 
         return triangles;
-    }
-
-    void cubeAggregate::intersectWithBlock(backgroundBlock &block) const
-    {
-        block.intersectClosedSurfaceCGAL(faces_, globalPoints_, identifier_);
     }
 
 }

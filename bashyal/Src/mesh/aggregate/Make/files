@@ -1,8 +1,9 @@
-aggregate.C
-aggregateCGAL.C
-cubeAggregate.C
-roundAggregate.C
-PSD.C
-cubeAggregates.C
+aggregate/aggregate.C
+aggregate/aggregateTriFaces.C
+aggregateObjects/cubeAggregate.C
+aggregateObjects/roundAggregate.C
+aggregates/cubeAggregates.C
+PSD/PSD.C
+
 
 LIB = $(FOAM_LIBBIN)/libaggregate

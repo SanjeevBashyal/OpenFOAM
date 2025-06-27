@@ -1,6 +1,8 @@
 #include "quickInclude.H"
 #include "backgroundMesh.H"
 #include "backgroundBlock.C"
+#include "boundary.H"
+#include "rectangularChannel.H"
 #include "cubeAggregate.H"
 #include "roundAggregate.H"
 #include "PSD.H"

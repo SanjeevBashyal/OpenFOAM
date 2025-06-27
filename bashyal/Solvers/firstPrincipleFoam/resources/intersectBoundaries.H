@@ -1,0 +1,1 @@
+bMesh.intersectDomainBoundary(recChannel,true);

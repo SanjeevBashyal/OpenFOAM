@@ -9,9 +9,26 @@ using namespace Foam;
 namespace Bashyal
 {
 
+    void backgroundMesh::developBlocks()
+    {
+        // Loop through each level of the List structure
+        for (auto &blockListLevel1 : backgroundBlocks_)
+        {
+            for (auto &blockListLevel2 : blockListLevel1)
+            {
+                for (auto &blockPtr : blockListLevel2)
+                {
+                    // Dereference the autoPtr to get the actual backgroundBlock
+                    backgroundBlock &block = *blockPtr;
+                    block.develop();
+                }
+            }
+        }
+    }
+
     void backgroundMesh::auditCells()
     {
-        this->reset();
+        // this->reset();
         Foam::label cellsCount = 0;
 
         // Loop through each level of the List structure

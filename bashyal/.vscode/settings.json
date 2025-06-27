@@ -117,6 +117,7 @@
         "cylindricalBoundary.C": "cpp",
         "backgroundBlockDomainIntersection.C": "cpp",
         "backgroundBlockCGAL.C": "cpp",
-        "backgroundBlockAggIntersection.C": "cpp"
+        "backgroundBlockAggIntersection.C": "cpp",
+        "backgroundBlockFoamComposer.C": "cpp"
     }
 }
