@@ -6,16 +6,12 @@
 #include "boundBox.H"
 #include "debugClass.H"
 #include "faceOperations.H"
+#include "indexedFaceSet.H"
 
 namespace Bashyal
 {
-    class geomObject : public debugClass
+    class geomObject : public debugClass, public Foam::particleModels::indexedFaceSet
     {
-    public:
-        // Private data members
-        Foam::pointField points_; // List of 3D points defining the boundary vertices
-        Foam::faceList faces_;    // List of faces, each referencing indices into points_
-
     public:
         // Constructors
         geomObject();
@@ -26,11 +22,11 @@ namespace Bashyal
         ~geomObject();
 
         // Access methods
-        const Foam::pointField &points() const { return points_; }
-        const Foam::faceList &faces() const { return faces_; }
+        // points() and faces() are inherited from indexedFaceSet
 
         void writeToSTL(const Foam::fileName &stlFile) const;
         Foam::boundBox createBoundBox();
+        void writeVtp(const Foam::fileName &filename) const;
     };
 }
 

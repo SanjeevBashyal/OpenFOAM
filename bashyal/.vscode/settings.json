@@ -118,6 +118,10 @@
         "backgroundBlockDomainIntersection.C": "cpp",
         "backgroundBlockCGAL.C": "cpp",
         "backgroundBlockAggIntersection.C": "cpp",
-        "backgroundBlockFoamComposer.C": "cpp"
+        "backgroundBlockFoamComposer.C": "cpp",
+        "IndexedFaceSet.C": "cpp",
+        "ImplicitPlanes.C": "cpp",
+        "halfEdgeMesh.C": "cpp",
+        "PolyhedronBuilder.C": "cpp"
     }
 }
