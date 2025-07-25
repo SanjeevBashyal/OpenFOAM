@@ -1,0 +1,5 @@
+geometryModels/halfEdgeMesh/HalfEdgeMesh.C
+geometryModels/implicitPlanes/ImplicitPlanes.C
+geometryModels/indexedFaceSet/IndexedFaceSet.C
+
+LIB = $(FOAM_LIBBIN)/libgeometryModels

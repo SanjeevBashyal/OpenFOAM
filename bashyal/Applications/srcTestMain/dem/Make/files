@@ -1,0 +1,3 @@
+mainParticle.C
+
+EXE = $(FOAM_APPBIN)/mainParticle
