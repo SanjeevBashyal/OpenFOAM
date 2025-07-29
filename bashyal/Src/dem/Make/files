@@ -1,5 +1,4 @@
-geometryModels/halfEdgeMesh/HalfEdgeMesh.C
-geometryModels/implicitPlanes/ImplicitPlanes.C
-geometryModels/indexedFaceSet/IndexedFaceSet.C
+particle/particle.C
+timeRegistry/timeRegistry.C
 
-LIB = $(FOAM_LIBBIN)/libgeometryModels
+LIB = $(FOAM_LIBBIN)/libdem

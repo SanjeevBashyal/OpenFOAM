@@ -31,7 +31,7 @@ namespace Bashyal
         using Converter = FoamCGALConverter<Kernel>; // Converter for the specified kernel
         Foam::pointField triPoints;
         Foam::faceList triFaces;
-        this->triangulateFaces(points_, faces_, triPoints, triFaces);
+        this->triangulateFaces(this->vertices(), this->faces(), triPoints, triFaces);
 
         // Convert points and faces from geomObject to CGAL Polyhedron
         auto polyhedron = Converter::toCGALPolyhedron(triPoints, triFaces);

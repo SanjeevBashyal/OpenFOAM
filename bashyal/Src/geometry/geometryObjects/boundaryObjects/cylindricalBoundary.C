@@ -34,7 +34,7 @@ namespace Bashyal
 
     void cylindricalBoundary::initializePatchTypes()
     {
-        patchTypes_.setSize(faces_.size());
+        patchTypes_.setSize(faces().size());
         // Assign the single patch type (20) to all faces
         forAll(patchTypes_, i)
         {
@@ -70,16 +70,16 @@ namespace Bashyal
 
         // --- Define Points ---
         // Total points = 2 (centers) + 2 * nSegments (edges)
-        points_.setSize(2 + 2 * nSegments_);
+        Foam::pointField points(2 + 2 * nSegments_);
 
         const Foam::scalar cx = center_.x();
         const Foam::scalar cy = center_.y();
         const Foam::scalar angleIncrement = 2.0 * mathematical::pi / nSegments_;
 
         // Point 0: Bottom center
-        points_[0] = Foam::point(cx, cy, zMin_);
+        points[0] = Foam::point(cx, cy, zMin_);
         // Point 1: Top center
-        points_[1] = Foam::point(cx, cy, zMax_);
+        points[1] = Foam::point(cx, cy, zMax_);
 
         // Points 2 to nSegments+1: Bottom edge points
         // Points nSegments+2 to 2*nSegments+1: Top edge points
@@ -92,15 +92,15 @@ namespace Bashyal
             Foam::scalar py = cy + radius_ * sinAngle;
 
             // Bottom edge point (index i + 2)
-            points_[i + 2] = Foam::point(px, py, zMin_);
+            points[i + 2] = Foam::point(px, py, zMin_);
             // Top edge point (index i + nSegments + 2)
-            points_[i + nSegments_ + 2] = Foam::point(px, py, zMax_);
+            points[i + nSegments_ + 2] = Foam::point(px, py, zMax_);
         }
 
         // --- Define Faces ---
         // Total faces = nSegments (bottom) + nSegments (top) + 2 * nSegments (wall)
         Foam::label nTotalFaces = 4 * nSegments_;
-        faces_.setSize(nTotalFaces);
+        Foam::faceList faces(nTotalFaces);
         Foam::label faceIndex = 0;
 
         // Define Bottom Cap Faces (nSegments triangles)
@@ -109,7 +109,7 @@ namespace Bashyal
         {
             Foam::label p1 = i + 2;                        // Current bottom edge point index
             Foam::label p2 = ((i + 1) % nSegments_) + 2;   // Next bottom edge point index (wrap around)
-            faces_[faceIndex++] = Foam::face({0, p1, p2}); // Order for outward normal (viewed from -Z)
+            faces[faceIndex++] = Foam::face({0, p1, p2}); // Order for outward normal (viewed from -Z)
         }
 
         // Define Top Cap Faces (nSegments triangles)
@@ -119,7 +119,7 @@ namespace Bashyal
             Foam::label p1 = i + nSegments_ + 2;                      // Current top edge point index
             Foam::label p2 = ((i + 1) % nSegments_) + nSegments_ + 2; // Next top edge point index
             // Reverse order for outward normal (viewed from +Z)
-            faces_[faceIndex++] = Foam::face({1, p2, p1});
+            faces[faceIndex++] = Foam::face({1, p2, p1});
         }
 
         // Define Curved Wall Faces (2 * nSegments triangles)
@@ -132,13 +132,15 @@ namespace Bashyal
             Foam::label t2 = ((i + 1) % nSegments_) + nSegments_ + 2; // Next top edge point index
 
             // Triangle 1 (bottom-left, bottom-right, top-left)
-            faces_[faceIndex++] = Foam::face({b1, b2, t1});
+            faces[faceIndex++] = Foam::face({b1, b2, t1});
             // Triangle 2 (bottom-right, top-right, top-left)
-            faces_[faceIndex++] = Foam::face({b2, t2, t1});
+            faces[faceIndex++] = Foam::face({b2, t2, t1});
         }
 
         // --- Initialize Patch Types ---
         // Call this *after* faces_.setSize() and nTotalFaces is known
+        // Assign to base class
+        *static_cast<Foam::particleModels::indexedFaceSet*>(this) = Foam::particleModels::indexedFaceSet(points, faces);
         initializePatchTypes();
     }
 

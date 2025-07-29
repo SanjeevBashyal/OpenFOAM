@@ -6,14 +6,22 @@ EXE_INC = \
     -I$(LIB_SRC)/mesh/blockMesh/lnInclude \
     -I$(WM_PROJECT_DIR)/bashyal/Utilities/lnInclude \
     -I$(WM_PROJECT_DIR)/bashyal/Src/debug/lnInclude \
-    -I$(WM_PROJECT_DIR)/bashyal/Utilities/converter/lnInclude
+    -I$(WM_PROJECT_DIR)/bashyal/Utilities/converter/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/Src/geometry/geometryModels/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/Src/geometry/geometryObjects/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/Src/geometry/geometryOperationsStatic/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/Src/dem/lnInclude
 
 EXE_LIBS = \
     -ldebugClass \
+    -ldem \
+    -lgeometryModels \
     -lgeometryObjects \
     -lgeometryOperations \
     -lfoamCGALConverter \
     -lfileFormats \
     -lsurfMesh \
     -lmeshTools \
-    -lfoamCGALConverter
+    -lfoamCGALConverter \
+    -lgmp \
+    -lmpfr

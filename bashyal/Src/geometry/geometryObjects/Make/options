@@ -6,7 +6,8 @@ EXE_INC = \
     -I$(WM_PROJECT_DIR)/bashyal/Utilities/lnInclude \
     -I$(WM_PROJECT_DIR)/bashyal/Src/debug/lnInclude \
     -I$(WM_PROJECT_DIR)/bashyal/Utilities/converter/lnInclude \
-    -I$(WM_PROJECT_DIR)/bashyal/Src/mesh/geometryOperationsStatic/lnInclude
+    -I$(WM_PROJECT_DIR)/bashyal/Src/geometry/geometryOperationsStatic/lnInclude \
+    -I$(WM_PROJECT_DIR)/bashyal/Src/geometry/geometryModels/lnInclude
     
 
 LIB_LIBS = \

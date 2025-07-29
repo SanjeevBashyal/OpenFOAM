@@ -51,30 +51,33 @@ void trapezoidalChannel::develop()
     }
 
     // Define the 8 vertices of the trapezoidal prism
-    points_.setSize(8);
+    Foam::pointField points(8);
     Foam::scalar zBackBottom = -slope_ * length_;
     Foam::scalar zBackTop = height_ - slope_ * length_;
 
     // Front face (x=0)
-    points_[0] = Foam::point(0, -topWidth_ / 2, height_);        // Top-left front
-    points_[1] = Foam::point(0, -bottomWidth_ / 2, 0);           // Bottom-left front
-    points_[2] = Foam::point(0, bottomWidth_ / 2, 0);            // Bottom-right front
-    points_[3] = Foam::point(0, topWidth_ / 2, height_);         // Top-right front
+    points[0] = Foam::point(0, -topWidth_ / 2, height_);        // Top-left front
+    points[1] = Foam::point(0, -bottomWidth_ / 2, 0);           // Bottom-left front
+    points[2] = Foam::point(0, bottomWidth_ / 2, 0);            // Bottom-right front
+    points[3] = Foam::point(0, topWidth_ / 2, height_);         // Top-right front
 
     // Back face (x=length)
-    points_[4] = Foam::point(length_, -topWidth_ / 2, zBackTop); // Top-left back
-    points_[5] = Foam::point(length_, -bottomWidth_ / 2, zBackBottom); // Bottom-left back
-    points_[6] = Foam::point(length_, bottomWidth_ / 2, zBackBottom);  // Bottom-right back
-    points_[7] = Foam::point(length_, topWidth_ / 2, zBackTop);  // Top-right back
+    points[4] = Foam::point(length_, -topWidth_ / 2, zBackTop); // Top-left back
+    points[5] = Foam::point(length_, -bottomWidth_ / 2, zBackBottom); // Bottom-left back
+    points[6] = Foam::point(length_, bottomWidth_ / 2, zBackBottom);  // Bottom-right back
+    points[7] = Foam::point(length_, topWidth_ / 2, zBackTop);  // Top-right back
 
     // Define the 6 faces using vertex indices
-    faces_.setSize(6);
-    faces_[0] = Foam::face({0, 1, 2, 3}); // Front face (inlet)
-    faces_[1] = Foam::face({4, 5, 6, 7}); // Back face (outlet)
-    faces_[2] = Foam::face({1, 2, 6, 5}); // Bottom face
-    faces_[3] = Foam::face({0, 3, 7, 4}); // Top face
-    faces_[4] = Foam::face({0, 1, 5, 4}); // Left side face
-    faces_[5] = Foam::face({3, 2, 6, 7}); // Right side face
+    Foam::faceList faces(6);
+    faces[0] = Foam::face({0, 1, 2, 3}); // Front face (inlet)
+    faces[1] = Foam::face({4, 5, 6, 7}); // Back face (outlet)
+    faces[2] = Foam::face({1, 2, 6, 5}); // Bottom face
+    faces[3] = Foam::face({0, 3, 7, 4}); // Top face
+    faces[4] = Foam::face({0, 1, 5, 4}); // Left side face
+    faces[5] = Foam::face({3, 2, 6, 7}); // Right side face
+
+    // Assign to base class
+    *static_cast<Foam::particleModels::indexedFaceSet*>(this) = Foam::particleModels::indexedFaceSet(points, faces);
 }
 
 // --- Public Member Functions ---

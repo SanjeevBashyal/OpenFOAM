@@ -10,20 +10,20 @@ namespace Bashyal {
 class timeRegistry {
     std::vector<std::vector<geomObject>> objectTimeStack_; // [object][time]
     std::vector<std::string> objectNames_;
-    scalar currentTime_;
-    scalar timeStep_;
-    scalar endTime_;
+    Foam::scalar currentTime_;
+    Foam::scalar timeStep_;
+    Foam::scalar endTime_;
     std::string outputDir_;
     std::string pvdFileName_;
 public:
-    timeRegistry(scalar timeStep, scalar endTime, const std::string& outputDir = "VTK_output");
+    timeRegistry(Foam::scalar timeStep, Foam::scalar endTime, const std::string& outputDir = "VTK_output");
 
     void addObject(const geomObject& obj, const std::string& name);
     void advanceTime();
-    void setCurrentTime(scalar t);
-    scalar currentTime() const;
-    scalar timeStep() const;
-    scalar endTime() const;
+    void setCurrentTime(Foam::scalar t);
+    Foam::scalar currentTime() const;
+    Foam::scalar timeStep() const;
+    Foam::scalar endTime() const;
     void writeTimeSeries() const;
 };
 

@@ -4,12 +4,14 @@
 #include "pointField.H"
 #include "faceList.H"
 #include "Ostream.H"
+#include "implicitPlanes.H"
 
 namespace Foam
 {
     namespace particleModels
     {
         class halfEdgeMesh; // Forward declaration
+        class implicitPlanes; // Forward declaration
 
         class indexedFaceSet
         {

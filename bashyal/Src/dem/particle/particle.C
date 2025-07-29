@@ -67,8 +67,8 @@ namespace Bashyal
         // --- Rotational Update ---
         // T = I*alpha => alpha = I^-1 * T
         // Transform inverse MOI tensor from local to world frame
-        Foam::tensor R = Foam::tensor(orientation_); // Rotation matrix from orientation
-        Foam::tensor invI_world = R * invMomentOfInertia_ * R.T();
+        Foam::tensor R = orientation_.R(); // Get rotation matrix from quaternion
+        Foam::tensor invI_world = R & invMomentOfInertia_ & R.T();
 
         // Calculate angular acceleration
         Foam::vector angularAcceleration = invI_world & torque_;
@@ -77,7 +77,7 @@ namespace Bashyal
         angularVelocity_ += angularAcceleration * dt;
 
         // Update orientation using the new angular velocity
-        if (mag(angularVelocity_) > SMALL)
+        if (mag(angularVelocity_) > Foam::SMALL)
         {
             Foam::quaternion deltaQ(angularVelocity_ * dt); // Create quaternion from rotation vector
             orientation_ = deltaQ * orientation_;
@@ -105,11 +105,11 @@ namespace Bashyal
     Foam::pointField particle::getGlobalPoints() const
     {
         // Get the local points from the base class
-        const Foam::pointField& localPoints = this->points();
+        const Foam::pointField& localPoints = this->vertices();
         Foam::pointField globalPoints(localPoints.size());
 
         // Create the transformation matrix from the orientation quaternion
-        Foam::tensor R(orientation_);
+        Foam::tensor R = orientation_.R();
 
         // Transform each local point to its global position
         forAll(localPoints, i)

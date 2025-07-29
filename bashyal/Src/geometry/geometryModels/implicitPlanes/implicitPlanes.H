@@ -8,30 +8,32 @@
 
 namespace Foam
 {
-namespace particleModels
-{
-    class indexedFaceSet; // Forward declaration
-
-    class implicitPlanes
+    namespace particleModels
     {
-    public:
-        struct Plane
+        class indexedFaceSet; // Forward declaration
+
+        class implicitPlanes
         {
-            vector normal;
-            scalar distance;
+        public:
+            struct Plane
+            {
+                vector normal;
+                scalar distance;
+            };
+
+        private:
+            List<Plane> planes_;
+            point centroid_;
+
+        public:
+            implicitPlanes();
+            implicitPlanes(const List<Plane> &planes, const point &centroid);
+
+            bool isInside(const point &p) const;
+            indexedFaceSet toIndexedFaceSet() const;
+            void print(Ostream &os) const;
         };
-    private:
-        List<Plane> planes_;
-        point centroid_;
-    public:
-        implicitPlanes();
-        implicitPlanes(const List<Plane>& planes, const point& centroid);
-
-        bool isInside(const point& p) const;
-        indexedFaceSet toIndexedFaceSet() const;
-        void print(Ostream& os) const;
-    };
-}
+    }
 }
 
-#endif 
+#endif

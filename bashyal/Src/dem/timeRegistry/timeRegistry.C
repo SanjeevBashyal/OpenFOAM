@@ -6,7 +6,7 @@
 
 namespace Bashyal {
 
-timeRegistry::timeRegistry(scalar timeStep, scalar endTime, const std::string& outputDir)
+timeRegistry::timeRegistry(Foam::scalar timeStep, Foam::scalar endTime, const std::string& outputDir)
     : currentTime_(0.0), timeStep_(timeStep), endTime_(endTime), outputDir_(outputDir), pvdFileName_(outputDir+"/timeSeries.pvd")
 {
     mkdir(outputDir_.c_str(), 0777);
@@ -24,13 +24,13 @@ void timeRegistry::advanceTime() {
     currentTime_ += timeStep_;
 }
 
-void timeRegistry::setCurrentTime(scalar t) {
+void timeRegistry::setCurrentTime(Foam::scalar t) {
     currentTime_ = t;
 }
 
-scalar timeRegistry::currentTime() const { return currentTime_; }
-scalar timeRegistry::timeStep() const { return timeStep_; }
-scalar timeRegistry::endTime() const { return endTime_; }
+Foam::scalar timeRegistry::currentTime() const { return currentTime_; }
+Foam::scalar timeRegistry::timeStep() const { return timeStep_; }
+Foam::scalar timeRegistry::endTime() const { return endTime_; }
 
 void timeRegistry::writeTimeSeries() const {
     // Write a .pvd file referencing all .vtp files for each object

@@ -64,43 +64,42 @@ void rectangularChannel::develop()
     }
 
     // --- Define the 8 vertices of the rectangular prism ---
-    points_.setSize(8); // Allocate space for 8 points
+    Foam::pointField points(8); // Allocate space for 8 points
 
     Foam::scalar halfWidth = width_ / 2.0;
     Foam::scalar zBackBottom = 0.0 - slope_ * length_; // Z at bottom back
     Foam::scalar zBackTop = height_ - slope_ * length_;   // Z at top back
 
     // Front face vertices (x = 0)
-    points_[0] = Foam::point(0.0, -halfWidth, 0.0);     // Front Bottom Left (FBL)
-    points_[1] = Foam::point(0.0,  halfWidth, 0.0);     // Front Bottom Right (FBR)
-    points_[2] = Foam::point(0.0,  halfWidth, height_); // Front Top Right (FTR)
-    points_[3] = Foam::point(0.0, -halfWidth, height_); // Front Top Left (FTL)
+    points[0] = Foam::point(0.0, -halfWidth, 0.0);     // Front Bottom Left (FBL)
+    points[1] = Foam::point(0.0,  halfWidth, 0.0);     // Front Bottom Right (FBR)
+    points[2] = Foam::point(0.0,  halfWidth, height_); // Front Top Right (FTR)
+    points[3] = Foam::point(0.0, -halfWidth, height_); // Front Top Left (FTL)
 
     // Back face vertices (x = length)
-    points_[4] = Foam::point(length_, -halfWidth, zBackBottom); // Back Bottom Left (BBL)
-    points_[5] = Foam::point(length_,  halfWidth, zBackBottom); // Back Bottom Right (BBR)
-    points_[6] = Foam::point(length_,  halfWidth, zBackTop);    // Back Top Right (BTR)
-    points_[7] = Foam::point(length_, -halfWidth, zBackTop);    // Back Top Left (BTL)
-
+    points[4] = Foam::point(length_, -halfWidth, zBackBottom); // Back Bottom Left (BBL)
+    points[5] = Foam::point(length_,  halfWidth, zBackBottom); // Back Bottom Right (BBR)
+    points[6] = Foam::point(length_,  halfWidth, zBackTop);    // Back Top Right (BTR)
+    points[7] = Foam::point(length_, -halfWidth, zBackTop);    // Back Top Left (BTL)
 
     // --- Define the 6 faces using vertex indices ---
-    // Order must match the indices used in initializeDefaultPatchTypes()
-    faces_.setSize(6); // Allocate space for 6 faces
+    Foam::faceList faces(6); // Allocate space for 6 faces
 
     // Face 0: Front face (inlet, x=0 plane, normal pointing -X) -> patchType 10
-    faces_[0] = Foam::face({0, 1, 2, 3});
+    faces[0] = Foam::face({0, 1, 2, 3});
     // Face 1: Back face (outlet, x=length plane, normal pointing +X) -> patchType 11
-    faces_[1] = Foam::face({4, 5, 6, 7});
+    faces[1] = Foam::face({4, 5, 6, 7});
     // Face 2: Bottom face (z=0 / sloped plane, normal pointing -Z) -> patchType 13
-    faces_[2] = Foam::face({0, 4, 5, 1});
+    faces[2] = Foam::face({0, 4, 5, 1});
     // Face 3: Top face (z=height / sloped plane, normal pointing +Z) -> patchType 15
-    faces_[3] = Foam::face({3, 2, 6, 7});
+    faces[3] = Foam::face({3, 2, 6, 7});
     // Face 4: Left side face (y=-width/2 plane, normal pointing -Y) -> patchType 12
-    faces_[4] = Foam::face({0, 3, 7, 4});
+    faces[4] = Foam::face({0, 3, 7, 4});
     // Face 5: Right side face (y=+width/2 plane, normal pointing +Y) -> patchType 12
-    faces_[5] = Foam::face({1, 5, 6, 2});
+    faces[5] = Foam::face({1, 5, 6, 2});
 
-
+    // Assign to base class
+    *static_cast<Foam::particleModels::indexedFaceSet*>(this) = Foam::particleModels::indexedFaceSet(points, faces);
 }
 
 

@@ -1,6 +1,7 @@
 #include "indexedFaceSet.H"
 #include "halfEdgeMesh.H"
 #include "foamCGALConverter.H"
+#include "implicitPlanes.H"
 
 namespace Foam
 {
@@ -15,7 +16,7 @@ namespace Foam
 
         halfEdgeMesh indexedFaceSet::toHalfEdgeMesh() const
         {
-            CgalPolyhedron cgalPoly;
+            CGALPolyhedron cgalPoly;
             cgalPoly = FoamCGALConverter<CGAL::Exact_predicates_exact_constructions_kernel>::toCGALPolyhedron(vertices_, faces_);
             return halfEdgeMesh(cgalPoly);
         }

@@ -3,6 +3,12 @@
 #include "indexedFaceSet.H"
 #include "foamCGALConverter.H"
 #include <vector>
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+#include <CGAL/Convex_hull_3/dual/halfspace_intersection_3.h>
+
+using Kernel = CGAL::Exact_predicates_exact_constructions_kernel;
+using CGALPlane_3 = Kernel::Plane_3;
+using CGALPolyhedron = CGAL::Polyhedron_3<Kernel>;
 
 namespace Foam
 {
@@ -26,17 +32,16 @@ namespace Foam
 
     indexedFaceSet implicitPlanes::toIndexedFaceSet() const
     {
-      std::vector<CgalPlane_3> cgalPlanes;
+      std::vector<CGALPlane_3> cgalPlanes;
       for (const auto &plane : planes_)
       {
         const vector &n = plane.normal;
         scalar plane_d = -((n & centroid_) + plane.distance);
         cgalPlanes.emplace_back(n.x(), n.y(), n.z(), plane_d);
       }
-      CgalPolyhedron cgalPoly;
-      CGAL::halfspace_intersection_3(cgalPlanes.begin(), cgalPlanes.end(),
-                                     cgalPoly);
-      HalfEdgeMesh heMesh(cgalPoly);
+      CGALPolyhedron cgalPoly;
+      CGAL::halfspace_intersection_3(cgalPlanes.begin(), cgalPlanes.end(), cgalPoly);
+      Foam::particleModels::halfEdgeMesh heMesh(cgalPoly);
       return heMesh.toIndexedFaceSet();
     }
 
