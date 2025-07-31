@@ -10,8 +10,6 @@ EXE_INC = \
 
 LIB_LIBS = \
     -ldebugClass \
-    -lgeometryObjects \
-    -lgeometryOperations \
     -lfoamCGALConverter \
     -lfileFormats \
     -lsurfMesh \
