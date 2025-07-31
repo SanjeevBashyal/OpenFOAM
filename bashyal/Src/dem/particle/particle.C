@@ -76,10 +76,14 @@ namespace Bashyal
         // Update angular velocity
         angularVelocity_ += angularAcceleration * dt;
 
+        Foam::scalar omegaMag = Foam::mag(angularVelocity_);
+
         // Update orientation using the new angular velocity
-        if (mag(angularVelocity_) > Foam::SMALL)
+        if (omegaMag > Foam::SMALL)
         {
-            Foam::quaternion deltaQ(angularVelocity_ * dt); // Create quaternion from rotation vector
+            Foam::vector rotationAxis = angularVelocity_ / omegaMag; // Normalize to get the axis
+            Foam::scalar rotationAngle = omegaMag * dt;         // angle = speed * time
+            Foam::quaternion deltaQ(rotationAxis, rotationAngle); // Create quaternion from rotation vector
             orientation_ = deltaQ * orientation_;
             orientation_.normalise(); // Normalize to prevent numerical drift
         }
@@ -120,6 +124,72 @@ namespace Bashyal
         }
 
         return globalPoints;
+    }
+
+    void particle::writeVtp(const Foam::fileName& filename) const
+    {
+        Foam::OFstream vtpFile(filename);
+        if (!vtpFile.good())
+        {
+            FatalErrorIn("writeVtp") << "Cannot open file " << filename << Foam::exit(Foam::FatalError);
+        }
+
+        // Get the global points (transformed to world coordinates)
+        const Foam::pointField& globalVertices = getGlobalPoints();
+        const Foam::faceList& faces = this->faces();
+
+        // VTK XML Header
+        vtpFile << "<?xml version=\"1.0\"?>" << Foam::endl;
+        vtpFile << "<VTKFile type=\"PolyData\" version=\"1.0\" byte_order=\"LittleEndian\">" << Foam::endl;
+        vtpFile << "  <PolyData>" << Foam::endl;
+
+        // Piece defines the geometry. We have one object, so one piece.
+        vtpFile << "    <Piece NumberOfPoints=\"" << globalVertices.size()
+                << "\" NumberOfVerts=\"0\" NumberOfLines=\"0\" NumberOfStrips=\"0\" NumberOfPolys=\""
+                << faces.size() << "\">" << Foam::endl;
+
+        // 1. Write Points (Vertices) - using global coordinates
+        vtpFile << "      <Points>" << Foam::endl;
+        vtpFile << "        <DataArray type=\"Float32\" Name=\"Points\" NumberOfComponents=\"3\" format=\"ascii\">" << Foam::endl;
+        for (const Foam::point& pt : globalVertices)
+        {
+            vtpFile << "          " << pt.x() << " " << pt.y() << " " << pt.z() << Foam::endl;
+        }
+        vtpFile << "        </DataArray>" << Foam::endl;
+        vtpFile << "      </Points>" << Foam::endl;
+
+        // 2. Write Polygons (Faces)
+        vtpFile << "      <Polys>" << Foam::endl;
+        // a) Connectivity: a flat list of all vertex indices for all faces
+        vtpFile << "        <DataArray type=\"Int64\" Name=\"connectivity\" format=\"ascii\">" << Foam::endl;
+        for (const Foam::face& f : faces)
+        {
+            vtpFile << "          ";
+            for (const Foam::label vIdx : f)
+            {
+                vtpFile << vIdx << " ";
+            }
+            vtpFile << Foam::endl;
+        }
+        vtpFile << "        </DataArray>" << Foam::endl;
+
+        // b) Offsets: the cumulative count of vertices per face
+        vtpFile << "        <DataArray type=\"Int64\" Name=\"offsets\" format=\"ascii\">" << Foam::endl;
+        vtpFile << "          ";
+        Foam::label offset = 0;
+        for (const Foam::face& f : faces)
+        {
+            offset += f.size();
+            vtpFile << offset << " ";
+        }
+        vtpFile << Foam::endl;
+        vtpFile << "        </DataArray>" << Foam::endl;
+        vtpFile << "      </Polys>" << Foam::endl;
+
+        // VTK XML Footer
+        vtpFile << "    </Piece>" << Foam::endl;
+        vtpFile << "  </PolyData>" << Foam::endl;
+        vtpFile << "</VTKFile>" << Foam::endl;
     }
 
 } // End namespace Bashyal

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<VTKFile type="PolyData" version="1.0" byte_order="LittleEndian">
+  <PolyData>
+    <Piece NumberOfPoints="8" NumberOfVerts="0" NumberOfLines="0" NumberOfStrips="0" NumberOfPolys="6">
+      <Points>
+        <DataArray type="Float32" Name="Points" NumberOfComponents="3" format="ascii">
+          -0.45 -0.48 -0.5
+          0.546754 -0.421469 -0.555284
+          0.491469 0.575284 -0.496754
+          -0.505284 0.516754 -0.441469
+          -0.391469 -0.535284 0.496754
+          0.605284 -0.476754 0.441469
+          0.55 0.52 0.5
+          -0.446754 0.461469 0.555284
+        </DataArray>
+      </Points>
+      <Polys>
+        <DataArray type="Int64" Name="connectivity" format="ascii">
+          0 3 2 1 
+          4 5 6 7 
+          0 1 5 4 
+          2 3 7 6 
+          1 2 6 5 
+          3 0 4 7 
+        </DataArray>
+        <DataArray type="Int64" Name="offsets" format="ascii">
+          4 8 12 16 20 24 
+        </DataArray>
+      </Polys>
+    </Piece>
+  </PolyData>
+</VTKFile>

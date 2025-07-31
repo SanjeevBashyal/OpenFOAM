@@ -95,6 +95,12 @@ namespace Bashyal
          */
         Foam::pointField getGlobalPoints() const;
 
+        /**
+         * @brief Writes the particle geometry to a VTP file using global coordinates.
+         * @param filename The output VTP file name.
+         */
+        void writeVtp(const Foam::fileName& filename) const;
+
 
         // * * * * * * * * * * * * * * Accessors (Getters) * * * * * * * * * * * * * //
 
@@ -112,6 +118,8 @@ namespace Bashyal
 
         void setPosition(const Foam::point& p) { position_ = p; }
         void setVelocity(const Foam::vector& v) { velocity_ = v; }
+        void setAngularVelocity(const Foam::vector& w) { angularVelocity_ = w; }
+        void setOrientation(const Foam::quaternion& q) { orientation_ = q; }
     };
 }
 
